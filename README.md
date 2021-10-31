@@ -37,4 +37,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 Things to do
 
-- setup Auth0 see [this example](https://github.com/vercel/next.js/tree/master/examples/auth0)
+- setup Auth0 
