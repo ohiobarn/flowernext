@@ -1,9 +1,14 @@
-import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 
 // This gets called on every request
-export async function getServerSideProps() {
+export async function getServerSideProps({ req }) {
+
+  // Get user from cookie
+  var res = {}; // Don't use actual res object, it cause spam in logs
+  const { user } = getSession(req,res);
+
   // Fetch data from AirTable
-  const orders = await getOrders()
+  const orders = await getOrders(user.email)
 
   // Pass orders to the page via props
   return { props: { orders } };
@@ -27,11 +32,12 @@ export default withPageAuthRequired(function Orders({ orders }) {
 ////////////////////////////////////////////////////////////////////////////
 //          Get Orders
 ////////////////////////////////////////////////////////////////////////////
-async function getOrders() {
+async function getOrders(userEmail) {
 
-  var account = "tonygilkerson@gmail.com"                   //DEVTODO get from user profile
+  var account = userEmail
   const apiKey = process.env.AIRTABLE_APIKEY
-  console.log("apikey %s", apiKey)
+  console.log("apikey [%s] account [%s]", apiKey, account)
+
   var Airtable = require("airtable")
   
   Airtable.configure({endpointUrl: "https://api.airtable.com",apiKey: apiKey,});
