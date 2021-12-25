@@ -1,3 +1,4 @@
+import '../styles/globals.css'
 import React from 'react';
 import Layout from '../comps/Layout'
 import { UserProvider } from '@auth0/nextjs-auth0';
