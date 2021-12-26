@@ -20,9 +20,8 @@ export default withPageAuthRequired(function Orders({ orders }) {
       <h1>Orders</h1>
       {orders.map((order) => (
         <div key={order.RecID}>
-          <a>
-            <h3>OrderNo: {order.OrderNo}</h3>
-          </a>
+          <a>OrderNo: {order.OrderNo}</a>
+          <p>{order.Status}</p>
         </div>
       ))}
     </div>
