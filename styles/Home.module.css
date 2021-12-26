@@ -4,8 +4,8 @@
   text-align: center;
 }
 .splash {
-  margin: 1px auto 1px;
-  padding: 1px 0;
+  margin: 80px auto 10px;
+  padding: 10px 0;
   display: flex;
   justify-content: center;
   align-items: center;
