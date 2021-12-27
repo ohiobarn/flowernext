@@ -24,13 +24,21 @@ export default withPageAuthRequired(function Order({ order }) {
   const updateOrder = async event => {
     event.preventDefault() // don't redirect the page
 
+    const rec = {
+      recid: event.target.recid.value,
+      clientJob: event.target.clientJob.value,
+      teamMember: event.target.teamMember.value,
+      dueDate: event.target.dueDate.value,
+      notes: event.target.notes.value
+    }
+
+    console.log("The following record will post to the order-update API")
+    console.log(rec)
+    
     const res = await fetch(
       '/api/order-update',
       {
-        body: JSON.stringify({
-          recid: event.target.recid.value,
-          notes: event.target.notes.value
-        }),
+        body: JSON.stringify(rec),
         headers: {
           'Content-Type': 'application/json'
         },
@@ -53,9 +61,21 @@ export default withPageAuthRequired(function Order({ order }) {
     <div>
       <h1>{ order["Client/Job"] } #{order.OrderNo} - {order.Status}</h1>
       <form onSubmit={updateOrder}>
-        <input id="recid" name="recid" type="hidden" value={order.RecID}/>
+        <input id="recid" name="recid" type="hidden" value={order.RecID} />
+
+        <label htmlFor="clientJob">Client/Job</label>
+        <input id="clientJob" name="clientJob" type="text" defaultValue={order["Client/Job"]} required/>
+
+        <label htmlFor="teamMember">Team Member</label>
+        <input id="teamMember" name="teamMember" type="text" defaultValue={order["Team Member"]} required />
+
+        <label htmlFor="dueDate">Team Member</label>
+        <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} required />
+
+
         <label htmlFor="notes">Notes</label>
-        <input id="notes" name="notes" type="text" defaultValue={order.Notes}/>
+        <input id="notes" name="notes" type="text" defaultValue={order.Notes} />
+
         <button type="submit">Update</button>
       </form>
     </div>

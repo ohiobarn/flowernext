@@ -9,8 +9,14 @@ export default function handler(req, res) {
   const result = updateOrder(user.email,req.body)
 
   result.then(
-    function(result){ res.status(200).json(result)},
-    function(error) { res.status(500).json(error) }
+    function(result){
+      console.log("Order update successful")
+      console.log(result) 
+      res.status(200).json(result)
+    },
+    function(error) { 
+      res.status(500).json(error) 
+    }
   )
 
 }
@@ -30,12 +36,16 @@ async function updateOrder(account,data) {
     {
       "id": data.recid,
       "fields": {
+        "Client/Job": data.clientJob,
+        "Team Member": data.teamMember,
+        "Due Date": data.dueDate,
         "Notes": data.notes
       }
     }
   ]
 
-  // console.log(rec)
+  console.log("The following record will be used to update the order.")
+  console.log(rec)
 
   var Airtable = require("airtable")
   Airtable.configure({endpointUrl: "https://api.airtable.com",apiKey: apiKey,});
