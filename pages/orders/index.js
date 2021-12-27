@@ -1,12 +1,13 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import styles from "../../styles/Orders.module.css"
+import Link from "next/link"
 
 // This gets called on every request
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps( context ) {
 
   // Get user from cookie
   var res = {}; // Don't use actual res object, it cause spam in logs
-  const { user } = getSession(req,res);
+  const { user } = getSession(context.req,res)
 
   // Fetch data from AirTable
   const orders = await getOrders(user.email)
@@ -20,11 +21,11 @@ export default withPageAuthRequired(function Orders({ orders }) {
     <div>
       <h1>Orders</h1>
       {orders.map(order => (
-        <div key={order.RecID}>
+        <Link href={'/orders/' + order.RecID} key={order.RecID}>
           <a className={styles.single}>
             <h3>{order["Client/Job"]} ( order: #{order.OrderNo} - {order.Status})</h3>
           </a>
-        </div>
+        </Link>
       ))}
     </div>
   );
