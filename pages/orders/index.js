@@ -1,4 +1,5 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
+import styles from "../../styles/Orders.module.css"
 
 // This gets called on every request
 export async function getServerSideProps({ req }) {
@@ -18,10 +19,11 @@ export default withPageAuthRequired(function Orders({ orders }) {
   return (
     <div>
       <h1>Orders</h1>
-      {orders.map((order) => (
+      {orders.map(order => (
         <div key={order.RecID}>
-          <a>OrderNo: {order.OrderNo}</a>
-          <p>{order.Status}</p>
+          <a className={styles.single}>
+            <h3>{order["Client/Job"]} ( order: #{order.OrderNo} - {order.Status})</h3>
+          </a>
         </div>
       ))}
     </div>
@@ -35,7 +37,8 @@ async function getOrders(userEmail) {
 
   var account = userEmail
   const apiKey = process.env.AIRTABLE_APIKEY
-  console.log("apikey [%s] account [%s]", apiKey, account)
+  // console.log("apikey [%s], apiKey)
+  console.log("account [%s]", apiKey, account)
 
   var Airtable = require("airtable")
   

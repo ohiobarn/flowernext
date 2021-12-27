@@ -14,7 +14,11 @@ a {
   margin: 0 auto;
 }
 nav {
-  margin: 3px auto 3px;
+  /* margin: 10px auto 10px; */
+  margin-top: 10px;
+  margin-right: auto;
+  margin-bottom: 50px;
+  margin-left: auto;
   padding: 5px 0;
   display: flex;
   justify-content: flex-end;
