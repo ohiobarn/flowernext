@@ -23,7 +23,7 @@ export default withPageAuthRequired(function Orders({ orders }) {
       {orders.map(order => (
         <Link href={'/orders/' + order.RecID} key={order.RecID}>
           <a className={styles.single}>
-            <h3>{order["Client/Job"]} ( order: #{order.OrderNo} - {order.Status})</h3>
+            <h3>{order["Client/Job"]}  #{order.OrderNo} - {order.Status}</h3>
           </a>
         </Link>
       ))}
@@ -34,19 +34,22 @@ export default withPageAuthRequired(function Orders({ orders }) {
 ////////////////////////////////////////////////////////////////////////////
 //          Get Orders
 ////////////////////////////////////////////////////////////////////////////
-async function getOrders(userEmail) {
+async function getOrders(account) {
 
-  var account = userEmail
+  // const account = account
   const apiKey = process.env.AIRTABLE_APIKEY
-  // console.log("apikey [%s], apiKey)
-  console.log("account [%s]", apiKey, account)
+  console.log("[getOrders] Account [%s]", account)
 
   var Airtable = require("airtable")
   
   Airtable.configure({endpointUrl: "https://api.airtable.com",apiKey: apiKey,});
 
   var base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
-  const records = await base("Order").select({pageSize: 25, view: "fp-grid", filterByFormula: 'Account = "' + account + '"',}).all();
+  const records = await base("Order").select({
+    pageSize: 100, 
+    view: "fp-grid", 
+    sort: [{field: "Client/Job", direction: "asc"}],
+    filterByFormula: 'Account = "' + account + '"',}).all();
 
   // Put resultes into an array
   var orders = []; 
