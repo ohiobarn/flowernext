@@ -9,7 +9,7 @@ export default function Home() {
         <Image src="/splash-clear-bg.png" alt="" width={406} height={173} />
       </div>
       {/* <p className={styles.text}>Say something here.</p> */}
-      <Link href='/orders'><a className={styles.btn}>Get Started</a></Link>
+      <Link href='/api/auth/login'><a className={styles.btn}>Login</a></Link>
     </div>
   );
 }
