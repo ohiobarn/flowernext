@@ -1,0 +1,69 @@
+.orderForm {
+  border-style: solid;
+  border-color:lightgray;
+  border-width: 2px;
+  border-radius: 5px;
+  max-width: 80%; 
+  margin: 20px;
+  padding: 1px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  padding: 1px;
+  
+}
+
+.field label {
+  opacity: .75;
+  font-size: 12px;
+  margin: 2px;
+}
+
+.field input {
+  border-style: solid;
+  border-color:lightgray;
+  border-width: 2px;
+  border-radius: 5px;
+  min-height: 34px;
+  max-width: 400px;
+  margin: 2px;
+  font-size: 14px
+}
+
+.field textarea {
+  border-style: solid;
+  border-color:lightgray;
+  border-width: 2px;
+  border-radius: 5px;
+  min-height: 34px;
+  max-width: 400px;
+  margin: 2px;
+  font-size: 14px
+}
+
+.date input {
+  max-width: 135px;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+}
+.title span {
+  font-size: small;
+  font-style: italic;
+  font-weight: lighter;
+}
+
+.btn {
+  display: block;
+  width: 150px;
+  padding: 8px 0;
+  margin: 20px auto;
+  background: #4979ff;
+  border-radius: 4px;
+  color: white;
+  text-align: center;
+}

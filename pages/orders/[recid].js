@@ -1,5 +1,5 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
-
+import styles from "../../styles/Order.module.css"
 
 export async function getServerSideProps( context ){
 
@@ -34,7 +34,7 @@ export default withPageAuthRequired(function Order({ order }) {
 
     console.log("The following record will post to the order-update API")
     console.log(rec)
-    
+
     const res = await fetch(
       '/api/order-update',
       {
@@ -59,31 +59,39 @@ export default withPageAuthRequired(function Order({ order }) {
 
   return (
     <div>
-      <h1>{ order["Client/Job"] } #{order.OrderNo} - {order.Status}</h1>
-      <form onSubmit={updateOrder}>
+      <h2 className={styles.title}>{ order["Client/Job"] } <span>Order#: {order.OrderNo} - {order.Status}</span></h2>
+      <form className={styles.orderForm} onSubmit={updateOrder}>
         <input id="recid" name="recid" type="hidden" value={order.RecID} />
 
-        <label htmlFor="clientJob">Client/Job</label>
-        <input id="clientJob" name="clientJob" type="text" defaultValue={order["Client/Job"]} required/>
+        <div className={styles.field}>
+          <label htmlFor="clientJob">Client/Job</label>
+          <input id="clientJob" name="clientJob" type="text" defaultValue={order["Client/Job"]} required/>
+        </div>
 
-        <label htmlFor="teamMember">Team Member</label>
-        <input id="teamMember" name="teamMember" type="text" defaultValue={order["Team Member"]} required />
+        <div className={styles.field}>
+          <label htmlFor="teamMember">Team Member</label>
+          <input id="teamMember" name="teamMember" type="text" defaultValue={order["Team Member"]} required />
+        </div>
 
-        <label htmlFor="dueDate">Team Member</label>
-        <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} required />
+        <div className={`${styles.field} ${styles.date}`}>
+          <label htmlFor="dueDate">Due Date</label>
+          <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} required />
+        </div>
 
-
-        <label htmlFor="notes">Notes</label>
-        <input id="notes" name="notes" type="text" defaultValue={order.Notes} />
-
-        <button type="submit">Update</button>
+        <div className={styles.field}>
+          <label htmlFor="notes">Notes</label>
+          {/* <input id="notes" name="notes" type="text" defaultValue={order.Notes} /> */}
+          <textarea id="notes" name="notes" rows="5" cols="30" defaultValue={order.Notes}></textarea>
+        </div>
+        
+        <button className={styles.btn} type="submit">Update</button>
       </form>
     </div>
   );
 });
 
 ////////////////////////////////////////////////////////////////////////////
-//          Get Orders
+//          Get Order
 ////////////////////////////////////////////////////////////////////////////
 async function getOrder(account,recid) {
 
