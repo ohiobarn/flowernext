@@ -1,4 +1,5 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
+import Image from "next/image"
 import styles from "../../styles/Order.module.css"
 
 export async function getServerSideProps( context ){
@@ -13,7 +14,7 @@ export async function getServerSideProps( context ){
   // Fetch data from AirTable
   const order = await getOrder(user.email,recid)
   
-  console.log(order)
+  // console.log(order)
 
   // Pass order to the page via props
   return { props: { order } };
@@ -21,6 +22,9 @@ export async function getServerSideProps( context ){
 
 export default withPageAuthRequired(function Order({ order }) {
 
+  //
+  // Update Order Event handler
+  //
   const updateOrder = async event => {
     event.preventDefault() // don't redirect the page
 
@@ -32,8 +36,8 @@ export default withPageAuthRequired(function Order({ order }) {
       notes: event.target.notes.value
     }
 
-    console.log("The following record will post to the order-update API")
-    console.log(rec)
+    // console.log("The following record will post to the order-update API")
+    // console.log(rec)
 
     const res = await fetch(
       '/api/order-update',
@@ -48,7 +52,7 @@ export default withPageAuthRequired(function Order({ order }) {
     
     //DEVTODO - should I check for errors? how?
     const result = await res.json()
-    console.log(result.length)
+
     if ( result.length > 0) {
       alert("Saved.")
     } else {
@@ -57,10 +61,18 @@ export default withPageAuthRequired(function Order({ order }) {
     
   }
 
+  //
+  // Update OrderDetail Event handler
+  //
+  const updateOrderDetail = async event => {
+    console.log("update order detail todo")
+  }
+
   return (
     <div>
-      <h2 className={styles.title}>{ order["Client/Job"] } <span>Order#: {order.OrderNo} - {order.Status}</span></h2>
+      <h2 className={styles.orderTitle}>{ order["Client/Job"] } <span>Order#: {order.OrderNo} - {order.Status}</span></h2>
       <form className={styles.orderForm} onSubmit={updateOrder}>
+        <h3>Header</h3>
         <input id="recid" name="recid" type="hidden" value={order.RecID} />
 
         <div className={styles.field}>
@@ -86,6 +98,33 @@ export default withPageAuthRequired(function Order({ order }) {
         
         <button className={styles.btn} type="submit">Update</button>
       </form>
+      <br></br>
+      <form className={styles.orderForm} onSubmit={updateOrderDetail}>
+        <h3>Items</h3>
+
+        {order.items.map(item => { return (
+          <div className={styles.card} key={item.RecID}>
+            <img src={item.Image[0].thumbnails.large.url} width="200" hight="200"/>
+            <h4>{item.Crop} - {item.Variety}</h4>
+            <div>
+              <label htmlFor="sku">SKU</label>
+              <p id="sku">{item.SKU}</p>
+            </div>                  
+            <div>
+              <label htmlFor="color">Color</label>
+              <p id="color">{item.Color}</p>
+            </div>
+            <div>
+              <label htmlFor="cost">Cost</label>
+              <p id="cost">{item.Bunches} bn at {item["Price per Bunch"]}/bn = $<strong>{item["Extended"]}</strong></p>
+            </div>  
+          </div>
+        )})}
+
+    
+      </form>
+
+
     </div>
   );
 });
@@ -98,25 +137,33 @@ async function getOrder(account,recid) {
   const apiKey = process.env.AIRTABLE_APIKEY
   console.log("[getOrder] Account [%s] RecordID [%s]", account,recid)
 
+  //
+  // Get order header
+  //
   var Airtable = require("airtable")
   Airtable.configure({endpointUrl: "https://api.airtable.com",apiKey: apiKey,});
 
   var base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
   const records = await base("Order").select({
-    pageSize: 100, 
     view: "fp-grid",
     filterByFormula: `AND( Account = "${account}", RecID = "${recid}" )`,
   }).all();
 
-  // Put resultes into an array
-  var orders = []; 
-  records.forEach(function (record) {
-    var order = record.fields;
-    orders.push(order);
-  });
-
   // There should only be one order
-  const order = orders[0]
+  var order = records[0].fields
+
+  //
+  // Get Order detail
+  //
+  const detailRecords = await base("OrderDetail").select({
+    view: "fp-grid",
+    filterByFormula: `OrderRecID = "${recid}"`,
+  }).all(); 
+
+  order.items = []; 
+  detailRecords.forEach(item => {
+    order.items.push(item.fields)
+  })
 
   return order
 }

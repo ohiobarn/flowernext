@@ -4,14 +4,14 @@
   border-width: 2px;
   border-radius: 5px;
   max-width: 80%; 
-  margin: 20px;
-  padding: 1px;
+  margin-top: 10px;
+  padding: 5px;
 }
 .field {
   display: flex;
   flex-direction: column;
   margin: 20px;
-  padding: 1px;
+  padding: 3px;
   
 }
 
@@ -47,11 +47,11 @@
   max-width: 135px;
 }
 
-.title {
+.orderTitle {
   display: flex;
   flex-direction: column;
 }
-.title span {
+.orderTitle span {
   font-size: small;
   font-style: italic;
   font-weight: lighter;
@@ -63,7 +63,45 @@
   padding: 8px 0;
   margin: 20px auto;
   background: #4979ff;
-  border-radius: 4px;
+  border-radius: 5px;
   color: white;
   text-align: center;
 }
+
+/* order detail */
+
+.card {
+  display: flex;
+  flex-direction:column;
+  justify-content:space-between;
+  margin: 20px;
+  padding: 5px;
+  background-color:white;
+  border-style: solid;
+  border-color:lightgray;
+  border-width: 2px;
+  border-radius: 5px;  
+}
+.card label {
+  opacity: .75;
+  font-size: 12px;
+  margin: 1px;
+}
+
+.card strong {
+  text-decoration: double underline;
+  font-weight: normal;
+}
+
+.card image {
+  object-fit: contain;
+  width: 200px !important;
+  position: relative !important;
+  height: unset !important;
+  max-width: 100px;
+}
+
+.card:hover {
+  border-left: 5px solid #4979ff;
+}
+

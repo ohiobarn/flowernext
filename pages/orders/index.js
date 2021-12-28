@@ -23,7 +23,8 @@ export default withPageAuthRequired(function Orders({ orders }) {
       {orders.map(order => (
         <Link href={'/orders/' + order.RecID} key={order.RecID}>
           <a className={styles.single}>
-            <h3>{order["Client/Job"]}  #{order.OrderNo} - {order.Status}</h3>
+            {/* <h3>{order["Client/Job"]}  #{order.OrderNo} - {order.Status}</h3> */}
+            <h2 className={styles.orderTitle}>{ order["Client/Job"] } <span>Order#: {order.OrderNo} - {order.Status}</span></h2>
           </a>
         </Link>
       ))}
@@ -49,7 +50,8 @@ async function getOrders(account) {
     pageSize: 100, 
     view: "fp-grid", 
     sort: [{field: "Client/Job", direction: "asc"}],
-    filterByFormula: 'Account = "' + account + '"',}).all();
+    filterByFormula: `Account = "${account}"`,
+  }).all();
 
   // Put resultes into an array
   var orders = []; 

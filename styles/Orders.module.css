@@ -12,3 +12,12 @@
   border-left: 8px solid #4979ff;
 }
 
+.orderTitle {
+  display: flex;
+  flex-direction: column;
+}
+.orderTitle span {
+  font-size: small;
+  font-style: italic;
+  font-weight: lighter;
+}
