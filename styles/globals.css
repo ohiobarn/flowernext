@@ -1,5 +1,10 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap'); */
 
+* {
+  font-size: 100%;
+  font-family: Arial;
+ }
+
 body {
   background: #fafafa;
   color: #333;
@@ -50,3 +55,24 @@ footer {
   color: #4979ff;
   text-decoration: underline;
 }
+
+.splash {
+  margin: 80px auto 10px;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  display: block;
+  width: 150px;
+  padding: 8px 0;
+  margin: 20px auto;
+  background: #4979ff;
+  border-radius: 4px;
+  color: white;
+  text-align: center;
+}
+

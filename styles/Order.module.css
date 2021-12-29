@@ -1,9 +1,24 @@
+.single {
+  padding: 2px 16px;
+  background: #fff;
+  /* display: block; */
+  display: flex;
+  flex-direction: column;
+  margin: 10px 5px;
+  border-left: 8px solid #fff;
+}
+
+.single:hover {
+  border-left: 8px solid #4979ff;
+}
+
 .orderForm {
   border-style: solid;
   border-color:lightgray;
   border-width: 2px;
   border-radius: 5px;
-  max-width: 80%; 
+  max-width: 90%; 
+  /* max-width: 300px; */
   margin-top: 10px;
   padding: 5px;
 }
@@ -38,7 +53,7 @@
   border-width: 2px;
   border-radius: 5px;
   min-height: 34px;
-  max-width: 400px;
+  max-width: 600px;
   margin: 2px;
   font-size: 14px
 }
@@ -57,30 +72,24 @@
   font-weight: lighter;
 }
 
-.btn {
-  display: block;
-  width: 150px;
-  padding: 8px 0;
-  margin: 20px auto;
-  background: #4979ff;
-  border-radius: 5px;
-  color: white;
-  text-align: center;
-}
-
 /* order detail */
 
 .card {
   display: flex;
-  flex-direction:column;
-  justify-content:space-between;
+  flex-direction:row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   margin: 20px;
-  padding: 5px;
+  padding: 2px;
   background-color:white;
   border-style: solid;
   border-color:lightgray;
   border-width: 2px;
   border-radius: 5px;  
+}
+
+.card span {
+  margin: 3px;
 }
 .card label {
   opacity: .75;
@@ -101,6 +110,18 @@
   max-width: 100px;
 }
 
+.card hr {
+  border-top: 1px solid rgba(247, 246, 246, 0.249);
+  margin: 3px;
+}
+
+.card p {
+  margin: 1px;
+}
+
+.card h4 {
+  margin: 5px;
+}
 .card:hover {
   border-left: 5px solid #4979ff;
 }

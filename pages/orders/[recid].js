@@ -71,6 +71,12 @@ export default withPageAuthRequired(function Order({ order }) {
   return (
     <div>
       <h2 className={styles.orderTitle}>{ order["Client/Job"] } <span>Order#: {order.OrderNo} - {order.Status}</span></h2>
+
+      {/* 
+      
+          Order Header
+      
+      */}      
       <form className={styles.orderForm} onSubmit={updateOrder}>
         <h3>Header</h3>
         <input id="recid" name="recid" type="hidden" value={order.RecID} />
@@ -93,37 +99,62 @@ export default withPageAuthRequired(function Order({ order }) {
         <div className={styles.field}>
           <label htmlFor="notes">Notes</label>
           {/* <input id="notes" name="notes" type="text" defaultValue={order.Notes} /> */}
-          <textarea id="notes" name="notes" rows="5" cols="30" defaultValue={order.Notes}></textarea>
+          <textarea id="notes" name="notes" rows="5" cols="60" defaultValue={order.Notes}></textarea>
         </div>
         
-        <button className={styles.btn} type="submit">Update</button>
+        <button className="btn" type="submit">Save Header</button>
       </form>
       <br></br>
+
+      {/* 
+      
+          Order Detail
+      
+      */}
       <form className={styles.orderForm} onSubmit={updateOrderDetail}>
         <h3>Items</h3>
 
         {order.items.map(item => { return (
           <div className={styles.card} key={item.RecID}>
-            <img src={item.Image[0].thumbnails.large.url} width="200" hight="200"/>
-            <h4>{item.Crop} - {item.Variety}</h4>
-            <div>
-              <label htmlFor="sku">SKU</label>
-              <p id="sku">{item.SKU}</p>
-            </div>                  
-            <div>
-              <label htmlFor="color">Color</label>
-              <p id="color">{item.Color}</p>
-            </div>
-            <div>
-              <label htmlFor="cost">Cost</label>
-              <p id="cost">{item.Bunches} bn at {item["Price per Bunch"]}/bn = $<strong>{item["Extended"]}</strong></p>
-            </div>  
+            <span>
+              <img src={item.Image[0].thumbnails.large.url} width="200" hight="200"/>
+              <h4>{item.Crop} - {item.Variety}</h4>
+            </span>
+            <span>
+              <div>
+                <hr/>
+                <label htmlFor="sku">SKU</label>
+                <p id="sku">{item.SKU}</p>
+              </div>                  
+              <div>
+                <hr/>
+                <label htmlFor="color">Color</label>
+                <p id="color">{item.Color}</p>
+              </div>
+              <div>
+                <hr/>
+                <label htmlFor="cost">Cost</label>
+                <p id="cost">{item.Bunches} bn at {item["Price per Bunch"]}/bn = $<strong>{item["Extended"]}</strong></p>
+              </div>
+            </span>
+            
           </div>
         )})}
 
     
       </form>
 
+      {/* 
+      
+          Order Activity
+      
+      */}
+      <div className={styles.orderForm}>
+        <h3>Activity</h3>
+        <div className={styles.field}>
+          <textarea id="activity" name="activity" rows="10" cols="30" defaultValue={order.Activity} readOnly></textarea>
+        </div>
+      </div>
 
     </div>
   );
