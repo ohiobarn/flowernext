@@ -1,5 +1,4 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
-import styles from "../../styles/Order.module.css"
 import Link from "next/link"
 
 // This gets called on every request
@@ -59,13 +58,13 @@ export default withPageAuthRequired(function Varieties({ varieties }) {
   return (
     <div>
       <h1>Varieties</h1>
-      <form className={styles.orderForm} onSubmit={addVarietiesToOrder}>
+      <form className="orderForm" onSubmit={addVarietiesToOrder}>
         {varieties.map(variety => (
-          <div className={styles.card} key={variety.SKU}>
+          <div className="card" key={variety.SKU}>
             {/* <img src={variety.Image[0].thumbnails.large.url} width="200" hight="200"/> */}
-            <h2 className={styles.orderTitle}>{variety.Crop} - {variety.Variety}</h2>
-            <p className={styles.orderSubTitle}>{variety.SKU}</p>
-              <div className={styles.field}>
+            <h2 className="orderTitle">{variety.Crop} - {variety.Variety}</h2>
+            <p className="orderSubTitle">{variety.SKU}</p>
+              <div className="field">
                 <label htmlFor="test">test</label>
                 <input id="test" name="test" type="text" defaultValue="test" required/>
               </div>

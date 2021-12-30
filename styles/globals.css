@@ -1,4 +1,6 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap'); */
+/*
+  Global
+*/
 
 * {
   font-size: 100%;
@@ -19,6 +21,21 @@ a {
   max-width: 960px;
   margin: 0 auto;
 }
+
+.btn {
+  display: block;
+  width: 150px;
+  padding: 8px 0;
+  margin: 20px auto;
+  background: #4979ff;
+  border-radius: 4px;
+  color: white;
+  text-align: center;
+}
+
+/* 
+  Nav
+*/
 nav {
   /* margin: 10px auto 10px; */
   margin-top: 10px;
@@ -48,14 +65,6 @@ footer {
   border-top: 1px solid #eaeaea;
 }
 
-.not-found {
-  text-align: center;
-}
-.not-found a{
-  color: #4979ff;
-  text-decoration: underline;
-}
-
 .splash {
   margin: 80px auto 10px;
   padding: 10px 0;
@@ -65,14 +74,150 @@ footer {
   align-items: center;
 }
 
-.btn {
-  display: block;
-  width: 150px;
-  padding: 8px 0;
-  margin: 20px auto;
-  background: #4979ff;
-  border-radius: 4px;
-  color: white;
+.version small{
+  font-size: x-small;
+}
+
+.not-found {
   text-align: center;
+}
+.not-found a{
+  color: #4979ff;
+  text-decoration: underline;
+}
+
+
+/* 
+
+Order
+
+*/
+
+.single {
+  padding: 2px 16px;
+  background: #fff;
+  /* display: block; */
+  display: flex;
+  flex-direction: column;
+  margin: 10px 5px;
+  border-left: 8px solid #fff;
+}
+
+.single:hover {
+  border-left: 8px solid #4979ff;
+}
+
+.orderForm {
+  border-style: solid;
+  border-color:lightgray;
+  border-width: 2px;
+  border-radius: 5px;
+  max-width: 90%; 
+  /* max-width: 300px; */
+  margin-top: 10px;
+  padding: 5px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  padding: 3px;
+  
+}
+
+.field label {
+  opacity: .75;
+  font-size: 12px;
+  margin: 2px;
+}
+
+.field input {
+  border-style: solid;
+  border-color:lightgray;
+  border-width: 2px;
+  border-radius: 5px;
+  min-height: 34px;
+  max-width: 400px;
+  margin: 2px;
+  font-size: 14px
+}
+
+.field textarea {
+  border-style: solid;
+  border-color:lightgray;
+  border-width: 2px;
+  border-radius: 5px;
+  min-height: 34px;
+  max-width: 600px;
+  margin: 2px;
+  font-size: 14px
+}
+
+.date input {
+  max-width: 135px;
+}
+
+.orderTitle {
+  display: flex;
+  flex-direction: column;
+}
+.orderTitle span {
+  font-size: small;
+  font-style: italic;
+  font-weight: lighter;
+}
+
+/* order detail */
+
+.card {
+  display: flex;
+  flex-direction:row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 20px;
+  padding: 2px;
+  background-color:white;
+  border-style: solid;
+  border-color:lightgray;
+  border-width: 2px;
+  border-radius: 5px;  
+}
+
+.card span {
+  margin: 3px;
+}
+.card label {
+  opacity: .75;
+  font-size: 12px;
+  margin: 1px;
+}
+
+.card strong {
+  text-decoration: double underline;
+  font-weight: normal;
+}
+
+.card image {
+  object-fit: contain;
+  width: 200px !important;
+  position: relative !important;
+  height: unset !important;
+  max-width: 100px;
+}
+
+.card hr {
+  border-top: 1px solid rgba(247, 246, 246, 0.249);
+  margin: 3px;
+}
+
+.card p {
+  margin: 1px;
+}
+
+.card h4 {
+  margin: 5px;
+}
+.card:hover {
+  border-left: 5px solid #4979ff;
 }
 

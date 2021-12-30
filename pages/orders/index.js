@@ -1,5 +1,4 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
-import styles from "../../styles/Order.module.css"
 import Link from "next/link"
 
 // This gets called on every request
@@ -22,9 +21,9 @@ export default withPageAuthRequired(function Orders({ orders }) {
       <h1>Orders</h1>
       {orders.map(order => (
         <Link href={'/orders/' + order.RecID} key={order.RecID}>
-          <a className={styles.single}>
+          <a className="single">
             {/* <h3>{order["Client/Job"]}  #{order.OrderNo} - {order.Status}</h3> */}
-            <h2 className={styles.orderTitle}>{ order["Client/Job"] } <span>Order#: {order.OrderNo} - {order.Status}</span></h2>
+            <h2 className="orderTitle">{ order["Client/Job"] } <span>Order#: {order.OrderNo} - {order.Status}</span></h2>
           </a>
         </Link>
       ))}

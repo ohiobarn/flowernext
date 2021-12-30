@@ -1,6 +1,5 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
-import Image from "next/image"
-import styles from "../../styles/Order.module.css"
+
 
 export async function getServerSideProps( context ){
 
@@ -70,33 +69,33 @@ export default withPageAuthRequired(function Order({ order }) {
 
   return (
     <div>
-      <h2 className={styles.orderTitle}>{ order["Client/Job"] } <span>Order#: {order.OrderNo} - {order.Status}</span></h2>
+      <h2 className="orderTitle">{ order["Client/Job"] } <span>Order#: {order.OrderNo} - {order.Status}</span></h2>
 
       {/* 
       
           Order Header
       
       */}      
-      <form className={styles.orderForm} onSubmit={updateOrder}>
+      <form className="orderForm" onSubmit={updateOrder}>
         <h3>Header</h3>
         <input id="recid" name="recid" type="hidden" value={order.RecID} />
 
-        <div className={styles.field}>
+        <div className="field">
           <label htmlFor="clientJob">Client/Job</label>
           <input id="clientJob" name="clientJob" type="text" defaultValue={order["Client/Job"]} required/>
         </div>
 
-        <div className={styles.field}>
+        <div className="field">
           <label htmlFor="teamMember">Team Member</label>
           <input id="teamMember" name="teamMember" type="text" defaultValue={order["Team Member"]} required />
         </div>
 
-        <div className={`${styles.field} ${styles.date}`}>
+        <div className="field date">
           <label htmlFor="dueDate">Due Date</label>
           <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} required />
         </div>
 
-        <div className={styles.field}>
+        <div className="field">
           <label htmlFor="notes">Notes</label>
           {/* <input id="notes" name="notes" type="text" defaultValue={order.Notes} /> */}
           <textarea id="notes" name="notes" rows="5" cols="60" defaultValue={order.Notes}></textarea>
@@ -111,11 +110,11 @@ export default withPageAuthRequired(function Order({ order }) {
           Order Detail
       
       */}
-      <form className={styles.orderForm} onSubmit={updateOrderDetail}>
+      <form className="orderForm" onSubmit={updateOrderDetail}>
         <h3>Items</h3>
 
         {order.items.map(item => { return (
-          <div className={styles.card} key={item.RecID}>
+          <div className="card" key={item.RecID}>
             <span>
               <img src={item.Image[0].thumbnails.large.url} width="200" hight="200"/>
               <h4>{item.Crop} - {item.Variety}</h4>
@@ -149,9 +148,9 @@ export default withPageAuthRequired(function Order({ order }) {
           Order Activity
       
       */}
-      <div className={styles.orderForm}>
+      <div className="orderForm">
         <h3>Activity</h3>
-        <div className={styles.field}>
+        <div className="field">
           <textarea id="activity" name="activity" rows="10" cols="30" defaultValue={order.Activity} readOnly></textarea>
         </div>
       </div>
