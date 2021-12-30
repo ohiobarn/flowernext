@@ -1,5 +1,5 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
-import styles from "../../styles/order.module.css"
+import styles from "../../styles/Order.module.css"
 import Link from "next/link"
 
 // This gets called on every request
