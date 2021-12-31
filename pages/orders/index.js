@@ -21,9 +21,9 @@ export default withPageAuthRequired(function Orders({ orders }) {
       <h1>Orders</h1>
       {orders.map(order => (
         <Link href={'/orders/' + order.RecID} key={order.RecID}>
-          <a className="single">
+          <a className="fpSingle">
             {/* <h3>{order["Client/Job"]}  #{order.OrderNo} - {order.Status}</h3> */}
-            <h2 className="orderTitle">{ order["Client/Job"] } <span>Order#: {order.OrderNo} - {order.Status}</span></h2>
+            <h2 className="fpFormTitle">{ order["Client/Job"] } <span>Order#: {order.OrderNo} - {order.Status}</span></h2>
           </a>
         </Link>
       ))}

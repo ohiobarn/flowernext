@@ -1,4 +1,5 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
+import Link from "next/link"
 
 
 export async function getServerSideProps( context ){
@@ -8,10 +9,10 @@ export async function getServerSideProps( context ){
   const { user } = getSession(context.req,res)
  
   // Get RecID
-  const recid = context.query.recid
+  const orderRecID = context.query.orderRecID
 
   // Fetch data from AirTable
-  const order = await getOrder(user.email,recid)
+  const order = await getOrder(user.email,orderRecID)
   
   // console.log(order)
 
@@ -28,7 +29,7 @@ export default withPageAuthRequired(function Order({ order }) {
     event.preventDefault() // don't redirect the page
 
     const rec = {
-      recid: event.target.recid.value,
+      orderRecID: event.target.orderRecID.value,
       clientJob: event.target.clientJob.value,
       teamMember: event.target.teamMember.value,
       dueDate: event.target.dueDate.value,
@@ -37,7 +38,6 @@ export default withPageAuthRequired(function Order({ order }) {
 
     // console.log("The following record will post to the order-update API")
     // console.log(rec)
-
     const res = await fetch(
       '/api/order-update',
       {
@@ -69,39 +69,39 @@ export default withPageAuthRequired(function Order({ order }) {
 
   return (
     <div>
-      <h2 className="orderTitle">{ order["Client/Job"] } <span>Order#: {order.OrderNo} - {order.Status}</span></h2>
+      <h2 className="fpFormTitle">{ order["Client/Job"] } <span>Order#: {order.OrderNo} - {order.Status}</span></h2>
 
       {/* 
       
           Order Header
       
       */}      
-      <form className="orderForm" onSubmit={updateOrder}>
+      <form className="fpForm" onSubmit={updateOrder}>
         <h3>Header</h3>
-        <input id="recid" name="recid" type="hidden" value={order.RecID} />
+        <input id="orderRecID" name="orderRecID" type="hidden" value={order.RecID} />
 
-        <div className="field">
+        <div className="fpFromField">
           <label htmlFor="clientJob">Client/Job</label>
           <input id="clientJob" name="clientJob" type="text" defaultValue={order["Client/Job"]} required/>
         </div>
 
-        <div className="field">
+        <div className="fpFromField">
           <label htmlFor="teamMember">Team Member</label>
           <input id="teamMember" name="teamMember" type="text" defaultValue={order["Team Member"]} required />
         </div>
 
-        <div className="field date">
+        <div className="fpFromField fpDate">
           <label htmlFor="dueDate">Due Date</label>
           <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} required />
         </div>
 
-        <div className="field">
+        <div className="fpFromField">
           <label htmlFor="notes">Notes</label>
           {/* <input id="notes" name="notes" type="text" defaultValue={order.Notes} /> */}
           <textarea id="notes" name="notes" rows="5" cols="60" defaultValue={order.Notes}></textarea>
         </div>
         
-        <button className="btn" type="submit">Save Header</button>
+        <button className="fpBtn" type="submit">Save Header</button>
       </form>
       <br></br>
 
@@ -110,11 +110,15 @@ export default withPageAuthRequired(function Order({ order }) {
           Order Detail
       
       */}
-      <form className="orderForm" onSubmit={updateOrderDetail}>
+      <form className="fpForm" onSubmit={updateOrderDetail}>
         <h3>Items</h3>
 
+        <Link href={ "varieties?orderRecID=" + order.RecID }>
+          <a>Add Items</a>
+        </Link>
+
         {order.items.map(item => { return (
-          <div className="card" key={item.RecID}>
+          <div className="fpCard" key={item.RecID}>
             <span>
               <img src={item.Image[0].thumbnails.large.url} width="200" hight="200"/>
               <h4>{item.Crop} - {item.Variety}</h4>
@@ -148,9 +152,9 @@ export default withPageAuthRequired(function Order({ order }) {
           Order Activity
       
       */}
-      <div className="orderForm">
+      <div className="fpForm">
         <h3>Activity</h3>
-        <div className="field">
+        <div className="fpFromField">
           <textarea id="activity" name="activity" rows="10" cols="30" defaultValue={order.Activity} readOnly></textarea>
         </div>
       </div>
@@ -162,10 +166,10 @@ export default withPageAuthRequired(function Order({ order }) {
 ////////////////////////////////////////////////////////////////////////////
 //          Get Order
 ////////////////////////////////////////////////////////////////////////////
-async function getOrder(account,recid) {
+async function getOrder(account,orderRecID) {
 
   const apiKey = process.env.AIRTABLE_APIKEY
-  console.log("[getOrder] Account [%s] RecordID [%s]", account,recid)
+  console.log("[getOrder] Account [%s] RecordID [%s]", account,orderRecID)
 
   //
   // Get order header
@@ -176,7 +180,7 @@ async function getOrder(account,recid) {
   var base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
   const records = await base("Order").select({
     view: "fp-grid",
-    filterByFormula: `AND( Account = "${account}", RecID = "${recid}" )`,
+    filterByFormula: `AND( Account = "${account}", RecID = "${orderRecID}" )`,
   }).all();
 
   // There should only be one order
@@ -187,7 +191,7 @@ async function getOrder(account,recid) {
   //
   const detailRecords = await base("OrderDetail").select({
     view: "fp-grid",
-    filterByFormula: `OrderRecID = "${recid}"`,
+    filterByFormula: `OrderRecID = "${orderRecID}"`,
   }).all(); 
 
   order.items = []; 

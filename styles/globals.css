@@ -17,12 +17,12 @@ a {
   color: #333;
   text-decoration: none;
 }
-.content {
+.fpContent {
   max-width: 960px;
   margin: 0 auto;
 }
 
-.btn {
+.fpBtn {
   display: block;
   width: 150px;
   padding: 8px 0;
@@ -51,21 +51,13 @@ nav {
 nav a {
   margin-left: 12px;
 }
-nav .logo {
+nav .fpLogo {
   margin-right: auto;
   display: flex;
   align-items: flex-start;
 }
-footer {
-  display: block;
-  text-align: center;
-  padding: 30px 0;
-  margin-top: 60px;
-  color: #777;
-  border-top: 1px solid #eaeaea;
-}
 
-.splash {
+.fpSplash {
   margin: 80px auto 10px;
   padding: 10px 0;
   display: flex;
@@ -74,14 +66,14 @@ footer {
   align-items: center;
 }
 
-.version small{
+.fpVersion small{
   font-size: x-small;
 }
 
-.not-found {
+.fpNot-found {
   text-align: center;
 }
-.not-found a{
+.fpNot-found a{
   color: #4979ff;
   text-decoration: underline;
 }
@@ -93,7 +85,7 @@ Order
 
 */
 
-.single {
+.fpSingle {
   padding: 2px 16px;
   background: #fff;
   /* display: block; */
@@ -103,11 +95,11 @@ Order
   border-left: 8px solid #fff;
 }
 
-.single:hover {
+.fpSingle:hover {
   border-left: 8px solid #4979ff;
 }
 
-.orderForm {
+.fpForm {
   border-style: solid;
   border-color:lightgray;
   border-width: 2px;
@@ -117,7 +109,7 @@ Order
   margin-top: 10px;
   padding: 5px;
 }
-.field {
+.fpFromField {
   display: flex;
   flex-direction: column;
   margin: 20px;
@@ -125,13 +117,13 @@ Order
   
 }
 
-.field label {
+.fpFromField label {
   opacity: .75;
   font-size: 12px;
   margin: 2px;
 }
 
-.field input {
+.fpFromField input {
   border-style: solid;
   border-color:lightgray;
   border-width: 2px;
@@ -142,7 +134,7 @@ Order
   font-size: 14px
 }
 
-.field textarea {
+.fpFromField textarea {
   border-style: solid;
   border-color:lightgray;
   border-width: 2px;
@@ -153,15 +145,15 @@ Order
   font-size: 14px
 }
 
-.date input {
+.fpDate input {
   max-width: 135px;
 }
 
-.orderTitle {
+.fpFormTitle {
   display: flex;
   flex-direction: column;
 }
-.orderTitle span {
+.fpFormTitle span {
   font-size: small;
   font-style: italic;
   font-weight: lighter;
@@ -169,7 +161,7 @@ Order
 
 /* order detail */
 
-.card {
+.fpCard {
   display: flex;
   flex-direction:row;
   flex-wrap: wrap;
@@ -183,21 +175,22 @@ Order
   border-radius: 5px;  
 }
 
-.card span {
+.fpCard span {
   margin: 3px;
+  
 }
-.card label {
+.fpCard label {
   opacity: .75;
   font-size: 12px;
   margin: 1px;
 }
 
-.card strong {
+.fpCard strong {
   text-decoration: double underline;
   font-weight: normal;
 }
 
-.card image {
+.fpCard image {
   object-fit: contain;
   width: 200px !important;
   position: relative !important;
@@ -205,19 +198,19 @@ Order
   max-width: 100px;
 }
 
-.card hr {
+.fpCard hr {
   border-top: 1px solid rgba(247, 246, 246, 0.249);
   margin: 3px;
 }
 
-.card p {
+.fpCard p {
   margin: 1px;
 }
 
-.card h4 {
+.fpCard h4 {
   margin: 5px;
 }
-.card:hover {
+.fpCard:hover {
   border-left: 5px solid #4979ff;
 }
 

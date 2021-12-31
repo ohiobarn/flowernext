@@ -4,36 +4,75 @@ import Link from "next/link"
 // This gets called on every request
 export async function getServerSideProps( context ) {
 
+  // Get RecID
+  const orderRecID = context.query.orderRecID
+  
   // Fetch data from AirTable
   const varieties = await getVarieties()
 
-   // Pass orders to the page via props
-  return { props: { varieties } };
+  const myprops  = {
+    order: { RecID: orderRecID },
+    varieties: varieties
+  }
+
+  // Pass props to the page via props
+  return { props: { myprops } };
 }
 
 
-export default withPageAuthRequired(function Varieties({ varieties }) {
+export default withPageAuthRequired(function Varieties({ myprops }) {
   //
   // Add Variety to Order Event handler
   //
   const addVarietiesToOrder = async event => {
     event.preventDefault() // don't redirect the page
 
-    //DEVTODO - change this section
 
-    const rec = {
-      recid: event.target.recid.value,
-      clientJob: event.target.clientJob.value,
-      teamMember: event.target.teamMember.value,
-      dueDate: event.target.dueDate.value,
-      notes: event.target.notes.value
+    //
+    // Add checked varieties to the array
+    //
+    var rec = {
+      varieties: []
+    }
+    for (var i=0; i < event.target.variety.length; i++) {
+      if (event.target.variety[i].checked) {
+
+        var skuKey = event.target.variety[i].value + ".SKU"
+        var cropKey = event.target.variety[i].value + ".Crop"
+        var varietyKey = event.target.variety[i].value + ".Variety"
+        var colorKey = event.target.variety[i].value + ".Color"
+        var ppbKey = event.target.variety[i].value + ".Price per Bunch"
+        var spbKey = event.target.variety[i].value + ".Stems per Bunch"
+        var orderRecIDKey = event.target.variety[i].value + ".OrderRecID"
+
+        var variety = {
+          ForecastRecID: event.target.variety[i].value,
+          SKU: event.target[skuKey].value,
+          Crop: event.target[cropKey].value,
+          Variety: event.target[varietyKey].value,
+          Color: event.target[colorKey].value,
+          "Price per Bunch": event.target[ppbKey].value,
+          "Stems per Bunch": event.target[spbKey].value,
+          OrderRecID: event.target[orderRecIDKey].value,
+        }
+        
+        rec.varieties.push(variety)
+
+      }
     }
 
-    // console.log("The following record will post to the order-update API")
-    // console.log(rec)
+    
+    //
+    // You must select at least one for this action
+    //
+    if (rec.varieties.length == 0) {
+      alert("Please select a variety")
+      return
+    }  
 
+  
     const res = await fetch(
-      '/api/order-update',
+      '/api/order-detail-add',
       {
         body: JSON.stringify(rec),
         headers: {
@@ -47,7 +86,7 @@ export default withPageAuthRequired(function Varieties({ varieties }) {
     const result = await res.json()
 
     if ( result.length > 0) {
-      alert("Saved.")
+      alert("Varieties added to order.")
     } else {
       alert("There was a problem saving your order, please try again...")
     }
@@ -58,18 +97,58 @@ export default withPageAuthRequired(function Varieties({ varieties }) {
   return (
     <div>
       <h1>Varieties</h1>
-      <form className="orderForm" onSubmit={addVarietiesToOrder}>
-        {varieties.map(variety => (
-          <div className="card" key={variety.SKU}>
-            {/* <img src={variety.Image[0].thumbnails.large.url} width="200" hight="200"/> */}
-            <h2 className="orderTitle">{variety.Crop} - {variety.Variety}</h2>
-            <p className="orderSubTitle">{variety.SKU}</p>
-              <div className="field">
-                <label htmlFor="test">test</label>
-                <input id="test" name="test" type="text" defaultValue="test" required/>
-              </div>
+      <form id="varietyForm " className="fpForm" onSubmit={addVarietiesToOrder}>
+
+        <input type="hidden" id="orderRecID" name="orderRecID" value={myprops.order.RecID} />  
+        <button className="fpBtn" type="submit">Add select to order</button> 
+
+        <button className="fpBtn">
+        <Link href={myprops.order.RecID}>
+          <a>Return to Order</a>
+        </Link>
+        </button> 
+
+        <hr />
+
+        {myprops.varieties.map(variety => (
+          <div className="fpCard" key={variety.RecID}>
+            <span>
+              <input type="checkbox" name="variety" value={variety.RecID} />
+              <input type="hidden" name={variety.RecID+".SKU"} value={variety.SKU} />
+              <input type="hidden" name={variety.RecID+".Crop"} value={variety.Crop} />
+              <input type="hidden" name={variety.RecID+".Variety"} value={variety.Variety} />
+              <input type="hidden" name={variety.RecID+".Color"} value={variety.Color} />
+              <input type="hidden" name={variety.RecID+".Price per Bunch"} value={variety["Price per Bunch"]} />
+              <input type="hidden" name={variety.RecID+".Stems per Bunch"} value={variety["Stems per Bunch"]} />
+              <input type="hidden" name={variety.RecID+".OrderRecID"} value={myprops.order.RecID} />
+
+            </span>
+            <span>
+              <img src={variety.Image[0].thumbnails.large.url} width="200" hight="200"/>
+              <h2 className="fpFormTitle">{variety.Crop} - {variety.Variety}</h2>
+            </span>
+            <span>
+              <div>
+                  <hr/>
+                  <label htmlFor="sku">SKU</label>
+                  <p id="sku">{variety.SKU}</p>
+                </div>                  
+                <div>
+                  <hr/>
+                  <label htmlFor="color">Color</label>
+                  <p id="color">{variety.Color}</p>
+                </div>
+                <div>
+                  <hr/>
+                  <label htmlFor="cost">Cost</label>
+                  <p id="cost">{variety["Price per Bunch"]}</p>
+                </div>              
+            </span>
           </div>
         ))}
+        <hr/>
+        <button className="fpBtn" type="submit">Add select to order</button>
+
       </form>
     </div>
   );

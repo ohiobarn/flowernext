@@ -7,10 +7,10 @@ export default function Home() {
   console.log("Flower Power v%s", pjson.version);
 
   return (
-    <div className="splash">
+    <div className="fpSplash">
       <Image src="/splash-clear-bg.png" alt="" width={406} height={173} />
-      <Link href='/landing'><a className="btn">Login</a></Link>
-      <p className="version"><small>Flower Power v{pjson.version}</small></p>
+      <Link href='/landing'><a className="fpBtn">Login</a></Link>
+      <p className="fpVersion"><small>Flower Power v{pjson.version}</small></p>
     </div>
   );
 }

@@ -8,33 +8,34 @@ export default function handler(req, res) {
   // Update Order from form data
   const result = updateOrder(user.email,req.body)
 
-  result.then(
-    function(result){
+  result.then( (err, records) => {
+    if (err){
+      console.log(err);
+      res.status(500).json(err)
+    } else {
       console.log("Order update successful")
-      console.log(result) 
-      res.status(200).json(result)
-    },
-    function(error) { 
-      res.status(500).json(error) 
+      console.log(records) 
+      res.status(200).json(records)      
     }
-  )
+  })
+
 
 }
 
 
 ////////////////////////////////////////////////////////////////////////////
-//          Get Orders
+//          Update Orders
 ////////////////////////////////////////////////////////////////////////////
 async function updateOrder(account,data) {
   
   const apiKey = process.env.AIRTABLE_APIKEY
-  console.log("Update order, account [%s] record id [%s]", account,data.recid )
+  console.log("Update order, account [%s] record id [%s]", account,data.orderRecID )
 
   // Build record from form data
   const rec = 
   [
     {
-      "id": data.recid,
+      "id": data.orderRecID,
       "fields": {
         "Client/Job": data.clientJob,
         "Team Member": data.teamMember,

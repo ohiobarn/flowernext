@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
     <Head>
       <title>MRFC</title>
     </Head> 
-    <div className="content">
+    <div className="fpContent">
       <Navbar />
       { children }
     </div>

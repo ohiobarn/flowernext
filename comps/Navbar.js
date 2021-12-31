@@ -5,7 +5,7 @@ const Navbar = () => {
   return (
     <nav>
         <Link href="/landing">
-          <a className="logo"><Image src="/logo-clear-bg.png" alt="" width={50} height={50} /></a>
+          <a className="fpLogo"><Image src="/logo-clear-bg.png" alt="" width={50} height={50} /></a>
         </Link>
       <Link href="/availabilityList"><a>Availability</a></Link>
       <Link href="/orders"><a>Orders</a></Link>

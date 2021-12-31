@@ -5,10 +5,10 @@ import Link from 'next/link'
 export default withPageAuthRequired(function Profile({ user }) {
 
   return (
-    <div  className="splash">
+    <div  className="fpSplash">
       <Image src="/splash-clear-bg.png" alt="" width={406} height={173} />
       {/* <p className="text">Welcome to MRFC!</p> */}
-      <Link href="/orders"><a className="btn">Get Started</a></Link>
+      <Link href="/orders"><a className="fpBtn">Get Started</a></Link>
     </div>
   );
 });
