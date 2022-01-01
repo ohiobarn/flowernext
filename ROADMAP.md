@@ -9,7 +9,7 @@ Description    | URL
 ---------------|------
 MRFC website   | https://www.madriverfloralcollective.com
 MRFC app       | https://app.madriverfloralcollective.com
-MRFC app help  | https://app.madriverfloralcollective.com/help
+MRFC app help  | https://ohiobarn.github.io/flowernext <br> <i>also viewable from within the app</i>
 
 ## Website
 
@@ -18,11 +18,23 @@ MRFC app help  | https://app.madriverfloralcollective.com/help
 
 ## App
 
+* **Order Processing Wrokflow**
+  * Establish a order processing workflow for how we want to do business with florists
+  * Review the [workflow doc](https://ohiobarn.github.io/flowernext/order/) and provide feedback
+  * The workflow is intended to standarize the processes between the MFRC and florist.
+  * The workflow should work to the advantage of the MRFC and florist and drive efficiencies into the process
+
 * **MFRC app alpha**
-  * Intended for use by the MFRC only. 
+  * Intended for use by the MFRC only.
   * Demo to florists to gather feedback
-  * Agree on minimal alpha feature set
+  * Agree on minimal feature set for alpha
 * **MFRC app beta**
-  * 
-* **MFRC app v1** -
-* **MFRC app v2** -
+  * Intended for selected florists
+  * Adjust feature set based on florist experience
+  * Collect enhancemnt list
+* **MFRC app v1**
+  * Generally available to any florist
+  * Collect bug list
+* **MFRC app v1.1**
+  * Fix bugs 
+  * Plan for next major features
