@@ -1,5 +1,7 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import Link from "next/link"
+import { useState } from "react"
+import Image from "next/image"
 
 // This gets called on every request
 export async function getServerSideProps( context ) {
@@ -21,12 +23,17 @@ export async function getServerSideProps( context ) {
 
 
 export default withPageAuthRequired(function Varieties({ myprops }) {
+
+  const [showMe, setShowMe] = useState(false);
+  function toggleCard(){
+    setShowMe(!showMe);
+  }
+
   //
   // Add Variety to Order Event handler
   //
   const addVarietiesToOrder = async event => {
     event.preventDefault() // don't redirect the page
-
 
     //
     // Add checked varieties to the array
@@ -97,21 +104,29 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
   return (
     <div>
       <h1>Varieties</h1>
-      <form id="varietyForm " className="fpForm" onSubmit={addVarietiesToOrder}>
+      
+      <div className="fpPageNav">
+        <span>  
+          <button className="fpBtn" type="submit">Add Select</button>
+        </span> 
+        <span>
+          <Link href={myprops.order.RecID}><a className="fpBtn">Done</a></Link>
+        </span>
 
-        <input type="hidden" id="orderRecID" name="orderRecID" value={myprops.order.RecID} />  
-        <button className="fpBtn" type="submit">Add select to order</button> 
+      </div>
 
-        <button className="fpBtn">
-        <Link href={myprops.order.RecID}>
-          <a>Return to Order</a>
-        </Link>
-        </button> 
-
-        <hr />
-
+      <form id="varietyForm " className="fpFormList" onSubmit={addVarietiesToOrder}>
+        <input type="hidden" id="orderRecID" name="orderRecID" value={myprops.order.RecID} />
+        <div className="expandCollapse">
+          <span style={{display: showMe?"none":"block"}}>
+            <Image  onClick={toggleCard} src="/expand-alt-solid.svg"   alt="" width={20} height={20}/>
+          </span>
+          <span style={{display: showMe?"block":"none"}}>
+            <Image  onClick={toggleCard} src="/compress-alt-solid.svg" alt="" width={20} height={20}/>
+          </span>
+        </div>        
         {myprops.varieties.map(variety => (
-          <div className="fpCard" key={variety.RecID}>
+          <div className="fpCard" key={variety.RecID} >
             <span>
               <input type="checkbox" name="variety" value={variety.RecID} />
               <input type="hidden" name={variety.RecID+".SKU"} value={variety.SKU} />
@@ -121,13 +136,11 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
               <input type="hidden" name={variety.RecID+".Price per Bunch"} value={variety["Price per Bunch"]} />
               <input type="hidden" name={variety.RecID+".Stems per Bunch"} value={variety["Stems per Bunch"]} />
               <input type="hidden" name={variety.RecID+".OrderRecID"} value={myprops.order.RecID} />
-
             </span>
-            <span>
-              <img src={variety.Image[0].thumbnails.large.url} width="200" hight="200"/>
-              <h2 className="fpFormTitle">{variety.Crop} - {variety.Variety}</h2>
+            <span style={{display: showMe?"block":"none"}}>
+              <img src={variety.Image[0].thumbnails.large.url} width="200" hight="200" />
             </span>
-            <span>
+            <span style={{display: showMe?"block":"none"}}>
               <div>
                   <hr/>
                   <label htmlFor="sku">SKU</label>
@@ -142,12 +155,21 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
                   <hr/>
                   <label htmlFor="cost">Cost</label>
                   <p id="cost">{variety["Price per Bunch"]}</p>
-                </div>              
+                </div> 
+                <div>
+                  <hr/>
+                  <label htmlFor="cost">Forecast</label>
+                  <p id="forecast">{variety["This week | Next week | Future"]}</p>
+                </div>                        
+            </span>
+            <span>
+              <h2 className="fpFormTitle">{variety.Crop} - {variety.Variety}</h2>
             </span>
           </div>
+          
         ))}
         <hr/>
-        <button className="fpBtn" type="submit">Add select to order</button>
+        <button className="fpBtnCenter" type="submit">Add select to order</button>
 
       </form>
     </div>

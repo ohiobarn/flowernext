@@ -101,7 +101,7 @@ export default withPageAuthRequired(function Order({ order }) {
           <textarea id="notes" name="notes" rows="5" cols="60" defaultValue={order.Notes}></textarea>
         </div>
         
-        <button className="fpBtn" type="submit">Save Header</button>
+        <button className="fpBtnCenter" type="submit">Save Header</button>
       </form>
       <br></br>
 
@@ -112,16 +112,10 @@ export default withPageAuthRequired(function Order({ order }) {
       */}
       <form className="fpForm" onSubmit={updateOrderDetail}>
         <h3>Items</h3>
-
-        <Link href={ "varieties?orderRecID=" + order.RecID }>
-          <a>Add Items</a>
-        </Link>
-
         {order.items.map(item => { return (
           <div className="fpCard" key={item.RecID}>
             <span>
               <img src={item.Image[0].thumbnails.large.url} width="200" hight="200"/>
-              <h4>{item.Crop} - {item.Variety}</h4>
             </span>
             <span>
               <div>
@@ -140,10 +134,15 @@ export default withPageAuthRequired(function Order({ order }) {
                 <p id="cost">{item.Bunches} bn at {item["Price per Bunch"]}/bn = $<strong>{item["Extended"]}</strong></p>
               </div>
             </span>
+            <span>
+              <h4>{item.Crop} - {item.Variety}</h4>
+            </span>
             
           </div>
         )})}
-
+        <div className="fpPageNav">
+          <Link href={ "varieties?orderRecID=" + order.RecID }><a className="fpBtn">Add Items</a></Link>
+        </div>
     
       </form>
 
