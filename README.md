@@ -34,3 +34,30 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Doc
+
+```bash
+# Setup
+mkdocs new .
+
+# one time setup for material theme
+python3 -m pip install mkdocs-material
+python3 -m pip install mkdocs-mermaid2-plugin
+
+# then
+mkdocs serve
+# Edit content and review changes here:
+open http://127.0.0.1:8000/
+```
+
+### Publish Doc
+
+```bash
+mkdocs build --clean; mkdocs gh-deploy
+open https://ohiobarn.github.io/flowerpower/ 
+```
+
+## Roadmap
+
+See: [ROADMAP.md](ROADMAP.md)

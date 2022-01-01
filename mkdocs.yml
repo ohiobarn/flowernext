@@ -1,0 +1,21 @@
+site_name: MRFC Documentation
+site_author: Tony Gilkerson
+nav:
+  - Availability Lists: forecast.md
+  - Orders: order.md
+  - About: about.md
+
+#theme: readthedocs
+theme:
+  # name: readthedocs
+  # name: nature
+  name: material
+  # name: cluster
+  # name: windmill
+  # name: bootstrap386
+  # name: gitbook
+  # name: github  
+
+plugins:
+    - search
+    - mermaid2
