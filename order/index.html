@@ -117,13 +117,8 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#order-status">
-    Order Status
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#order-status-flow">
-    Order Status Flow
+<a class="md-nav__link" href="#order-status-summary">
+    Order Status Summary
   </a>
 </li>
 </ul>
@@ -149,13 +144,8 @@
     </label>
 <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
 <li class="md-nav__item">
-<a class="md-nav__link" href="#order-status">
-    Order Status
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#order-status-flow">
-    Order Status Flow
+<a class="md-nav__link" href="#order-status-summary">
+    Order Status Summary
   </a>
 </li>
 </ul>
@@ -166,39 +156,85 @@
 <div class="md-content" data-md-component="content">
 <article class="md-content__inner md-typeset">
 <h1 id="orders">Orders</h1>
-<p>The Order lifecycle is intended to facilitate communication between the collectives and its members form early planning to fulfillment.</p>
-<h2 id="order-status">Order Status</h2>
+<p>An order is an electronic record in the MFRC app used to manage all order activities from early planning to fulfillment/payment. It is a single point of contact between the MRFC and florist for all communication on a given order. All information; status, delivery dates, correspondence, etc. are managed on the original order using various fields on the order. The goal is to keep everything you need in one place and avoid the need to manage disparate emails, text and pieces of paper.</p>
+<p>What's on an order:</p>
+<ul>
+<li>
+<p><strong>Client/Job</strong> - The florists' client or job that this order is for, e.g. The Johnson Wedding.  It is use as a convent way to refer to this order in the app.</p>
+</li>
+<li>
+<p><strong>Team Member</strong> - The name of the florists' contact for this order.</p>
+</li>
+<li>
+<p><strong>Order Notes</strong> - Each order has a notes section use by both MRFC and florists to finalize details.  Order notes are intended to replace out-of-band communication such aa texts and emails.</p>
+</li>
+<li>
+<p><strong>Order activity</strong> - Each order has an activity log with a record of all changes made to the order. The activity log is managed automatically by the system and is viewable on the order at anytime. It contains the date and description of any order modification.</p>
+</li>
+<li>
+<p><strong>Delivery Date</strong> - The date when the order is to be delivered or picked-up. The florist must select an available delivery date from the MRFC's delivery schedule.</p>
+</li>
+<li>
+<p><strong>Delivery Option</strong> - Indicates weather the order is to be delivered or picked-up.</p>
+</li>
+<li>
+<p><strong>Delivery Location</strong> - The location where the order is to be delivered or picked-up. If the delivery option was taken the florist must supply a delivery location. If the pick-up option was taken the MFRC will supply a pick-up location.</p>
+</li>
+<li>
+<p><strong>Delivery Notes</strong> - Optional notes that may be necessary to clarify delivery details.</p>
+</li>
+<li>
+<p><strong>Order Items</strong> - A list of varieties for this order. The florist select varieties from the MRFC availability list and indicates the number of bunches requested.</p>
+</li>
+<li>
+<p><strong>Order Status</strong> - Indicates the current status of the order and is key for managing the lifecycle of the order.  See the order status sections below for more detail.</p>
+</li>
+</ul>
+<h2 id="order-status-summary">Order Status Summary</h2>
+<p>Below are the status a florest will see in the app.</p>
 <div class="mermaid">flowchart LR;
 
-draft(Draft) --&gt; submit("Submitted") --&gt; pending(Pending) --&gt; settled(Settled) --&gt; fulfilled(Fulfilled) --&gt; archived(Archived)
+
+draft(Draft) --&gt; 
+submit("Submitted") --&gt; 
+accepted(Accepted) --&gt; 
+pending(Pending) --&gt; 
+ready(Ready) --&gt;
+delivered(Delivered) --&gt;
+invoiced(Invoiced) --&gt;
+paid(Paid)
+
+submit --&gt; modsreq(Modifications Requested) --&gt; submit
 </div>
-<h2 id="order-status-flow">Order Status Flow</h2>
-<div class="mermaid">flowchart TD;
-
-  subgraph Draft-Phase;
-    start(["Start"]) 
-    -- Create Order --&gt; draft("Draft&lt;br&gt;Order")
-    -- Submit Order --&gt; submit(Submitted&lt;br&gt;Order)
-  end
-
-  subgraph Collaboration-Phase;
-    submit -- MRFC Acknowledge --&gt; pending(Pending&lt;br&gt;Order)
-  end
-
-  subgraph Fulfillment-Phase;
-    pending
-    -- MRFC Mark As Settled --&gt; settled(Settled&lt;br&gt;Order)
-    -- MRFC Mark As Fulfilled --&gt; fulfilled(Fulfilled&lt;br&gt;Order)
-    -- MRFC Mark As Invoiced or Paid --&gt; archived(Archived&lt;br&gt;Order)
-  end
-
-note1[/Modify order untill it is just right&lt;br&gt;Orders can stay in this phase for as longe as needed/] -.-&gt; Draft-Phase
-
-note2[/Work with MRFC to finalize the order&lt;br&gt;Additional edits may be required/] -.-&gt; Collaboration-Phase
-
-note3[/No edits can be made during this phase the&lt;br&gt;order is in view only mode. Once archived &lt;br&gt;the order will no longer display in your active order &lt;br&gt;list but can be view via Order History/] -.-&gt; Fulfillment-Phase
-
-</div>
+<ul>
+<li>
+<p><strong>Draft</strong> - When a florist creates a new order its initial status is draft. The draft order is a planning tool for the florist, creating the order early in their planning phase and making edits over time as plans solidify with their clients. At some point the draft is complete or mostly complete, some details may be missing or the florist may have questions for the MRFC. At this time the florist should submit the order to the MRFC for review by clicking the submit button on the order.</p>
+</li>
+<li>
+<p><strong>Submitted</strong> - When a florist submits an order the MRFC will receive a notification. The MRFC will review the order and if all is well, marks the order as accepted. If the order can not be accepted as-is the MRFC will request that the order be modified by adding notes to the order specifying the detail of the modifications being requested, then marks the order as modifications requested. <em>Note</em>: the app will not allow an order to be submitted unless it is complete. For example, the florist must select an available delivery date from the MRFC's delivery schedule.</p>
+</li>
+<li>
+<p><strong>Modifications Requested</strong> - When an order is marked as "Modifications Requested" the florist receives a notification.  As a result the florist will edit the order and when ready submits the order again. This cycle continues until the order is accepted.</p>
+</li>
+<li>
+<p><strong>Accepted</strong> - When an order is accepted the florists will receive a notification.   The accepted orders are "highlighted" in the app for the florist to see. At this time no action is required, both parties are waiting for the approaching delivery date.</p>
+</li>
+<li>
+<p><strong>Pending</strong> - Each Monday the system automatically looks for accepted orders with a delivery date that is due in that week and marks them as pending. The pending orders will show more prominently in the app for the florist to see. It lets the florist know that the MRFC will soon begin their pick-n-pack process. </p>
+</li>
+<li>
+<p><strong>Ready</strong> - Once all items for an order have been harvested and prepared the MRFC will mark the order as ready, indicating that the order is ready to be picked up or delivered according to the delivery date specified on the order.</p>
+</li>
+<li>
+<p><strong>Delivered</strong> - Once the order has been  picked up/delivered the MRFC will mark the order as delivered.</p>
+</li>
+<li>
+<p><strong>Invoiced</strong> - Once a day the system will look for delivered orders and automaticly create and invoice. The order will be marked as invoiced and remain in the active orders list in the app to remind the florist that payment is due.</p>
+</li>
+<li>
+<p><strong>Paid</strong> - Once payment is received the MFRC will mark the order as paid.  Paid orders are not shown in the active orders list but instead can be view from the "past orders" section of the app, in view only mode.</p>
+</li>
+</ul>
 </article>
 </div>
 </div>
