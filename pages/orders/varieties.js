@@ -98,24 +98,21 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
       alert("There was a problem saving your order, please try again...")
     }
     
+    //Go back from where you came
+    history.go(-1)
   }
 
 
   return (
     <div>
       <h1>Varieties</h1>
-      
-      <div className="fpPageNav">
-        <span>  
-          <button className="fpBtn" type="submit">Add Select</button>
-        </span> 
-        <span>
-          <Link href={myprops.order.RecID}><a className="fpBtn">Done</a></Link>
-        </span>
 
-      </div>
 
-      <form id="varietyForm " className="fpFormList" onSubmit={addVarietiesToOrder}>
+
+      <form id="varietyForm" className="fpFormList" onSubmit={addVarietiesToOrder}>
+
+
+        
         <input type="hidden" id="orderRecID" name="orderRecID" value={myprops.order.RecID} />
         <div className="expandCollapse">
           <span style={{display: showMe?"none":"block"}}>
@@ -124,6 +121,10 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
           <span style={{display: showMe?"block":"none"}}>
             <Image  onClick={toggleCard} src="/compress-alt-solid.svg" alt="" width={20} height={20}/>
           </span>
+        </div>
+        <div className="fpPageNavTop">
+            <button className="fpBtn" type="submit">Add Select</button>
+            <Link href={myprops.order.RecID}><a className="fpBtn">Done</a></Link>
         </div>        
         {myprops.varieties.map(variety => (
           <div className="fpCard" key={variety.RecID} >
@@ -168,10 +169,13 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
           </div>
           
         ))}
-        <hr/>
-        <button className="fpBtnCenter" type="submit">Add select to order</button>
-
+        <div className="fpPageNavBottom">
+          <button className="fpBtn" type="submit">Add Select</button>
+          <Link href={myprops.order.RecID}><a className="fpBtn">Done</a></Link>
+        </div>
       </form>
+
+
     </div>
   );
 });

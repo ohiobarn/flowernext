@@ -9,20 +9,55 @@ export async function getServerSideProps( context ) {
   const { user } = getSession(context.req,res)
 
   // Fetch data from AirTable
-  const orders = await getOrders(user.email)
+  var orders = await getOrders(user.email)
 
   // Pass orders to the page via props
   return { props: { orders } };
 }
 
 export default withPageAuthRequired(function Orders({ orders }) {
+
+  //
+  // Create Order Event handler
+  //
+  const createOrder = async event => {
+    event.preventDefault() // don't redirect the page
+
+    const res = await fetch(
+      '/api/order-create',
+      {
+        body: JSON.stringify({"foo": "bar"}),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST'
+      }
+    )
+    
+
+    //DEVTODO - should I check for errors? how?
+    const result = await res.json()
+
+    if ( result.length > 0) {
+      console.log("Created.")
+    } else {
+      alert("There was a problem creating your order, please try again...")
+    }
+    
+    window.location.href = "/orders/"+ result[0].id;
+  }
+
   return (
     <div>
       <h1>Orders</h1>
+
+      <form className="fpPageNavTop" onSubmit={createOrder}>
+        <button className="fpBtn" type="submit">New Order</button>
+      </form>
+ 
       {orders.map(order => (
         <Link href={'/orders/' + order.RecID} key={order.RecID}>
           <a className="fpSingle">
-            {/* <h3>{order["Client/Job"]}  #{order.OrderNo} - {order.Status}</h3> */}
             <h2 className="fpFormTitle">{ order["Client/Job"] } <span>Order#: {order.OrderNo} - {order.Status}</span></h2>
           </a>
         </Link>

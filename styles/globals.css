@@ -3,7 +3,7 @@
 */
 
 * {
-  font-size: 100%;
+  /* font-size: 100%; */
   font-family: Arial;
  }
 
@@ -13,6 +13,7 @@ body {
   /* font-family: "Nunito"; */
   font-family: Arial, Helvetica, sans-serif
 }
+
 a {
   color: #333;
   text-decoration: none;
@@ -120,7 +121,7 @@ Order
   border-radius: 5px;
   max-width: 90%; 
   /* max-width: 300px; */
-  margin-top: 10px;
+  margin: 10px;
   padding: 5px;
 }
 .fpFormList {
@@ -171,6 +172,10 @@ Order
   font-size: 14px
 }
 
+.fpInputReadOnly  {
+  border-style: none;
+}
+
 .fpDate input {
   max-width: 135px;
 }
@@ -186,7 +191,7 @@ Order
 }
 
 /* card */
-.fpPageNav {
+.fpPageNavTop {
   margin-top: 2px;
   margin-right: auto;
   margin-bottom: 2px;
@@ -198,7 +203,19 @@ Order
   flex-wrap: wrap;
   gap: 30px;
   border-bottom: 1px solid #ddd;
-
+}
+.fpPageNavBottom {
+  margin-top: 2px;
+  margin-right: auto;
+  margin-bottom: 2px;
+  margin-left: auto;
+  padding: 5px 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  border-top: 1px solid #ddd;
 }
 
 .fpCard {
@@ -221,6 +238,12 @@ Order
   
 }
 .fpCard label {
+  opacity: .75;
+  font-size: 12px;
+  margin: 1px;
+}
+
+.fpCard small {
   opacity: .75;
   font-size: 12px;
   margin: 1px;
@@ -253,6 +276,20 @@ Order
 }
 .fpCard:hover {
   border-left: 5px solid #4979ff;
+}
+
+.fpBar {
+  margin-top: 2px;
+  margin-right: auto;
+  margin-bottom: 2px;
+  margin-left: 15px;
+  padding: 5px 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  /* border-bottom: 1px solid #ddd; */
 }
 
 .expandCollapse {

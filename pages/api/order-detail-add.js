@@ -8,17 +8,16 @@ export default function handler(req, res) {
   // Update Order from form data
   const result = addOrderDetail(user.email,req.body)
 
-  result.then( (err, records) => {
-    if (err){
-      console.log(err);
-      res.status(500).json(err)
-    } else {
-      console.log("OrderDetail create successful")
-      console.log(records) 
-      res.status(200).json(records)      
-    }
-  })
+  result.then(value => {
+    console.log("OrderDetail update successful") // Success!
+    res.status(200).json(value)
+  }, reason => {
+    console.log("OrderDetail update NOT successful") // Error!
+    console.error(reason); // Error!
+    res.status(500).json(reason)
+  });
 
+  return
 }
 
 
@@ -43,7 +42,6 @@ async function addOrderDetail(account,data) {
         "SKU": data.varieties[i].SKU,
         "Account": account,
         "Bunches": 0,
-        "Extended": 0,
         "Crop": data.varieties[i].Crop,
         "Variety": data.varieties[i].Variety,
         "Color": data.varieties[i].Color,

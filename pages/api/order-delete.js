@@ -6,13 +6,13 @@ export default function handler(req, res) {
   const { user } = getSession(req,res)
   
   // Update Order from form data
-  const result = updateOrder(user.email,req.body)
+  const result = deleteOrder(user.email,req.body)
 
   result.then(value => {
-    console.log("OrderDetail update successful") // Success!
+    console.log("Order deleted successful") // Success!
     res.status(200).json(value) 
   }, reason => {
-    console.log("OrderDetail update NOT successful") // Error!
+    console.log("Order deleted NOT successful") // Error!
     console.error(reason); // Error!
     res.status(500).json(reason)
   });
@@ -22,34 +22,19 @@ export default function handler(req, res) {
 
 
 ////////////////////////////////////////////////////////////////////////////
-//          Update Orders
+//          Delete Orders
 ////////////////////////////////////////////////////////////////////////////
-async function updateOrder(account,data) {
+async function deleteOrder(account,data) {
   
   const apiKey = process.env.AIRTABLE_APIKEY
-  console.log("Update order, account [%s] record id [%s]", account,data.orderRecID )
-
-  // Build record from form data
-  const rec = 
-  [
-    {
-      "id": data.orderRecID,
-      "fields": {
-        "Client/Job": data.clientJob,
-        "Team Member": data.teamMember,
-        "Due Date": data.dueDate,
-        "Notes": data.notes
-      }
-    }
-  ]
-
-  console.log("The following record will be used to update the order.")
-  console.log(rec)
+  console.log(data)
+  console.log("Delete order for account [%s] record ids:", account )
+  console.log(data.orderRecIDs)
 
   var Airtable = require("airtable")
   Airtable.configure({endpointUrl: "https://api.airtable.com",apiKey: apiKey,});
   var base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
-  const result  = await base("Order").update(rec);
+  const result  = await base("Order").destroy(data.orderRecIDs);
 
   //Return a promise
   return result
