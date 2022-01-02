@@ -10,21 +10,20 @@ MRFC app help  | https://ohiobarn.github.io/flowernext <br> <i>also viewable fro
 
 ## Early 2022
 
-* Single point of contact for florists (www+app)
-* Review www content
-* Create app to manange pre-orders, orders, invoicing
+* Establish a single point of presence for florists (www & app)
+* Create app to manage pre-orders, orders, invoicing
 * Review [backlog](https://github.com/ohiobarn/flowernext/issues)
 
 ## Spring 2022
 
-* Launch www + Intended (alpha release)
+* Launch www & app (alpha release)
 * Engage with florists to get setup and trained
 * In some cases the MRFC will use the app on behalf of a florist
-* Demo to florists to gather feedback
+* Gather feedback form florists
 
 ## Late 2022
 
-* Adjust workflow and app based on 2022 experience (beta release)
+* Adjust www & app based on 2022 experience (beta release)
 * Introduce MFRC back office features for members
   * "Grap-n-go Orders"
   * TBD
