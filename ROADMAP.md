@@ -4,17 +4,12 @@ The MRFC roadmap is a plan that outlines both short and longterm goals and desir
 
 > Note: This is a very minimal start to a roadmap. It is my hope to expand this over time.
 
-
 Description    | URL
 ---------------|------
 MRFC website   | https://www.madriverfloralcollective.com
 MRFC app       | https://app.madriverfloralcollective.com
 MRFC app help  | https://ohiobarn.github.io/flowernext <br> <i>also viewable from within the app</i>
-
-## Website
-
-* **Refresh Content** -  Review all content and update anything that is out of date. For example, add the 2022 availability list and remove the 2021 list.
-* **Add Galery** - Migrate the variety galery from OBFF Squarespace gallery to the MRFC website
+Backlog        | https://github.com/ohiobarn/flowernext/issues
 
 ## App
 
@@ -28,13 +23,16 @@ MRFC app help  | https://ohiobarn.github.io/flowernext <br> <i>also viewable fro
   * Intended for use by the MFRC only.
   * Demo to florists to gather feedback
   * Agree on minimal feature set for alpha
+
 * **MFRC app beta**
   * Intended for selected florists
   * Adjust feature set based on florist experience
   * Collect enhancemnt list
+
 * **MFRC app v1**
   * Generally available to any florist
   * Collect bug list
+
 * **MFRC app v1.1**
   * Fix bugs 
   * Plan for next major features
