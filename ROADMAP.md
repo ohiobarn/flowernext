@@ -1,38 +1,40 @@
-# MRFC Roadmap
+# MRFC App Roadmap
 
-The MRFC roadmap is a plan that outlines both short and longterm goals and desired outcomes. When possible it will include the major steps or milestones needed to reach it.
-
-> Note: This is a very minimal start to a roadmap. It is my hope to expand this over time.
+Roadmap items for the MRFC app and web site.
 
 Description    | URL
 ---------------|------
 MRFC website   | https://www.madriverfloralcollective.com
 MRFC app       | https://app.madriverfloralcollective.com
 MRFC app help  | https://ohiobarn.github.io/flowernext <br> <i>also viewable from within the app</i>
-Backlog        | https://github.com/ohiobarn/flowernext/issues
 
-## App
+## Early 2022
 
-* **Order Processing Wrokflow**
-  * Establish a order processing workflow for how we want to do business with florists
-  * Review the [workflow doc](https://ohiobarn.github.io/flowernext/order/) and provide feedback
-  * The workflow is intended to standarize the processes between the MFRC and florist.
-  * The workflow should work to the advantage of the MRFC and florist and drive efficiencies into the process
+* Single point of contact for florists (www+app)
+* Review www content
+* Create app to manange pre-orders, orders, invoicing
+* Review [backlog](https://github.com/ohiobarn/flowernext/issues)
 
-* **MFRC app alpha**
-  * Intended for use by the MFRC only.
-  * Demo to florists to gather feedback
-  * Agree on minimal feature set for alpha
+## Spring 2022
 
-* **MFRC app beta**
-  * Intended for selected florists
-  * Adjust feature set based on florist experience
-  * Collect enhancemnt list
+* Launch www + Intended (alpha release)
+* Engage with florists to get setup and trained
+* In some cases the MRFC will use the app on behalf of a florist
+* Demo to florists to gather feedback
 
-* **MFRC app v1**
-  * Generally available to any florist
-  * Collect bug list
+## Late 2022
 
-* **MFRC app v1.1**
-  * Fix bugs 
-  * Plan for next major features
+* Adjust workflow and app based on 2022 experience (beta release)
+* Introduce MFRC back office features for members
+  * "Grap-n-go Orders"
+  * TBD
+
+## Spring 2023
+
+* App generally available to all florist (v1)
+  * florists should be able to self on-board with minimal or no MFRC involvement
+* MFRC members should be able to more easily participate/share back-office functions
+
+## Fall 2023
+
+* TBD
