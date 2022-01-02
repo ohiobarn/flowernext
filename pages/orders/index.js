@@ -52,7 +52,8 @@ export default withPageAuthRequired(function Orders({ orders }) {
       <h1>Orders</h1>
 
       <form className="fpPageNavTop" onSubmit={createOrder}>
-        <button className="fpBtn" type="submit">New Order</button>
+        <span><button className="fpBtn" type="submit">New Order</button></span>
+        <span><Link href="/orders/history"><a>Past Orders</a></Link></span>
       </form>
  
       {orders.map(order => (
