@@ -8,7 +8,7 @@ export default withPageAuthRequired(function Profile({ user }) {
     <div  className="fpSplash">
       <Image src="/splash-clear-bg.png" alt="" width={406} height={173} />
       {/* <p className="text">Welcome to MRFC!</p> */}
-      <Link href="/orders"><a className="fpBtnCenter">Get Started</a></Link>
+      <Link href="/orders"><a className="fpBtn">Get Started</a></Link>
     </div>
   );
 });

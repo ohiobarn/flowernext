@@ -34,14 +34,18 @@ async function updateOrder(account,data) {
   [
     {
       "id": data.orderRecID,
-      "fields": {
-        "Client/Job": data.clientJob,
-        "Team Member": data.teamMember,
-        "Due Date": data.dueDate,
-        "Notes": data.notes
-      }
+      "fields": {}
     }
   ]
+
+  // 
+  // Add fields
+  //
+  if (data.status != null)     { rec[0].fields.Status = data.status }
+  if (data.clientJob != null)  { rec[0].fields["Client/Job"] = data.clientJob }
+  if (data.teamMember != null) { rec[0].fields["Team Member"] = data.teamMember }
+  if (data.dueDate != null)    { rec[0].fields["Due Date"] = data.dueDate }
+  if (data.notes != null)      { rec[0].fields.Notes = data.notes }
 
   console.log("The following record will be used to update the order.")
   console.log(rec)
