@@ -291,7 +291,7 @@ export default withPageAuthRequired(function Order({ order }) {
             <label htmlFor="notes">Notes</label>
             {/* <input id="notes" name="notes" type="text" defaultValue={order.Notes} /> */}
             <textarea id="notes" name="notes" rows="15" cols="60" defaultValue={order.Notes}></textarea>
-            <small>Use the notes to include special instructions or ask a question about this order. Press <em>Send Notes</em> to notify MRFC. You will receive a response in the notes, simular to how text works.</small>
+            <small>Use the notes to include special instructions or ask a question about this order. Press <em>Send Notes</em> to notify MRFC. You will receive a response in the notes, like a text.</small>
           </div>
           <div className="fpPageNavBottom">
             <button className="fpBtn" type="button" value={order.RecID} onClick={sendNotes}>
