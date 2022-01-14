@@ -6,7 +6,7 @@ export default withPageAuthRequired(function Profile({ user }) {
 
   return (
     <div  className="fpSplash">
-      <Image src="/splash-clear-bg.png" alt="" width={406} height={173} />
+      <Image src="/splash-clear-bg.png"  layout="intrinsic" alt="splash" width={406} height={173} />
       {/* <p className="text">Welcome to MRFC!</p> */}
       <Link href="/orders"><a className="fpBtn">Get Started</a></Link>
     </div>

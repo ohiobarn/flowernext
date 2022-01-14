@@ -24,7 +24,7 @@ export async function getServerSideProps( context ) {
 
 export default withPageAuthRequired(function Varieties({ myprops }) {
 
-  const [showMe, setShowMe] = useState(false);
+  const [showMe, setShowMe] = useState(true);
   function toggleCard(){
     setShowMe(!showMe);
   }
@@ -116,10 +116,10 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
         <input type="hidden" id="orderRecID" name="orderRecID" value={myprops.order.RecID} />
         <div className="expandCollapse">
           <span style={{display: showMe?"none":"block"}}>
-            <Image  onClick={toggleCard} src="/expand-alt-solid.svg"   alt="" width={20} height={20}/>
+            <Image  onClick={toggleCard} src="/expand-alt-solid.svg"   layout="fixed" alt="expand" width={20} height={20}/>
           </span>
           <span style={{display: showMe?"block":"none"}}>
-            <Image  onClick={toggleCard} src="/compress-alt-solid.svg" alt="" width={20} height={20}/>
+            <Image  onClick={toggleCard} src="/compress-alt-solid.svg" layout="fixed" alt="compress" width={20} height={20}/>
           </span>
         </div>
         <div className="fpPageNavTop">
@@ -139,7 +139,7 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
               <input type="hidden" name={variety.RecID+".OrderRecID"} value={myprops.order.RecID} />
             </span>
             <span style={{display: showMe?"block":"none"}}>
-              <img src={variety.Image[0].thumbnails.large.url} width="200" hight="200" />
+              <Image src={variety.Image[0].thumbnails.large.url} layout="intrinsic" width={200} height={200} alt="thmbnail"/>
             </span>
             <span style={{display: showMe?"block":"none"}}>
               <div>

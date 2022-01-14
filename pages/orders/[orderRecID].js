@@ -1,6 +1,8 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import Image from "next/image"
+import React, { useState, useEffect} from "react";
+
 
 export async function getServerSideProps(context) {
   // Get user from cookie
@@ -289,9 +291,12 @@ export default withPageAuthRequired(function Order({ order }) {
           </p>
           <div className="fpFromField">
             <label htmlFor="notes">Notes</label>
-            {/* <input id="notes" name="notes" type="text" defaultValue={order.Notes} /> */}
-            <textarea id="notes" name="notes" rows="15" cols="60" defaultValue={order.Notes}></textarea>
-            <small>Use the notes to include special instructions or ask a question about this order. Press <em>Send Notes</em> to notify MRFC. You will receive a response in the notes, like a text.</small>
+            <textarea id="notes" name="notes" rows="15" cols="80" defaultValue={order.Notes}></textarea>
+            <small>
+              Notes can be used to include special instructions or ask a question about this order. 
+              To notify MRFC, press <em>Send Notes</em> and you will receive a response soon. 
+              The response will show up in the notes sectionin above, like a text.
+            </small>
           </div>
           <div className="fpPageNavBottom">
             <button className="fpBtn" type="button" value={order.RecID} onClick={sendNotes}>
@@ -361,7 +366,7 @@ export default withPageAuthRequired(function Order({ order }) {
                 <input name="orderDetailRecID" type="hidden" defaultValue={item.RecID} />
                 <input name="pricePerBunch" type="hidden" defaultValue={item["Price per Bunch"]} />
                 <span>
-                  <img src={item.Image[0].thumbnails.large.url} width="200" hight="200" />
+                  <Image src={item.Image[0].thumbnails.large.url} layout="intrinsic" width={200} height={200} alt="thmbnail"/>
                 </span>
                 <span>
                   <div>
