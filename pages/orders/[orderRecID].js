@@ -218,22 +218,24 @@ export default withPageAuthRequired(function Order({ order }) {
   // Send Notes
   /////////////////////////////////////////////////////////////////////////////////
   const sendNotes = async (event) => {
-
-    if (!event.target.form.notes.value) {
-      alert("Notes are empty. Please enter your notes first.");
+    
+    if (!event.target.form.textMsg.value) {
+      alert("Text is empty. Please enter a text message.");
       return;      
     }
 
-    var answer = confirm("\nWARNING!\nAre you sure you want to notify MRFC?");
+    var answer = confirm("\nWARNING!\nAre you sure you want to send a text to MRFC?");
     if (!answer) {
       // Dont submit
       return;
     }
 
+    var notes=event.target.form.notes.value + "\n" +  event.target.form.orderAccount.value + ": " + event.target.form.textMsg.value
+
     // Yes continue
     const rec = {
       orderRecID: event.target.value,
-      notes: event.target.form.notes.value
+      notes: notes
     };
 
     console.log("The following record will post to the order-update API")
@@ -257,6 +259,7 @@ export default withPageAuthRequired(function Order({ order }) {
       alert("There was a problem sending your notes, please try again...");
     }
 
+    window.location.href = "/orders";
   };
 
   /////////////////////////////////////////////////////////////////////////////////
@@ -264,88 +267,92 @@ export default withPageAuthRequired(function Order({ order }) {
   /////////////////////////////////////////////////////////////////////////////////
   return (
     <div>
-      <h2 className="fpFormTitle">
-        {order["Client/Job"]}{" "}
-        <span>
-          Order#: {order.OrderNo} - {order.Status}
-        </span>
-      </h2>
-
-
-      <h3>Status</h3>
-      <form className="fpForm">
+      <h2 className="fpFormTitle">{order["Client/Job"]}{" "}</h2>
+      <p>
+        <i>Order#: {order.OrderNo} ({order.Status})</i> -&nbsp;
+        {(() => {
+          switch (order.Status) {
+            case "Draft":
+              return "Prepare your order and when ready click submit.";
+            case "Submitted":
+              return "Your order has been submitted for review. you can expect a response soon. In the mean time you will not be able to make changes to the order.";
+            default:
+              return "other";
+          }
+        })()}
+      </p>
+      
+      <form>
         <input id="orderRecID" name="orderRecID" type="hidden" value={order.RecID} />
-        <div>
-          <p>
-            <b>{order.Status}</b> -&nbsp;
-            {(() => {
-              switch (order.Status) {
-                case "Draft":
-                  return "Prepare your order and when ready click submit. Put any questions or special instructions in the Notes section.";
-                case "Submitted":
-                  return "Your order has been submitted for review. you can expect a response soon. In the mean time you will not be able to make changes to the order.";
-                default:
-                  return "other";
-              }
-            })()}
-          </p>
-          <div className="fpFromField">
-            <label htmlFor="notes">Notes</label>
-            <textarea id="notes" name="notes" rows="15" cols="80" defaultValue={order.Notes}></textarea>
-            <small>
-              Notes can be used to include special instructions or ask a question about this order. 
-              To notify MRFC, press <em>Send Notes</em> and you will receive a response soon. 
-              The response will show up in the notes sectionin above, like a text.
-            </small>
-          </div>
-          <div className="fpPageNavBottom">
-            <button className="fpBtn" type="button" value={order.RecID} onClick={sendNotes}>
-              Send Notes
-            </button>
-            <button className="fpBtn" type="button" value={order.RecID} onClick={submitOrder} disabled={contentLock} style={{ opacity: contentLock ? ".45" : "1" }}>
-              Submit Order
-            </button>
-            <button className="fpBtn" type="button" value={order.RecID} onClick={deleteOrder}>
-              Delete Order
-            </button>
-          </div>
+        <div className="fpPageNavTop">
+          <button className="fpBtn" type="button" value={order.RecID} onClick={submitOrder} disabled={contentLock} style={{ opacity: contentLock ? ".45" : "1" }}>
+            Submit Order
+          </button>
+          <button className="fpBtn" type="button" value={order.RecID} onClick={deleteOrder}>
+            Delete Order
+          </button>
         </div>
       </form>
+
       {/* 
       
           Order Header
       
       */}
       <h3>Header</h3>
-      <form className="fpForm" onSubmit={updateOrder} style={{ opacity: contentLock ? ".45" : "1" }}>
-        <input id="orderRecID" name="orderRecID" type="hidden" value={order.RecID} />
+      <div className="fpForm">
+        <form onSubmit={updateOrder} style={{ opacity: contentLock ? ".45" : "1" }}>
+          <input id="orderRecID" name="orderRecID" type="hidden" value={order.RecID} />
 
-        <div className="fpFromField">
-          <label htmlFor="clientJob">Client/Job</label>
-          <input id="clientJob" name="clientJob" type="text" defaultValue={order["Client/Job"]} disabled={contentLock} required />
-        </div>
+          <div className="fpFromField">
+            <label htmlFor="clientJob">Client/Job</label>
+            <input id="clientJob" name="clientJob" type="text" defaultValue={order["Client/Job"]} disabled={contentLock} required />
+          </div>
 
-        <div className="fpFromField">
-          <label htmlFor="teamMember">Team Member</label>
-          <input id="teamMember" name="teamMember" type="text" defaultValue={order["Team Member"]} disabled={contentLock} required />
-        </div>
+          <div className="fpFromField">
+            <label htmlFor="teamMember">Team Member</label>
+            <input id="teamMember" name="teamMember" type="text" defaultValue={order["Team Member"]} disabled={contentLock} required />
+          </div>
 
-        <div className="fpFromField fpDate">
-          <label htmlFor="dueDate">Due Date</label>
-          <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} disabled={contentLock} required />
-        </div>
+          <div className="fpFromField fpDate">
+            <label htmlFor="dueDate">Due Date</label>
+            <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} disabled={contentLock} required />
+          </div>
 
-        <div className="fpPageNavBottom">
-          <button className="fpBtn" type="submit" disabled={contentLock} >
-            Save Header
-          </button>
-        </div>
-      </form>
-      <br></br>
+          <div className="fpPageNavBottom">
+            <button className="fpBtn" type="submit" disabled={contentLock} >
+              Save Header
+            </button>
+          </div>
+        </form>
+      </div>
+    
+      {/* 
+      
+          Chat
+      
+      */}
+      <h3>Chat</h3>
+      <div className="fpForm">
+        <form>
+          <input id="orderAccount" name="orderAccount" type="hidden" value={order.Account} />
+          <div>
+            <div className="fpFromField">
+              <label htmlFor="notes">Chat History</label>
+              <textarea id="notes" name="notes" rows="15" cols="80" defaultValue={order.Notes} readOnly></textarea>
+            </div>
+            <div className="fpTextMsgCard">
+              <input id="textMsg" name="textMsg" type="text" 
+                placeholder="Send MRFC special instructions, questions or comments you may have about this order" /> 
+              <button className="fpBtn" type="button" value={order.RecID} onClick={sendNotes}>Send</button>
+            </div>
+          </div>
+        </form>
+      </div>
 
       {/* 
       
-          Order Detail
+          Items
       
       */}
 
@@ -414,7 +421,7 @@ export default withPageAuthRequired(function Order({ order }) {
 
       {/* 
       
-          Order Activity
+         Activity
       
       */}
       <h3>Activity</h3>

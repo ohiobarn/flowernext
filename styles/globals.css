@@ -18,6 +18,9 @@ a {
   color: #333;
   text-decoration: none;
 }
+
+
+
 .fpContent {
   max-width: 960px;
   margin: 0 auto;
@@ -220,6 +223,11 @@ Order
   border-top: 1px solid #ddd;
 }
 
+/* 
+
+card
+
+*/
 .fpCard {
   display: flex;
   flex-direction:row;
@@ -279,7 +287,48 @@ Order
 .fpCard:hover {
   border-left: 5px solid #4979ff;
 }
+/* 
 
+text card
+
+*/
+.fpTextMsgCard {
+  display: flex;
+  flex-direction:row;
+  flex-wrap: wrap;
+  justify-content:flex-start;
+  align-items: center;
+  margin: 20px;
+  padding: 3px;
+}
+
+.fpTextMsgCard input {
+  border-style: solid;
+  border-color:lightgray;
+  border-width: 2px;
+  border-radius: 5px;
+  min-height: 34px;
+  width: 550px;
+  margin: 2px;
+  font-size: 14px
+}
+
+.fpTextMsgCard button {
+  display: block;
+  width: 50px;
+  padding: 8px 0;
+  margin: 10px;
+  background: #0c9a45;
+  border-radius: 4px;
+  color: white;
+  text-align: center;
+}
+
+/* 
+
+bar
+
+*/
 .fpBar {
   margin-top: 2px;
   margin-right: auto;
