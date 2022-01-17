@@ -29,9 +29,9 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
     setShowMe(!showMe);
   }
 
-  //
+  /////////////////////////////////////////////////////////////////////////////////
   // Add Variety to Order Event handler
-  //
+  /////////////////////////////////////////////////////////////////////////////////
   const addVarietiesToOrder = async event => {
     event.preventDefault() // don't redirect the page
 
@@ -102,80 +102,110 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
     history.go(-1)
   }
 
+  /////////////////////////////////////////////////////////////////////////////////
+  // Filter Cards
+  /////////////////////////////////////////////////////////////////////////////////
+  const filterCards = async (event) => {
+
+    var filterText = event.target.value.toUpperCase()
+    var cards = document.getElementsByClassName("fpCard");
+    
+    if ( filterText.length > 0) {
+
+      //
+      // show/hide cards if their is a filter
+      //
+      for (var i = 0; i < cards.length; i++) {
+        
+        var cardTitle=cards[i].title.toUpperCase()
+
+        if (cardTitle.includes(filterText)) {
+          cards[i].style.display = "";
+        } else {
+          cards[i].style.display = "none";
+        }
+      }
+    } else {
+      //
+      // if no filter show all cards
+      //
+      var cards = document.getElementsByClassName("fpCard"); 
+      for (var i = 0; i < cards.length; i++) {
+        cards[i].style.display = "";
+      }
+    }
+    
+  }
 
   return (
     <div>
-      <h1>Varieties</h1>
-
-
-
-      <form id="varietyForm" className="fpFormList" onSubmit={addVarietiesToOrder}>
-
-
-        
+      <form id="varietyForm" onSubmit={addVarietiesToOrder}>
         <input type="hidden" id="orderRecID" name="orderRecID" value={myprops.order.RecID} />
-        <div className="expandCollapse">
-          <span style={{display: showMe?"none":"block"}}>
-            <Image  onClick={toggleCard} src="/expand-alt-solid.svg"   layout="fixed" alt="expand" width={20} height={20}/>
-          </span>
-          <span style={{display: showMe?"block":"none"}}>
-            <Image  onClick={toggleCard} src="/compress-alt-solid.svg" layout="fixed" alt="compress" width={20} height={20}/>
-          </span>
-        </div>
         <div className="fpPageNavTop">
-            <button className="fpBtn" type="submit">Add Select</button>
+            <button className="fpBtn" type="submit">Add Selected</button>
             <Link href={myprops.order.RecID}><a className="fpBtn">Done</a></Link>
-        </div>        
-        {myprops.varieties.map(variety => (
-          <div className="fpCard" key={variety.RecID} >
-            <span>
-              <input type="checkbox" name="variety" value={variety.RecID} />
-              <input type="hidden" name={variety.RecID+".SKU"} value={variety.SKU} />
-              <input type="hidden" name={variety.RecID+".Crop"} value={variety.Crop} />
-              <input type="hidden" name={variety.RecID+".Variety"} value={variety.Variety} />
-              <input type="hidden" name={variety.RecID+".Color"} value={variety.Color} />
-              <input type="hidden" name={variety.RecID+".Price per Bunch"} value={variety["Price per Bunch"]} />
-              <input type="hidden" name={variety.RecID+".Stems per Bunch"} value={variety["Stems per Bunch"]} />
-              <input type="hidden" name={variety.RecID+".OrderRecID"} value={myprops.order.RecID} />
+            <input className="searchInput" type="text" id="varietyFilter"  onKeyUp={filterCards} placeholder="Search for names.."/>
+        </div>
+        <div className="fpFormList">
+          <div className="expandCollapse">
+            <span style={{display: showMe?"none":"block"}}>
+              <Image  onClick={toggleCard} src="/expand-alt-solid.svg"   layout="fixed" alt="expand" width={20} height={20}/>
             </span>
             <span style={{display: showMe?"block":"none"}}>
-              <Image src={variety.Image[0].thumbnails.large.url} layout="intrinsic" width={200} height={200} alt="thmbnail"/>
-            </span>
-            <span style={{display: showMe?"block":"none"}}>
-              <div>
-                  <hr/>
-                  <label htmlFor="sku">SKU</label>
-                  <p id="sku">{variety.SKU}</p>
-                </div>                  
-                <div>
-                  <hr/>
-                  <label htmlFor="color">Color</label>
-                  <p id="color">{variety.Color}</p>
-                </div>
-                <div>
-                  <hr/>
-                  <label htmlFor="cost">Cost</label>
-                  <p id="cost">{variety["Price per Bunch"]}</p>
-                </div> 
-                <div>
-                  <hr/>
-                  <label htmlFor="cost">Forecast</label>
-                  <p id="forecast">{variety["This week | Next week | Future"]}</p>
-                </div>                        
-            </span>
-            <span>
-              <h2 className="fpFormTitle">{variety.Crop} - {variety.Variety}</h2>
+              <Image  onClick={toggleCard} src="/compress-alt-solid.svg" layout="fixed" alt="compress" width={20} height={20}/>
             </span>
           </div>
-          
-        ))}
+          {myprops.varieties.map(variety => (
+            
+            <div className="fpCard" key={variety.RecID} 
+                title={variety.SKU + "-" + variety.Crop + "-" + variety.Variety + "-" + variety.Color}>
+              <span>
+                <input type="checkbox" name="variety" value={variety.RecID} />
+                <input type="hidden" name={variety.RecID+".SKU"} value={variety.SKU} />
+                <input type="hidden" name={variety.RecID+".Crop"} value={variety.Crop} />
+                <input type="hidden" name={variety.RecID+".Variety"} value={variety.Variety} />
+                <input type="hidden" name={variety.RecID+".Color"} value={variety.Color} />
+                <input type="hidden" name={variety.RecID+".Price per Bunch"} value={variety["Price per Bunch"]} />
+                <input type="hidden" name={variety.RecID+".Stems per Bunch"} value={variety["Stems per Bunch"]} />
+                <input type="hidden" name={variety.RecID+".OrderRecID"} value={myprops.order.RecID} />
+              </span>
+              <span style={{display: showMe?"block":"none"}}>
+                <Image src={variety.Image[0].thumbnails.large.url} layout="intrinsic" width={200} height={200} alt="thmbnail"/>
+              </span>
+              <span style={{display: showMe?"block":"none"}}>
+                <div>
+                    <hr/>
+                    <label htmlFor="sku">SKU</label>
+                    <p id="sku">{variety.SKU}</p>
+                  </div>                  
+                  <div>
+                    <hr/>
+                    <label htmlFor="color">Color</label>
+                    <p id="color">{variety.Color}</p>
+                  </div>
+                  <div>
+                    <hr/>
+                    <label htmlFor="cost">Cost</label>
+                    <p id="cost">{variety["Price per Bunch"]}</p>
+                  </div> 
+                  <div>
+                    <hr/>
+                    <label htmlFor="cost">Forecast</label>
+                    <p id="forecast">{variety["This week | Next week | Future"]}</p>
+                  </div>                        
+              </span>
+              <span>
+                <h2 className="fpFormTitle">{variety.Crop} - {variety.Variety}</h2>
+              </span>
+            </div>
+            
+          ))}
+        </div>
         <div className="fpPageNavBottom">
-          <button className="fpBtn" type="submit">Add Select</button>
+          <button className="fpBtn" type="submit">Add Selected</button>
           <Link href={myprops.order.RecID}><a className="fpBtn">Done</a></Link>
         </div>
       </form>
-
-
     </div>
   );
 });

@@ -276,8 +276,10 @@ export default withPageAuthRequired(function Order({ order }) {
               return "Prepare your order and when ready click submit.";
             case "Submitted":
               return "Your order has been submitted for review. you can expect a response soon. In the mean time you will not be able to make changes to the order.";
+            case "Modification Requested":
+              return "Modifications to your order are required before it can be accepted. Please review the chat history for more detail."
             default:
-              return "other";
+              return "TODO";
           }
         })()}
       </p>
@@ -285,6 +287,7 @@ export default withPageAuthRequired(function Order({ order }) {
       <form>
         <input id="orderRecID" name="orderRecID" type="hidden" value={order.RecID} />
         <div className="fpPageNavTop">
+          <Link href="/orders"><a className="fpBtn">Done</a></Link>
           <button className="fpBtn" type="button" value={order.RecID} onClick={submitOrder} disabled={contentLock} style={{ opacity: contentLock ? ".45" : "1" }}>
             Submit Order
           </button>

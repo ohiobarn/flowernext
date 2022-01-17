@@ -199,8 +199,9 @@ Order
 .fpPageNavTop {
   margin-top: 2px;
   margin-right: auto;
-  margin-bottom: 2px;
+  margin-bottom: 5px;
   margin-left: auto;
+  max-width: 90%;
   padding: 5px 0;
   display: flex;
   justify-content: space-around;
@@ -210,7 +211,7 @@ Order
   border-bottom: 1px solid #ddd;
 }
 .fpPageNavBottom {
-  margin-top: 2px;
+  margin-top: 5px;
   margin-right: auto;
   margin-bottom: 2px;
   margin-left: auto;
@@ -353,4 +354,19 @@ bar
   padding: 2px;
   
 
+}
+
+/* 
+  Search 
+*/
+
+.searchInput {
+  background-image: url('/searchicon.png'); 
+  background-position: 10px 12px; /* Position the search icon */
+  background-repeat: no-repeat; /* Do not repeat the icon image */
+  width: 200px;
+  font-size: 14px; /* Increase font-size */
+  padding: 12px 20px 12px 40px; /* Add some padding */
+  border: 1px solid #ddd; /* Add a grey border */
+  /* margin-bottom: 12px; Add some space below the input */
 }
