@@ -59,6 +59,9 @@ export default withPageAuthRequired(function Order({ order }) {
     }
   }, [order.Status]);
 
+  // compute the order total
+  order = computeOrderTotal(order)
+
   /////////////////////////////////////////////////////////////////////////////////
   // Update Order Event handler
   /////////////////////////////////////////////////////////////////////////////////
@@ -116,6 +119,14 @@ export default withPageAuthRequired(function Order({ order }) {
     var pricePerBunch = Number(event.target.form.pricePerBunch.value);
     var extended = bunches * pricePerBunch;
     event.target.form.extended.value = extended;
+
+    // Update order total 
+    var extendedPricesColl = document.getElementsByName("extended")
+    var extendedPricesArr = Array.prototype.slice.call( extendedPricesColl, 0 );
+    var total = extendedPricesArr.map(p => Number(p.value)).reduce((accum,curr) => accum+curr)
+    var orderTotal = document.getElementById("orderTotal");
+    orderTotal.value = total
+
 
     // console.log("The following record will post to the order-detail-update API")
     // console.log(rec)
@@ -366,7 +377,8 @@ export default withPageAuthRequired(function Order({ order }) {
           <Link href={"varieties?orderRecID=" + order.RecID} >Add Items</Link>
         </div>
 
-        {order.items.map((item) => {
+        <div id="items">
+        {order.items.map((item) => { 
           return (
             <form key={item.RecID} style={{ opacity: contentLock ? ".45" : "1" }}>
               <div className="fpCard">
@@ -375,9 +387,7 @@ export default withPageAuthRequired(function Order({ order }) {
                 */}
                 <input name="orderDetailRecID" type="hidden" defaultValue={item.RecID} />
                 <input name="pricePerBunch" type="hidden" defaultValue={item["Price per Bunch"]} />
-                <span>
-                  <Image src={item.Image[0].thumbnails.large.url} layout="intrinsic" width={200} height={200} alt="thmbnail"/>
-                </span>
+                <Image src={item.Image[0].thumbnails.large.url} layout="intrinsic" width={200} height={200} alt="thmbnail"/>
                 <span>
                   <div>
                     <hr />
@@ -392,18 +402,12 @@ export default withPageAuthRequired(function Order({ order }) {
                   <div>
                     <hr />
                     <label htmlFor="bunches">Bunches</label>
-                    <br></br>
-                    <input id="bunches" name="bunches" type="number" defaultValue={item.Bunches} min="0" max="99" onChange={updateOrderDetailOnBunchesChange} disabled={contentLock}/>
-                    at ${item["Price per Bunch"]}/bn
+                    <p><input id="bunches" name="bunches" type="number" defaultValue={item.Bunches} min="0" max="99" onChange={updateOrderDetailOnBunchesChange} disabled={contentLock}/> at ${item["Price per Bunch"]}/bn</p>
                   </div>
                   <div>
                     <hr />
                     <label htmlFor="extended">Extended</label>
-                    <span>
-                      <p>
-                        $<input className="fpInputReadOnly" id="extended" name="extended" type="number" defaultValue={item["Extended"]} min="0" max="999" readOnly />
-                      </p>
-                    </span>
+                    <p>$<input className="fpInputReadOnly" id="extended" name="extended" type="number" defaultValue={item["Extended"]} min="0" max="999" readOnly /></p>
                   </div>
                 </span>
                 <span>
@@ -415,12 +419,25 @@ export default withPageAuthRequired(function Order({ order }) {
             </form>
           );
         })}
+        </div>
 
         <div className="fpBar" style={{display: contentLock?'none':'true'}}>
           <Link href={"varieties?orderRecID=" + order.RecID}>Add Items</Link>
         </div>
       </div>
-      <br></br>
+
+      {/* 
+      
+         Order Summary
+      
+      */}
+      <h3>Order Summary</h3>
+      <div className="fpForm">
+        <div className="fpFromField">
+          {/* <p>Order total: $<span id="orderTotal">{order.total}</span></p> */}
+          <p>Order total: $<input className="fpInputReadOnly" id="orderTotal" name="orderTotal" type="number" defaultValue={order.total} min="0" max="999" readOnly /></p>
+        </div>
+      </div>
 
       {/* 
       
@@ -477,4 +494,15 @@ async function getOrder(account, orderRecID) {
   });
 
   return order;
+}
+
+////////////////////////////////////////////////////////////////////////////
+//          Compute order total
+////////////////////////////////////////////////////////////////////////////
+function computeOrderTotal(order){
+
+  var orderTotal = order.items.map(item => item.Extended).reduce((accum,curr) => accum+curr)
+  order.total = orderTotal
+  return order
+
 }
