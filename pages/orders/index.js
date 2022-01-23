@@ -53,7 +53,7 @@ export default withPageAuthRequired(function Orders({ orders }) {
 
       <form className="fpPageNavTop" onSubmit={createOrder}>
         <span><button className="fpBtn" type="submit">New Order</button></span>
-        <span><Link href="/orders/history"><a>Past Orders</a></Link></span>
+        <span><Link href="/orders/history"><a className="fpA">Past Orders</a></Link></span>
       </form>
  
       {orders.map(order => (
@@ -85,7 +85,7 @@ async function getOrders(account) {
     pageSize: 100, 
     view: "fp-grid", 
     sort: [{field: "Client/Job", direction: "asc"}],
-    filterByFormula: `Account = "${account}"`,
+    filterByFormula: `OR(Account = "${account}", {Managed Account} = "${account}")`,
   }).all();
 
   // Put resultes into an array

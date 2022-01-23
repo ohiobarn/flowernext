@@ -298,7 +298,8 @@ export default withPageAuthRequired(function Order({ order }) {
       <form>
         <input id="orderRecID" name="orderRecID" type="hidden" value={order.RecID} />
         <div className="fpPageNavTop">
-          <Link href="/orders"><a className="fpBtn">Done</a></Link>
+          <div>&nbsp;</div>
+          <Link href="/orders"><a className="fpA">Done</a></Link>
           <button className="fpBtn" type="button" value={order.RecID} onClick={submitOrder} disabled={contentLock} style={{ opacity: contentLock ? ".45" : "1" }}>
             Submit Order
           </button>
@@ -333,7 +334,8 @@ export default withPageAuthRequired(function Order({ order }) {
             <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} disabled={contentLock} required />
           </div>
 
-          <div className="fpPageNavBottom">
+
+          <div>
             <button className="fpBtn" type="submit" disabled={contentLock} >
               Save Header
             </button>
@@ -358,7 +360,7 @@ export default withPageAuthRequired(function Order({ order }) {
             <div className="fpTextMsgCard">
               <input id="textMsg" name="textMsg" type="text" 
                 placeholder="Send MRFC special instructions, questions or comments you may have about this order" /> 
-              <button className="fpBtn" type="button" value={order.RecID} onClick={sendNotes}>Send</button>
+              <button type="button" value={order.RecID} onClick={sendNotes}>Send</button>
             </div>
           </div>
         </form>
@@ -374,7 +376,7 @@ export default withPageAuthRequired(function Order({ order }) {
 
       <div className="fpForm">
         <div className="fpBar" style={{display: contentLock?'none':'true'}} >
-          <Link href={"varieties?orderRecID=" + order.RecID} >Add Items</Link>
+          <Link href={"varieties?orderRecID=" + order.RecID} ><a className="fpA">Add Items</a></Link>
         </div>
 
         <div id="items">
@@ -422,7 +424,7 @@ export default withPageAuthRequired(function Order({ order }) {
         </div>
 
         <div className="fpBar" style={{display: contentLock?'none':'true'}}>
-          <Link href={"varieties?orderRecID=" + order.RecID}>Add Items</Link>
+          <Link href={"varieties?orderRecID=" + order.RecID}><a className="fpA">Add Items</a></Link>
         </div>
       </div>
 
@@ -471,7 +473,7 @@ async function getOrder(account, orderRecID) {
   const records = await base("Order")
     .select({
       view: "fp-grid",
-      filterByFormula: `AND( Account = "${account}", RecID = "${orderRecID}" )`,
+      filterByFormula: `AND( OR(Account = "${account}",{Managed Account} = "${account}"), RecID = "${orderRecID}" )`,
     })
     .all();
 
@@ -501,7 +503,7 @@ async function getOrder(account, orderRecID) {
 ////////////////////////////////////////////////////////////////////////////
 function computeOrderTotal(order){
 
-  var orderTotal = order.items.map(item => item.Extended).reduce((accum,curr) => accum+curr)
+  var orderTotal = order.items.map(item => item.Extended).reduce((accum,curr) => accum+curr,0)
   order.total = orderTotal
   return order
 

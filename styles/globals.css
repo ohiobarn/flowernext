@@ -19,7 +19,13 @@ a {
   text-decoration: none;
 }
 
-
+.fpA {
+  text-decoration-style: solid;
+  text-decoration-color:#4979ff;
+  text-decoration:solid;
+  text-decoration:underline;
+  text-decoration-thickness: 3px;
+}
 
 .fpContent {
   max-width: 960px;
@@ -197,12 +203,9 @@ Order
 
 /* card */
 .fpPageNavTop {
-  margin-top: 2px;
-  margin-right: auto;
-  margin-bottom: 5px;
-  margin-left: auto;
-  max-width: 90%;
-  padding: 5px 0;
+  max-width: 95%;
+  margin: 3px;
+  padding: 5px;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -210,19 +213,7 @@ Order
   gap: 30px;
   border-bottom: 1px solid #ddd;
 }
-.fpPageNavBottom {
-  margin-top: 5px;
-  margin-right: auto;
-  margin-bottom: 2px;
-  margin-left: auto;
-  padding: 5px 0;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 30px;
-  border-top: 1px solid #ddd;
-}
+
 
 /* 
 
