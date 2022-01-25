@@ -334,6 +334,7 @@ export default withPageAuthRequired(function Order({ order }) {
             <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} disabled={contentLock} required />
           </div>
 
+          {/* DEVTODO add managed user dropdown here if {user["https://app.madriverfloralcollective.com/role"]} = admin */}
 
           <div>
             <button className="fpBtn" type="submit" disabled={contentLock} >
