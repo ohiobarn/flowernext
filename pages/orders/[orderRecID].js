@@ -15,17 +15,32 @@ export async function getServerSideProps(context) {
   // Fetch data from AirTable
   const order = await getOrder(user.email, orderRecID);
 
-  // console.log(order)
+  var myProps = {}
+  myProps.order = order;
+  myProps.user = user;
+
+  // console.log(myProps)
 
   // Pass order to the page via props
-  return { props: { order } };
+  return { props: { myProps } };
 }
 
-export default withPageAuthRequired(function Order({ order }) {
+export default withPageAuthRequired(function Order({ myProps }) {
+  var order = myProps.order;
+  var user = myProps.user;
+
+  const [showManagedAccount, setShowManagedAccount] = useState(false);
   const [contentLock, setContentLock] = useState(false);
 
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
+    if (user["https://app.madriverfloralcollective.com/role"] === "admin" ){
+      setShowManagedAccount(true)
+    } 
+    else {
+      setShowManagedAccount(false)
+    }
+
     switch (order.Status) {
       case "Draft":
         setContentLock(false);
@@ -334,7 +349,10 @@ export default withPageAuthRequired(function Order({ order }) {
             <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} disabled={contentLock} required />
           </div>
 
-          {/* DEVTODO add managed user dropdown here if {user["https://app.madriverfloralcollective.com/role"]} = admin */}
+          <div className="fpFromField fpManagedAccount" style={{display: showManagedAccount?"":"none"}}>
+            <label htmlFor="managedAccount">Managed Account</label>
+            <input id="managedAccount" name="managedAccount" type="text" defaultValue={order["Managed Account"]} disabled={contentLock} required />
+          </div>
 
           <div>
             <button className="fpBtn" type="submit" disabled={contentLock} >
