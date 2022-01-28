@@ -41,11 +41,12 @@ async function updateOrder(account,data) {
   // 
   // Add fields
   //
-  if (data.status != null)     { rec[0].fields.Status = data.status }
-  if (data.clientJob != null)  { rec[0].fields["Client/Job"] = data.clientJob }
-  if (data.teamMember != null) { rec[0].fields["Team Member"] = data.teamMember }
-  if (data.dueDate != null)    { rec[0].fields["Due Date"] = data.dueDate }
-  if (data.notes != null)      { rec[0].fields.Notes = data.notes }
+  if (data.status != null)         { rec[0].fields.Status = data.status }
+  if (data.clientJob != null)      { rec[0].fields["Client/Job"] = data.clientJob }
+  if (data.teamMember != null)     { rec[0].fields["Team Member"] = data.teamMember }
+  if (data.dueDate != null)        { rec[0].fields["Due Date"] = data.dueDate }
+  if (data.notes != null)          { rec[0].fields.Notes = data.notes }
+  if (data.managedAccount != null) { rec[0].fields["Managed Account"] = data.managedAccount}
 
   console.log("The following record will be used to update the order.")
   console.log(rec)

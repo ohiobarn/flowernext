@@ -72,10 +72,11 @@ async function getOrder(account, orderRecID) {
 // Default
 ////////////////////////////////////////////////////////////////////////////
 export default withPageAuthRequired(function Order({ myProps }) {
-  var order = myProps.order;
+  // var order = myProps.order;
   var user = myProps.user;
 
 
+  const [order, setOrder] = useState(myProps.order)
   const [showManagedAccount, setShowManagedAccount] = useState(false);
   const [contentLock, setContentLock] = useState(false);
   const [orderTotal, setOrderTotal] = useState(0);
@@ -170,6 +171,9 @@ export default withPageAuthRequired(function Order({ myProps }) {
     if (event.target.dueDate != null) {
       rec.dueDate = event.target.dueDate.value;
     }
+    if (event.target.managedAccount != null) { 
+      rec.managedAccount = event.target.managedAccount.value;
+    }
 
     console.log("The following record will post to the order-update API");
     console.log(rec);
@@ -204,11 +208,14 @@ export default withPageAuthRequired(function Order({ myProps }) {
     var pricePerBunch = Number(event.target.form.pricePerBunch.value);
     var extended = bunches * pricePerBunch;
     event.target.form.extended.value = extended;
-    
-    // Update order total 
-    var extendedPricesColl = document.getElementsByName("extended")
-    var extendedPricesArr = Array.prototype.slice.call( extendedPricesColl, 0 );
-    var total = extendedPricesArr.map(p => Number(p.value)).reduce((accum,curr) => accum+curr)
+
+    // Update order total from state
+    var recid = event.target.form.orderDetailRecID.value;
+    var index = order.items.findIndex( o => o.RecID === recid)
+    order.items[index].Extended = extended
+    setOrder(order)
+
+    var total = order.items.map(o => Number(o.Extended)).reduce((accum,curr) => accum+curr)
     setOrderTotal(total)
     
     
