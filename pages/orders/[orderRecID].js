@@ -25,15 +25,76 @@ export async function getServerSideProps(context) {
   return { props: { myProps } };
 }
 
+////////////////////////////////////////////////////////////////////////////
+//          Get Order
+////////////////////////////////////////////////////////////////////////////
+async function getOrder(account, orderRecID) {
+  const apiKey = process.env.AIRTABLE_APIKEY;
+  console.log("[getOrder] Account [%s] RecordID [%s]", account, orderRecID);
+
+  //
+  // Get order header
+  //
+  var Airtable = require("airtable");
+  Airtable.configure({ endpointUrl: "https://api.airtable.com", apiKey: apiKey });
+
+  var base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
+  const records = await base("Order")
+    .select({
+      view: "fp-grid",
+      filterByFormula: `AND( OR(Account = "${account}",{Managed Account} = "${account}"), RecID = "${orderRecID}" )`,
+    })
+    .all();
+
+  // There should only be one order
+  var order = records[0].fields;
+
+  //
+  // Get Order detail
+  //
+  const detailRecords = await base("OrderDetail")
+    .select({
+      view: "fp-grid",
+      filterByFormula: `OrderRecID = "${orderRecID}"`,
+    })
+    .all();
+
+  order.items = [];
+  detailRecords.forEach((item) => {
+    order.items.push(item.fields);
+  });
+
+  return order;
+}
+
+  
+////////////////////////////////////////////////////////////////////////////
+// Default
+////////////////////////////////////////////////////////////////////////////
 export default withPageAuthRequired(function Order({ myProps }) {
   var order = myProps.order;
   var user = myProps.user;
 
+
   const [showManagedAccount, setShowManagedAccount] = useState(false);
   const [contentLock, setContentLock] = useState(false);
+  const [orderTotal, setOrderTotal] = useState(0);
+  const [orderStatusDesc, setOrderStatusDesc] = useState("");
+
 
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
+
+    //
+    // Order Total
+    //
+    var orderTotal = order.items.map(item => item.Extended).reduce((accum,curr) => accum+curr,0)
+    setOrderTotal(orderTotal)
+
+
+    //
+    // Role
+    //
     if (user["https://app.madriverfloralcollective.com/role"] === "admin" ){
       setShowManagedAccount(true)
     } 
@@ -41,41 +102,52 @@ export default withPageAuthRequired(function Order({ myProps }) {
       setShowManagedAccount(false)
     }
 
+    //
+    // Order Status
+    //
     switch (order.Status) {
       case "Draft":
         setContentLock(false);
+        setOrderStatusDesc("Prepare your order and when ready click submit.");
         break;
       case "Submitted":
         setContentLock(true);
+        setOrderStatusDesc("Your order has been submitted for review. you can expect a response soon. In the mean time you will not be able to make changes to the order.");
         break;
       case "Modification Requested":
-        setContentLock(false);
+        setContentLock(false)
+        setOrderStatusDesc("Modifications to your order are required before it can be accepted. Please review the chat history for more detail.");
         break;
       case "Accepted":
         setContentLock(true);
+        setOrderStatusDesc("todo");
         break;
       case "Pending":
         setContentLock(true);
+        setOrderStatusDesc("todo");
         break;
       case "Ready":
         setContentLock(true);
+        setOrderStatusDesc("todo");
         break;
       case "Delivered":
         setContentLock(true);
+        setOrderStatusDesc("todo");
         break;
       case "Invoiced":
         setContentLock(true);
+        setOrderStatusDesc("todo");
         break;
       case "Paid":
         setContentLock(true);
+        setOrderStatusDesc("todo");
         break;
       default:
         setContentLock(true);
+        setOrderStatusDesc("todo");
     }
-  }, [order.Status]);
+  }, [order.Status, order.items, user]);
 
-  // compute the order total
-  order = computeOrderTotal(order)
 
   /////////////////////////////////////////////////////////////////////////////////
   // Update Order Event handler
@@ -99,7 +171,6 @@ export default withPageAuthRequired(function Order({ myProps }) {
       rec.dueDate = event.target.dueDate.value;
     }
 
-
     console.log("The following record will post to the order-update API");
     console.log(rec);
     const res = await fetch("/api/order-update", {
@@ -109,8 +180,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
       },
       method: "PATCH",
     });
-
-    //DEVTODO - should I check for errors? how?
+    
     const result = await res.json();
 
     if (result.length > 0) {
@@ -119,7 +189,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
       alert("There was a problem saving your order, please try again...");
     }
   };
-
+  
   /////////////////////////////////////////////////////////////////////////////////
   // Update OrderDetail Event handler
   /////////////////////////////////////////////////////////////////////////////////
@@ -128,21 +198,20 @@ export default withPageAuthRequired(function Order({ myProps }) {
       orderDetailRecID: event.target.form.orderDetailRecID.value,
       bunches: event.target.value,
     };
-
+    
     // Update extended
     var bunches = Number(event.target.value);
     var pricePerBunch = Number(event.target.form.pricePerBunch.value);
     var extended = bunches * pricePerBunch;
     event.target.form.extended.value = extended;
-
+    
     // Update order total 
     var extendedPricesColl = document.getElementsByName("extended")
     var extendedPricesArr = Array.prototype.slice.call( extendedPricesColl, 0 );
     var total = extendedPricesArr.map(p => Number(p.value)).reduce((accum,curr) => accum+curr)
-    var orderTotal = document.getElementById("orderTotal");
-    orderTotal.value = total
-
-
+    setOrderTotal(total)
+    
+    
     // console.log("The following record will post to the order-detail-update API")
     // console.log(rec)
     const res = await fetch("/api/order-detail-update", {
@@ -152,10 +221,9 @@ export default withPageAuthRequired(function Order({ myProps }) {
       },
       method: "PATCH",
     });
-
-    //DEVTODO - should I check for errors? how?
+    
     const result = await res.json();
-
+    
     if (result.length > 0) {
       console.log("OrderDetail update successful, updateOrderDetailOnBunchesChange.");
     } else {
@@ -163,6 +231,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
     }
   };
 
+  
   /////////////////////////////////////////////////////////////////////////////////
   // Delete Order
   /////////////////////////////////////////////////////////////////////////////////
@@ -172,15 +241,15 @@ export default withPageAuthRequired(function Order({ myProps }) {
       // Dont delete
       return;
     }
-
+    
     // Yes continue
     const rec = {
       orderRecIDs: [event.target.value],
     };
-
+    
     console.log("The following record will post to the order-delete API");
     console.log(rec);
-
+    
     const res = await fetch("/api/order-delete", {
       body: JSON.stringify(rec),
       headers: {
@@ -188,19 +257,18 @@ export default withPageAuthRequired(function Order({ myProps }) {
       },
       method: "DELETE",
     });
-
-    //DEVTODO - should I check for errors? how?
+    
     const result = await res.json();
-
+    
     if (result.length > 0) {
       console.log("Order delete successful.");
     } else {
       alert("There was a problem deleting your order, please try again...");
     }
-
+    
     window.location.href = "/orders";
   };
-
+  
   /////////////////////////////////////////////////////////////////////////////////
   // Submit Order
   /////////////////////////////////////////////////////////////////////////////////
@@ -210,16 +278,16 @@ export default withPageAuthRequired(function Order({ myProps }) {
       // Dont submit
       return;
     }
-
+    
     //Yes continue
     const rec = {
       orderRecID: event.target.value,
       status: "Submitted",
     };
-
+    
     // console.log("The following record will post to the order-update API")
     // console.log(rec)
-
+    
     const res = await fetch("/api/order-update", {
       body: JSON.stringify(rec),
       headers: {
@@ -228,7 +296,6 @@ export default withPageAuthRequired(function Order({ myProps }) {
       method: "PATCH",
     });
 
-    //DEVTODO - should I check for errors? how?
     const result = await res.json();
 
     if (result.length > 0) {
@@ -236,10 +303,10 @@ export default withPageAuthRequired(function Order({ myProps }) {
     } else {
       alert("There was a problem submitting your order, please try again...");
     }
-
+    
     window.location.href = "/orders";
   };
-
+  
   /////////////////////////////////////////////////////////////////////////////////
   // Send Notes
   /////////////////////////////////////////////////////////////////////////////////
@@ -249,15 +316,15 @@ export default withPageAuthRequired(function Order({ myProps }) {
       alert("Text is empty. Please enter a text message.");
       return;      
     }
-
+    
     var answer = confirm("\nWARNING!\nAre you sure you want to send a text to MRFC?");
     if (!answer) {
       // Dont submit
       return;
     }
-
+    
     var notes=event.target.form.notes.value + "\n" +  event.target.form.orderAccount.value + ": " + event.target.form.textMsg.value
-
+    
     // Yes continue
     const rec = {
       orderRecID: event.target.value,
@@ -266,7 +333,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
 
     console.log("The following record will post to the order-update API")
     console.log(rec)
-
+    
     const res = await fetch("/api/order-update", {
       body: JSON.stringify(rec),
       headers: {
@@ -274,42 +341,27 @@ export default withPageAuthRequired(function Order({ myProps }) {
       },
       method: "PATCH",
     });
-
-    //DEVTODO - should I check for errors? how?
+    
     const result = await res.json();
-
+    
     if (result.length > 0) {
       console.log("Send notes successful.");
       alert("Your notes have been sent to MRFC");
     } else {
       alert("There was a problem sending your notes, please try again...");
     }
-
+    
     window.location.href = "/orders";
   };
-
+  
   /////////////////////////////////////////////////////////////////////////////////
   // return
   /////////////////////////////////////////////////////////////////////////////////
   return (
     <div>
       <h2 className="fpFormTitle">{order["Client/Job"]}{" "}</h2>
-      <p>
-        <i>Order#: {order.OrderNo} ({order.Status})</i> -&nbsp;
-        {(() => {
-          switch (order.Status) {
-            case "Draft":
-              return "Prepare your order and when ready click submit.";
-            case "Submitted":
-              return "Your order has been submitted for review. you can expect a response soon. In the mean time you will not be able to make changes to the order.";
-            case "Modification Requested":
-              return "Modifications to your order are required before it can be accepted. Please review the chat history for more detail."
-            default:
-              return "TODO";
-          }
-        })()}
-      </p>
-      
+      <p><i>Order#: {order.OrderNo} ({order.Status})</i> - {orderStatusDesc}</p>
+        
       <form>
         <input id="orderRecID" name="orderRecID" type="hidden" value={order.RecID} />
         <div className="fpPageNavTop">
@@ -326,9 +378,9 @@ export default withPageAuthRequired(function Order({ myProps }) {
 
       {/* 
       
-          Order Header
+      Order Header
       
-      */}
+    */}
       <h3>Header</h3>
       <div className="fpForm">
         <form onSubmit={updateOrder} style={{ opacity: contentLock ? ".45" : "1" }}>
@@ -364,9 +416,9 @@ export default withPageAuthRequired(function Order({ myProps }) {
     
       {/* 
       
-          Chat
+      Chat
       
-      */}
+    */}
       <h3>Chat</h3>
       <div className="fpForm">
         <form>
@@ -387,9 +439,9 @@ export default withPageAuthRequired(function Order({ myProps }) {
 
       {/* 
       
-          Items
+      Items
       
-      */}
+    */}
 
       <h3>Items</h3>
 
@@ -449,22 +501,21 @@ export default withPageAuthRequired(function Order({ myProps }) {
 
       {/* 
       
-         Order Summary
+      Order Summary
       
-      */}
+    */}
       <h3>Order Summary</h3>
       <div className="fpForm">
         <div className="fpFromField">
-          {/* <p>Order total: $<span id="orderTotal">{order.total}</span></p> */}
-          <p>Order total: $<input className="fpInputReadOnly" id="orderTotal" name="orderTotal" type="number" defaultValue={order.total} min="0" max="999" readOnly /></p>
+          <p>Order total: ${orderTotal}</p>
         </div>
       </div>
 
       {/* 
       
-         Activity
+      Activity
       
-      */}
+    */}
       <h3>Activity</h3>
       <div className="fpForm">
         <div className="fpFromField">
@@ -475,55 +526,4 @@ export default withPageAuthRequired(function Order({ myProps }) {
   );
 });
 
-////////////////////////////////////////////////////////////////////////////
-//          Get Order
-////////////////////////////////////////////////////////////////////////////
-async function getOrder(account, orderRecID) {
-  const apiKey = process.env.AIRTABLE_APIKEY;
-  console.log("[getOrder] Account [%s] RecordID [%s]", account, orderRecID);
 
-  //
-  // Get order header
-  //
-  var Airtable = require("airtable");
-  Airtable.configure({ endpointUrl: "https://api.airtable.com", apiKey: apiKey });
-
-  var base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
-  const records = await base("Order")
-    .select({
-      view: "fp-grid",
-      filterByFormula: `AND( OR(Account = "${account}",{Managed Account} = "${account}"), RecID = "${orderRecID}" )`,
-    })
-    .all();
-
-  // There should only be one order
-  var order = records[0].fields;
-
-  //
-  // Get Order detail
-  //
-  const detailRecords = await base("OrderDetail")
-    .select({
-      view: "fp-grid",
-      filterByFormula: `OrderRecID = "${orderRecID}"`,
-    })
-    .all();
-
-  order.items = [];
-  detailRecords.forEach((item) => {
-    order.items.push(item.fields);
-  });
-
-  return order;
-}
-
-////////////////////////////////////////////////////////////////////////////
-//          Compute order total
-////////////////////////////////////////////////////////////////////////////
-function computeOrderTotal(order){
-
-  var orderTotal = order.items.map(item => item.Extended).reduce((accum,curr) => accum+curr,0)
-  order.total = orderTotal
-  return order
-
-}
