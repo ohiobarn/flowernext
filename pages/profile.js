@@ -13,7 +13,7 @@ export default withPageAuthRequired(function Profile({ user }) {
         <h2>{user.name}</h2>
         <p>{user.email}</p>
         <p>Role: {user["https://app.madriverfloralcollective.com/role"]}</p>
-        <Link href="/api/auth/logout"><a className='fpA'>Logout</a></Link>
+        <Link href="/api/auth/logout?federated"><a className='fpA'>Logout</a></Link>
       </div>
 
   );
