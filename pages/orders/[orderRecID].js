@@ -410,7 +410,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
 
           <div className="fpFromField fpManagedAccount" style={{display: showManagedAccount?"":"none"}}>
             <label htmlFor="managedAccount">Managed Account</label>
-            <input id="managedAccount" name="managedAccount" type="text" defaultValue={order["Managed Account"]} disabled={contentLock} required />
+            <input id="managedAccount" name="managedAccount" type="text" defaultValue={order["Managed Account"]} disabled={contentLock} />
           </div>
 
           <div>
