@@ -83,6 +83,8 @@ export default withPageAuthRequired(function Order({ myProps }) {
   const [orderStatusDesc, setOrderStatusDesc] = useState("");
   const chatFrom =  useRef(null)
 
+  //DEVTODO - make this a map object with status and description 
+  const orderStatusList = ["Draft","Submitted","Modification Requested","Accepted","Pending","Ready","Delivered","Invoiced","Paid"]
 
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
@@ -174,6 +176,9 @@ export default withPageAuthRequired(function Order({ myProps }) {
     }
     if (event.target.managedAccount != null) { 
       rec.managedAccount = event.target.managedAccount.value;
+    }
+    if (event.target.status != null) { 
+      rec.status = event.target.status.value;
     }
 
     console.log("The following record will post to the order-update API");
@@ -417,13 +422,32 @@ export default withPageAuthRequired(function Order({ myProps }) {
             <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} disabled={contentLock} required />
           </div>
 
+
+          {/*  DEVTODO - look for places where I use style and fix it!
           <div className="fpFromField fpManagedAccount" style={{display: showManagedAccount?"":"none"}}>
             <label htmlFor="managedAccount">Managed Account</label>
             <input id="managedAccount" name="managedAccount" type="text" defaultValue={order["Managed Account"]} disabled={contentLock} />
-          </div>
+          </div> */
+          }
 
+          { showManagedAccount &&
+            <div className="fpFromField">
+              <label htmlFor="managedAccount">Managed Account</label>
+              <input id="managedAccount" name="managedAccount" type="text" defaultValue={order["Managed Account"]}  />
+            </div>
+          }
+          { showManagedAccount &&
+            <div className="fpFromField">
+              <label htmlFor="status">Order Status</label>
+              <select name="status" id="status" value={order.status}>
+                {orderStatusList.map( s => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+          }
           <div>
-            <button className="fpBtn" type="submit" disabled={contentLock} >
+            <button className="fpBtn" type="submit" disabled={contentLock && !showManagedAccount} >
               Save Header
             </button>
           </div>
