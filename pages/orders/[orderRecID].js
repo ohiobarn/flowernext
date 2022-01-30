@@ -112,15 +112,15 @@ export default withPageAuthRequired(function Order({ myProps }) {
     switch (order.Status) {
       case "Draft":
         setContentLock(false);
-        setOrderStatusDesc("Prepare your order and when ready click submit.");
+        setOrderStatusDesc("Draft - Prepare your order and when ready click submit.");
         break;
       case "Submitted":
         setContentLock(true);
-        setOrderStatusDesc("Your order has been submitted for review. you can expect a response soon. In the mean time you will not be able to make changes to the order.");
+        setOrderStatusDesc("Submitted - Your order has been submitted for review. you can expect a response soon. In the mean time you will not be able to make changes to the order.");
         break;
       case "Modification Requested":
         setContentLock(false)
-        setOrderStatusDesc("Modifications to your order are required before it can be accepted. Please review the chat history for more detail.");
+        setOrderStatusDesc("Modification Requested - Modifications to your order are required before it can be accepted. Please review the chat history for more detail.");
         break;
       case "Accepted":
         setContentLock(true);
@@ -179,7 +179,13 @@ export default withPageAuthRequired(function Order({ myProps }) {
     }
     if (event.target.status != null) { 
       rec.status = event.target.status.value;
+      // Update order and update state so orderStatusDesc is updated
+      order.Status = event.target.status.value;
     }
+
+    // Update page state
+    var newOrder = {...order}
+    setOrder(newOrder);
 
     console.log("The following record will post to the order-update API");
     console.log(rec);
@@ -196,7 +202,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
     if (result.length > 0) {
       alert("Saved.");
     } else {
-      alert("There was a problem saving your order, please try again...");
+      alert("There was a problem saving your order, please try again.");
     }
   };
   
@@ -242,7 +248,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
     if (result.length > 0) {
       console.log("OrderDetail update successful, updateOrderDetailOnBunchesChange.");
     } else {
-      alert("There was a problem saving your items, please try again...");
+      alert("There was a problem saving your items, please try again.");
     }
   };
 
@@ -278,7 +284,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
     if (result.length > 0) {
       console.log("Order delete successful.");
     } else {
-      alert("There was a problem deleting your order, please try again...");
+      alert("There was a problem deleting your order, please try again.");
     }
     
     window.location.href = "/orders";
@@ -316,7 +322,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
     if (result.length > 0) {
       console.log("Order submit successful.");
     } else {
-      alert("There was a problem submitting your order, please try again...");
+      alert("There was a problem submitting your order, please try again.");
     }
     
     window.location.href = "/orders";
@@ -359,7 +365,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
       console.log("Send notes successful.");
       alert("Your notes have been sent to MRFC");
     } else {
-      alert("There was a problem sending your notes, please try again...");
+      alert("There was a problem sending your notes, please try again.");
     }
     
     // Update state
@@ -380,8 +386,8 @@ export default withPageAuthRequired(function Order({ myProps }) {
   /////////////////////////////////////////////////////////////////////////////////
   return (
     <div>
-      <h2 className="fpFormTitle">{order["Client/Job"]}{" "}</h2>
-      <p><i>Order#: {order.OrderNo} ({order.Status})</i> - {orderStatusDesc}</p>
+      <h2 className="fpFormTitle">{order["Client/Job"]}{" "} ({order.OrderNo})</h2>
+      <h3>{orderStatusDesc}</h3>
         
       <form>
         <input id="orderRecID" name="orderRecID" type="hidden" value={order.RecID} />
