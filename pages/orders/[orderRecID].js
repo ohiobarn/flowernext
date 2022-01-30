@@ -439,7 +439,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
           { showManagedAccount &&
             <div className="fpFromField">
               <label htmlFor="status">Order Status</label>
-              <select name="status" id="status" value={order.status}>
+              <select name="status" id="status" defaultValue={order.Status}>
                 {orderStatusList.map( s => (
                   <option key={s} value={s}>{s}</option>
                 ))}
