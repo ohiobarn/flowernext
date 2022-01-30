@@ -197,24 +197,26 @@ export default withPageAuthRequired(function Order({ myProps }) {
   /////////////////////////////////////////////////////////////////////////////////
   // Update OrderDetail Event handler
   /////////////////////////////////////////////////////////////////////////////////
-  const updateOrderDetailOnBunchesChange = async (event) => {
+  const updateOrderDetailOnBunchesChange = async (item, event) => {
+
     const rec = {
-      orderDetailRecID: event.target.form.orderDetailRecID.value,
+      orderDetailRecID: item.RecID,
       bunches: event.target.value,
     };
-    
+
     // Update extended
     var bunches = Number(event.target.value);
-    var pricePerBunch = Number(event.target.form.pricePerBunch.value);
+    var pricePerBunch = Number(item["Price per Bunch"]);
     var extended = bunches * pricePerBunch;
-    event.target.form.extended.value = extended;
+    
+    // event.target.form.extended.value = extended;  DEVTODO need to useState
 
-    // Update order total from state
-    var recid = event.target.form.orderDetailRecID.value;
-    var index = order.items.findIndex( o => o.RecID === recid)
+    // Update order with extended
+    var index = order.items.findIndex( o => o.RecID === item.RecID)
     order.items[index].Extended = extended
     setOrder(order)
 
+    // Update order total
     var total = order.items.map(o => Number(o.Extended)).reduce((accum,curr) => accum+curr)
     setOrderTotal(total)
     
@@ -462,11 +464,6 @@ export default withPageAuthRequired(function Order({ myProps }) {
           return (
             <form key={item.RecID} style={{ opacity: contentLock ? ".45" : "1" }}>
               <div className="fpCard">
-                {/* 
-                  Hidden order detail from fields
-                */}
-                <input name="orderDetailRecID" type="hidden" defaultValue={item.RecID} />
-                <input name="pricePerBunch" type="hidden" defaultValue={item["Price per Bunch"]} />
                 <Image src={item.Image[0].thumbnails.large.url} layout="intrinsic" width={200} height={200} alt="thmbnail"/>
                 <span>
                   <div>
@@ -482,12 +479,17 @@ export default withPageAuthRequired(function Order({ myProps }) {
                   <div>
                     <hr />
                     <label htmlFor="bunches">Bunches</label>
-                    <p><input id="bunches" name="bunches" type="number" defaultValue={item.Bunches} min="0" max="99" onChange={updateOrderDetailOnBunchesChange} disabled={contentLock}/> at ${item["Price per Bunch"]}/bn</p>
+                    <p>
+                      <input id="bunches" name="bunches" type="number" defaultValue={item.Bunches} min="0" max="99" 
+                        onChange={(event) => updateOrderDetailOnBunchesChange(item,event)} 
+                        disabled={contentLock}
+                      /> at ${item["Price per Bunch"]}/bn
+                    </p>
                   </div>
                   <div>
                     <hr />
                     <label htmlFor="extended">Extended</label>
-                    <p>$<input className="fpInputReadOnly" id="extended" name="extended" type="number" defaultValue={item["Extended"]} min="0" max="999" readOnly /></p>
+                    <p id="extended">${item["Extended"]}</p>
                   </div>
                 </span>
                 <span>
