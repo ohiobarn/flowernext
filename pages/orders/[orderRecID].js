@@ -1,7 +1,7 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import Link from "next/link";
 import Image from "next/image"
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect, useRef} from "react";
 
 
 export async function getServerSideProps(context) {
@@ -81,6 +81,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
   const [contentLock, setContentLock] = useState(false);
   const [orderTotal, setOrderTotal] = useState(0);
   const [orderStatusDesc, setOrderStatusDesc] = useState("");
+  const chatFrom =  useRef(null)
 
 
   // Similar to componentDidMount and componentDidUpdate:
@@ -320,19 +321,15 @@ export default withPageAuthRequired(function Order({ myProps }) {
   // Send Notes
   /////////////////////////////////////////////////////////////////////////////////
   const sendNotes = async (event) => {
-    
-    if (!event.target.form.textMsg.value) {
-      alert("Text is empty. Please enter a text message.");
+
+    const form = chatFrom.current
+
+    if (form.textMsg.value.length === 0) {
+      //Nothing to do just return
       return;      
     }
     
-    var answer = confirm("\nWARNING!\nAre you sure you want to send a text to MRFC?");
-    if (!answer) {
-      // Dont submit
-      return;
-    }
-    
-    var notes=event.target.form.notes.value + "\n" +  event.target.form.orderAccount.value + ": " + event.target.form.textMsg.value
+    var notes = form.notes.value + "\n" + form.orderAccount.value + ": " + form.textMsg.value
     
     // Yes continue
     const rec = {
@@ -360,7 +357,17 @@ export default withPageAuthRequired(function Order({ myProps }) {
       alert("There was a problem sending your notes, please try again...");
     }
     
-    window.location.href = "/orders";
+    // Update state
+    order.Notes =  notes
+    setOrder(order)
+
+    // DEVTODO - This work but i dont under stand why yet 
+    setOrder(order => ({
+      ...order,
+      ["Notes"]: notes
+    }));
+    
+
   };
   
   /////////////////////////////////////////////////////////////////////////////////
@@ -430,17 +437,16 @@ export default withPageAuthRequired(function Order({ myProps }) {
     */}
       <h3>Chat</h3>
       <div className="fpForm">
-        <form>
+        <form ref={chatFrom}>
           <input id="orderAccount" name="orderAccount" type="hidden" value={order.Account} />
           <div>
             <div className="fpFromField">
               <label htmlFor="notes">Chat History</label>
-              <textarea id="notes" name="notes" rows="15" cols="80" defaultValue={order.Notes} readOnly></textarea>
+              <textarea id="notes" name="notes" rows="15" cols="80" value={order.Notes} readOnly></textarea>
             </div>
             <div className="fpTextMsgCard">
-              <input id="textMsg" name="textMsg" type="text" 
-                placeholder="Send MRFC special instructions, questions or comments you may have about this order" /> 
-              <button type="button" value={order.RecID} onClick={sendNotes}>Send</button>
+              <input id="textMsg" name="textMsg" type="text" placeholder="Send MRFC special instructions, questions or comments you may have about this order" /> 
+              <button type="button" value={order.RecID} onClick={(event) => sendNotes(event)}>Send</button>
             </div>
           </div>
         </form>
