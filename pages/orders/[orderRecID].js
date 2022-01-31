@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image"
 import React, { useState, useEffect, useRef} from "react";
 import OrderActivity from "../../comps/OrderActivity";
+import OrderSummary from "../../comps/OrderSummary";
 
 
 export async function getServerSideProps(context) {
@@ -536,23 +537,9 @@ export default withPageAuthRequired(function Order({ myProps }) {
         </div>
       </div>
 
-      {/* 
-      
-        Order Summary
-        
-      */}
       <h3>Order Summary</h3>
-      <div className="fpForm">
-        <div className="fpFromField">
-          <p>Order total: ${orderTotal}</p>
-        </div>
-      </div>
+      <OrderSummary orderTotal={orderTotal} />
 
-      {/* 
-      
-        Activity
-        
-      */}
       <h3>Activity</h3>
       <OrderActivity order={order} />
     </div>
