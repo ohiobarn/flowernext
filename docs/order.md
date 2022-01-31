@@ -26,7 +26,7 @@ What's on an order:
 
 ## Order Status Summary
 
-Below are the status a florest will see in the app.
+Below are the status a florist will see in the app.
 
 ``` mermaid
 flowchart LR;

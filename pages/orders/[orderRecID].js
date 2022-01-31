@@ -4,7 +4,7 @@ import Image from "next/image"
 import React, { useState, useEffect, useRef} from "react";
 import OrderActivity from "../../comps/OrderActivity";
 import OrderSummary from "../../comps/OrderSummary";
-
+import OrderItems from "../../comps/OrderItems";
 
 export async function getServerSideProps(context) {
   // Get user from cookie
@@ -101,7 +101,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
     //
     // Role
     //
-    if (user["https://app.madriverfloralcollective.com/role"] === "admin" ){
+    if (user["https://app.madriverfloralcollective.com/role"] === "Admin" ){
       setShowManagedAccount(true)
     } 
     else {
@@ -118,7 +118,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
         break;
       case "Submitted":
         setContentLock(true);
-        setOrderStatusDesc("Submitted - Your order has been submitted for review. you can expect a response soon. In the mean time you will not be able to make changes to the order.");
+        setOrderStatusDesc("Submitted - Your order has been submitted for review. You can expect a response soon. In the mean time you will not be able to make changes to the order.");
         break;
       case "Modification Requested":
         setContentLock(false)
@@ -476,66 +476,8 @@ export default withPageAuthRequired(function Order({ myProps }) {
         </form>
       </div>
 
-      {/* 
-        
-        Items
-        
-      */}
       <h3>Items</h3>
-
-      <div className="fpForm">
-        <div className="fpBar" style={{display: contentLock?'none':'true'}} >
-          <Link href={"varieties?orderRecID=" + order.RecID} ><a className="fpA">Add Items</a></Link>
-        </div>
-
-        <div id="items">
-        {order.items.map((item) => { 
-          return (
-            <form key={item.RecID} style={{ opacity: contentLock ? ".45" : "1" }}>
-              <div className="fpCard">
-                <Image src={item.Image[0].thumbnails.large.url} layout="intrinsic" width={200} height={200} alt="thmbnail"/>
-                <span>
-                  <div>
-                    <hr />
-                    <label htmlFor="sku">SKU</label>
-                    <p id="sku">{item.SKU}</p>
-                  </div>
-                  <div>
-                    <hr />
-                    <label htmlFor="color">Color</label>
-                    <p id="color">{item.Color}</p>
-                  </div>
-                  <div>
-                    <hr />
-                    <label htmlFor="bunches">Bunches</label>
-                    <p>
-                      <input id="bunches" name="bunches" type="number" defaultValue={item.Bunches} min="0" max="99" 
-                        onChange={(event) => updateOrderDetailOnBunchesChange(item,event)} 
-                        disabled={contentLock}
-                      /> at ${item["Price per Bunch"]}/bn
-                    </p>
-                  </div>
-                  <div>
-                    <hr />
-                    <label htmlFor="extended">Extended</label>
-                    <p id="extended">${item["Extended"]}</p>
-                  </div>
-                </span>
-                <span>
-                  <h4>
-                    {item.Crop} - {item.Variety}
-                  </h4>
-                </span>
-              </div>
-            </form>
-          );
-        })}
-        </div>
-
-        <div className="fpBar" style={{display: contentLock?'none':'true'}}>
-          <Link href={"varieties?orderRecID=" + order.RecID}><a className="fpA">Add Items</a></Link>
-        </div>
-      </div>
+      <OrderItems order={order} contentLock={contentLock} updateOrderDetailOnBunchesChange={updateOrderDetailOnBunchesChange} />
 
       <h3>Order Summary</h3>
       <OrderSummary orderTotal={orderTotal} />

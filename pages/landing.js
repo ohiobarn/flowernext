@@ -1,14 +1,20 @@
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect } from 'react';
 
 export default withPageAuthRequired(function Profile({ user }) {
+
+  useEffect( () => {
+    setTimeout(function() {
+      window.location.replace('/orders');
+    }, 1);
+  });
 
   return (
     <div  className="fpSplash">
       <Image src="/splash-clear-bg.png"  layout="intrinsic" alt="splash" width={406} height={173} />
       {/* <p className="text">Welcome to MRFC!</p> */}
-      <Link href="/orders"><a className="fpBtn">Get Started</a></Link>
     </div>
   );
 });
