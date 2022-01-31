@@ -2,6 +2,7 @@ import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import Link from "next/link";
 import Image from "next/image"
 import React, { useState, useEffect, useRef} from "react";
+import OrderActivity from "../../comps/OrderActivity";
 
 
 export async function getServerSideProps(context) {
@@ -404,10 +405,10 @@ export default withPageAuthRequired(function Order({ myProps }) {
       </form>
 
       {/* 
-      
-      Order Header
-      
-    */}
+        
+        Order Header
+        
+      */}
       <h3>Header</h3>
       <div className="fpForm">
         <form onSubmit={updateOrder} style={{ opacity: contentLock ? ".45" : "1" }}>
@@ -427,14 +428,6 @@ export default withPageAuthRequired(function Order({ myProps }) {
             <label htmlFor="dueDate">Due Date</label>
             <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} disabled={contentLock} required />
           </div>
-
-
-          {/*  DEVTODO - look for places where I use style and fix it!
-          <div className="fpFromField fpManagedAccount" style={{display: showManagedAccount?"":"none"}}>
-            <label htmlFor="managedAccount">Managed Account</label>
-            <input id="managedAccount" name="managedAccount" type="text" defaultValue={order["Managed Account"]} disabled={contentLock} />
-          </div> */
-          }
 
           { showManagedAccount &&
             <div className="fpFromField">
@@ -461,10 +454,10 @@ export default withPageAuthRequired(function Order({ myProps }) {
       </div>
     
       {/* 
-      
-      Chat
-      
-    */}
+        
+        Chat
+        
+      */}
       <h3>Chat</h3>
       <div className="fpForm">
         <form ref={chatFrom}>
@@ -483,11 +476,10 @@ export default withPageAuthRequired(function Order({ myProps }) {
       </div>
 
       {/* 
-      
-      Items
-      
-    */}
-
+        
+        Items
+        
+      */}
       <h3>Items</h3>
 
       <div className="fpForm">
@@ -546,9 +538,9 @@ export default withPageAuthRequired(function Order({ myProps }) {
 
       {/* 
       
-      Order Summary
-      
-    */}
+        Order Summary
+        
+      */}
       <h3>Order Summary</h3>
       <div className="fpForm">
         <div className="fpFromField">
@@ -558,15 +550,11 @@ export default withPageAuthRequired(function Order({ myProps }) {
 
       {/* 
       
-      Activity
-      
-    */}
+        Activity
+        
+      */}
       <h3>Activity</h3>
-      <div className="fpForm">
-        <div className="fpFromField">
-          <textarea id="activity" name="activity" rows="10" cols="30" defaultValue={order.Activity} readOnly></textarea>
-        </div>
-      </div>
+      <OrderActivity order={order} />
     </div>
   );
 });
