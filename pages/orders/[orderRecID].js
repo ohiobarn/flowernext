@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef} from "react";
 import OrderActivity from "../../comps/OrderActivity";
 import OrderSummary from "../../comps/OrderSummary";
 import OrderItems from "../../comps/OrderItems";
+import {getOrder} from "../../utils/OrderUtils.js"
 
 export async function getServerSideProps(context) {
   // Get user from cookie
@@ -25,48 +26,6 @@ export async function getServerSideProps(context) {
 
   // Pass order to the page via props
   return { props: { myProps } };
-}
-
-////////////////////////////////////////////////////////////////////////////
-//          Get Order
-////////////////////////////////////////////////////////////////////////////
-async function getOrder(account, orderRecID) {
-  const apiKey = process.env.AIRTABLE_APIKEY;
-  console.log("[getOrder] Account [%s] RecordID [%s]", account, orderRecID);
-
-  //
-  // Get order header
-  //
-  var Airtable = require("airtable");
-  Airtable.configure({ endpointUrl: "https://api.airtable.com", apiKey: apiKey });
-
-  var base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
-  const records = await base("Order")
-    .select({
-      view: "fp-grid",
-      filterByFormula: `AND( OR(Account = "${account}",{Managed Account} = "${account}"), RecID = "${orderRecID}" )`,
-    })
-    .all();
-
-  // There should only be one order
-  var order = records[0].fields;
-
-  //
-  // Get Order detail
-  //
-  const detailRecords = await base("OrderDetail")
-    .select({
-      view: "fp-grid",
-      filterByFormula: `OrderRecID = "${orderRecID}"`,
-    })
-    .all();
-
-  order.items = [];
-  detailRecords.forEach((item) => {
-    order.items.push(item.fields);
-  });
-
-  return order;
 }
 
   
@@ -331,59 +290,6 @@ export default withPageAuthRequired(function Order({ myProps }) {
   };
   
   /////////////////////////////////////////////////////////////////////////////////
-  // Send Notes
-  /////////////////////////////////////////////////////////////////////////////////
-  const sendNotes = async (event) => {
-
-    const form = chatFrom.current
-
-    if (form.textMsg.value.length === 0) {
-      //Nothing to do just return
-      return;      
-    }
-    
-    var notes = form.notes.value + "\n" + form.orderAccount.value + ": " + form.textMsg.value
-    
-    // Yes continue
-    const rec = {
-      orderRecID: event.target.value,
-      notes: notes
-    };
-
-    console.log("The following record will post to the order-update API")
-    console.log(rec)
-    
-    const res = await fetch("/api/order-update", {
-      body: JSON.stringify(rec),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "PATCH",
-    });
-    
-    const result = await res.json();
-    
-    if (result.length > 0) {
-      console.log("Send notes successful.");
-      alert("Your notes have been sent to MRFC");
-    } else {
-      alert("There was a problem sending your notes, please try again.");
-    }
-    
-    // Update state
-    order.Notes =  notes
-    setOrder(order)
-
-    // DEVTODO - This work but i dont under stand why yet 
-    setOrder(order => ({
-      ...order,
-      ["Notes"]: notes
-    }));
-    
-
-  };
-  
-  /////////////////////////////////////////////////////////////////////////////////
   // return
   /////////////////////////////////////////////////////////////////////////////////
   return (
@@ -395,7 +301,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
         <input id="orderRecID" name="orderRecID" type="hidden" value={order.RecID} />
         <div className="fpPageNavTop">
           <div>&nbsp;</div>
-          <Link href="/orders"><a className="fpA">Done</a></Link>
+          <Link href="/orders"><a className="fpBtn">Done</a></Link>
           <button className="fpBtn" type="button" value={order.RecID} onClick={submitOrder} disabled={contentLock} style={{ opacity: contentLock ? ".45" : "1" }}>
             Submit Order
           </button>
@@ -453,28 +359,6 @@ export default withPageAuthRequired(function Order({ myProps }) {
           </div>
         </form>
       </div>
-    
-      {/* 
-        
-        Chat
-        
-      */}
-      <h3>Chat</h3>
-      <div className="fpForm">
-        <form ref={chatFrom}>
-          <input id="orderAccount" name="orderAccount" type="hidden" value={order.Account} />
-          <div>
-            <div className="fpFromField">
-              <label htmlFor="notes">Chat History</label>
-              <textarea id="notes" name="notes" rows="15" cols="80" value={order.Notes} readOnly></textarea>
-            </div>
-            <div className="fpTextMsgCard">
-              <input id="textMsg" name="textMsg" type="text" placeholder="Send MRFC special instructions, questions or comments you may have about this order" /> 
-              <button type="button" value={order.RecID} onClick={(event) => sendNotes(event)}>Send</button>
-            </div>
-          </div>
-        </form>
-      </div>
 
       <h3>Items</h3>
       <OrderItems order={order} contentLock={contentLock} updateOrderDetailOnBunchesChange={updateOrderDetailOnBunchesChange} />
@@ -482,8 +366,6 @@ export default withPageAuthRequired(function Order({ myProps }) {
       <h3>Order Summary</h3>
       <OrderSummary orderTotal={orderTotal} />
 
-      <h3>Activity</h3>
-      <OrderActivity order={order} />
     </div>
   );
 });

@@ -53,15 +53,19 @@ export default withPageAuthRequired(function Orders({ orders }) {
 
       <form className="fpPageNavTop" onSubmit={createOrder}>
         <span><button className="fpBtn" type="submit">New Order</button></span>
-        <span><Link href="/orders/history"><a className="fpA">Past Orders</a></Link></span>
+        <span><Link href="/orders/history"><a className="fpBtn">Past Orders</a></Link></span>
       </form>
  
       {orders.map(order => (
-        <Link href={'/orders/' + order.RecID} key={order.RecID}>
-          <a className="fpSingle">
-            <h2 className="fpFormTitle">{ order["Client/Job"] } <span>Order#: {order.OrderNo} - {order.Status}</span></h2>
-          </a>
-        </Link>
+        <div key={order.RecID} className="fpOrderList">
+          <Link href={'/orders/' + order.RecID} key={order.RecID}>
+            <a className="fpSingle"><h3 className="fpFormTitle">{order["Client/Job"]} <span>Order#: {order.OrderNo} - {order.Status}</span></h3></a>
+          </Link>
+          <span>
+          <Link href={'/orders/chat/' + order.RecID} key={order.RecID}><a className="fpSingle">Chat</a></Link>
+          <Link href={'/orders/activity/' + order.RecID} key={order.RecID}><a className="fpSingle">Activity</a></Link>
+          </span>
+        </div>
       ))}
     </div>
   );

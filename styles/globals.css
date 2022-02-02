@@ -21,10 +21,10 @@ a {
 
 .fpA {
   text-decoration-style: solid;
-  text-decoration-color:#4979ff;
+  text-decoration-color:#e9cbcb;
   text-decoration:solid;
   text-decoration:underline;
-  text-decoration-thickness: 3px;
+  text-decoration-thickness: 2px;
 }
 
 .fpContent {
@@ -37,7 +37,7 @@ a {
   width: 110px;
   padding: 8px 0;
   margin: 10px auto;
-  background: #4979ff;
+  background: #e9cbcb;
   border-radius: 4px;
   color: white;
   text-align: center;
@@ -48,10 +48,14 @@ a {
   width: 110px;
   padding: 8px 0;
   margin: 10px auto;
-  background: #4979ff;
+  background: #e9cbcb;
   border-radius: 4px;
   color: white;
   text-align: center;
+  border: none;
+  color:black;
+  font-size: 14px;
+
 }
 
 
@@ -225,6 +229,25 @@ Order
   border-bottom: 1px solid #ddd;
 }
 
+/* 
+
+Order List 
+
+*/
+.fpOrderList {
+  display: flex;
+  flex-direction:row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+  padding: 2px;
+  background-color:white;
+  border-style: solid;
+  border-color:lightgray;
+  border-width: 2px;
+  border-radius: 5px;  
+}
 
 /* 
 
@@ -301,7 +324,7 @@ text card
   flex-wrap: wrap;
   justify-content:flex-start;
   align-items: center;
-  margin: 20px;
+  margin: 10px;
   padding: 3px;
 }
 
