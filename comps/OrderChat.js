@@ -59,18 +59,21 @@ const OrderChat = ({order, setOrder}) => {
 
   return ( 
     <div className="fpForm">
+      <p>Send MRFC special instructions, questions or comments you may have about this order</p>
       <form ref={chatFrom}>
+      
         <input id="orderAccount" name="orderAccount" type="hidden" value={order.Account} />
-        <div>
-          <div className="fpFromField">
-            <label htmlFor="notes">Chat History</label>
-            <textarea id="notes" name="notes" rows="15" cols="80" value={order.Notes} readOnly></textarea>
-          </div>
-          <div className="fpTextMsgCard">
-            <input id="textMsg" name="textMsg" type="text" placeholder="Send MRFC special instructions, questions or comments you may have about this order" /> 
-            <button type="button" value={order.RecID} onClick={(event) => sendNotes(event)}>Send</button>
-          </div>
+
+        <div className="fpFromField">
+          <label htmlFor="notes">Chat History</label>
+          <textarea id="notes" name="notes" rows="15" cols="80" value={order.Notes} readOnly></textarea>
         </div>
+
+        <div className="fpTextMsgCard">
+          <input id="textMsg" name="textMsg" type="text" /> 
+          <button className="fpBtn" type="button" value={order.RecID} onClick={(event) => sendNotes(event)}>Send</button>
+        </div>
+      
       </form>
     </div>
    );

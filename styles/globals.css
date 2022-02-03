@@ -34,7 +34,7 @@ a {
 
 .fpBtnCenter {
   display: block;
-  width: 110px;
+  width: 100px;
   padding: 8px 0;
   margin: 10px auto;
   background: #e9cbcb;
@@ -45,7 +45,7 @@ a {
 
 .fpBtn {
   display: block;
-  width: 110px;
+  width: 100px;
   padding: 8px 0;
   margin: 10px auto;
   background: #e9cbcb;
@@ -55,7 +55,6 @@ a {
   border: none;
   color:black;
   font-size: 14px;
-
 }
 
 
@@ -138,6 +137,10 @@ Order
   padding: 5px;
 }
 
+.fpForm p {
+  margin: 20px;
+  padding: 3px;
+}
 
 .fpForm fieldset {
   opacity: .45;
@@ -320,11 +323,12 @@ text card
 */
 .fpTextMsgCard {
   display: flex;
+  width: 85%;
   flex-direction:row;
   flex-wrap: wrap;
   justify-content:flex-start;
   align-items: center;
-  margin: 10px;
+  margin: 20px;
   padding: 3px;
 }
 
@@ -339,16 +343,6 @@ text card
   font-size: 14px
 }
 
-.fpTextMsgCard button {
-  display: block;
-  width: 50px;
-  padding: 8px 0;
-  margin: 10px;
-  background: #0c9a45;
-  border-radius: 4px;
-  color: white;
-  text-align: center;
-}
 
 /* 
 
