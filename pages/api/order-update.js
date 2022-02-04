@@ -45,6 +45,7 @@ async function updateOrder(account,data) {
   if (data.clientJob != null)      { rec[0].fields["Client/Job"] = data.clientJob }
   if (data.teamMember != null)     { rec[0].fields["Team Member"] = data.teamMember }
   if (data.dueDate != null)        { rec[0].fields["Due Date"] = data.dueDate }
+  if (data.deliveryOption != null) { rec[0].fields["Delivery Option"] = data.deliveryOption }
   if (data.notes != null)          { rec[0].fields.Notes = data.notes }
   if (data.managedAccount != null) { rec[0].fields["Managed Account"] = data.managedAccount}
 

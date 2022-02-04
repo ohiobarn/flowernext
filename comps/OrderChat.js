@@ -1,4 +1,5 @@
 import React, {useRef} from "react";
+import Link from "next/link";
 
 const OrderChat = ({order, setOrder}) => {
   
@@ -60,6 +61,9 @@ const OrderChat = ({order, setOrder}) => {
   return ( 
     <div className="fpForm">
       <p>Send MRFC special instructions, questions or comments you may have about this order</p>
+      <div className="fpPageNavTop">
+        <Link href="/orders"><a className="fpBtn">Done</a></Link>
+      </div>
       <form ref={chatFrom}>
       
         <input id="orderAccount" name="orderAccount" type="hidden" value={order.Account} />

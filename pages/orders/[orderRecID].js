@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef} from "react";
 import OrderActivity from "../../comps/OrderActivity";
 import OrderSummary from "../../comps/OrderSummary";
 import OrderItems from "../../comps/OrderItems";
+import OrderHeader from "../../comps/OrderHeader";
 import {getOrder} from "../../utils/OrderUtils.js"
 
 export async function getServerSideProps(context) {
@@ -44,9 +45,6 @@ export default withPageAuthRequired(function Order({ myProps }) {
   const [orderStatusDesc, setOrderStatusDesc] = useState("");
   const chatFrom =  useRef(null)
 
-  //DEVTODO - make this a map object with status and description 
-  const orderStatusList = ["Draft","Submitted","Modification Requested","Accepted","Pending","Ready","Delivered","Invoiced","Paid"]
-
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
 
@@ -85,87 +83,36 @@ export default withPageAuthRequired(function Order({ myProps }) {
         break;
       case "Accepted":
         setContentLock(true);
-        setOrderStatusDesc("todo");
+        setOrderStatusDesc("Accepted - Your order has been accepted. No action is required. When the Due Date approaches the order status will change to Pending, letting you know we have started to fulfill your order. In the mean time you will not be able to make changes to the order.");
         break;
       case "Pending":
         setContentLock(true);
-        setOrderStatusDesc("todo");
+        setOrderStatusDesc("Pending - Order fulfillment is in progress, the order status will change when it is Ready for " + order["Delivery Option"]);
         break;
       case "Ready":
         setContentLock(true);
-        setOrderStatusDesc("todo");
+        setOrderStatusDesc("Ready - The order is ready for " + order["Delivery Option"]);
         break;
       case "Delivered":
         setContentLock(true);
-        setOrderStatusDesc("todo");
+        setOrderStatusDesc("Delivered");
         break;
       case "Invoiced":
         setContentLock(true);
-        setOrderStatusDesc("todo");
+        setOrderStatusDesc("Invoiced");
         break;
       case "Paid":
         setContentLock(true);
-        setOrderStatusDesc("todo");
+        setOrderStatusDesc("Paid");
         break;
       default:
         setContentLock(true);
-        setOrderStatusDesc("todo");
+        setOrderStatusDesc("Bad order status");
     }
   }, [order.Status, order.items, user]);
 
 
-  /////////////////////////////////////////////////////////////////////////////////
-  // Update Order Event handler
-  /////////////////////////////////////////////////////////////////////////////////
-  const updateOrder = async (event) => {
-    event.preventDefault(); // don't redirect the page
 
-    const rec = {
-      orderRecID: event.target.orderRecID.value,
-    };
-    //
-    // Add fields
-    //
-    if (event.target.clientJob != null) {
-      rec.clientJob = event.target.clientJob.value;
-    }
-    if (event.target.teamMember != null) {
-      rec.teamMember = event.target.teamMember.value;
-    }
-    if (event.target.dueDate != null) {
-      rec.dueDate = event.target.dueDate.value;
-    }
-    if (event.target.managedAccount != null) { 
-      rec.managedAccount = event.target.managedAccount.value;
-    }
-    if (event.target.status != null) { 
-      rec.status = event.target.status.value;
-      // Update order and update state so orderStatusDesc is updated
-      order.Status = event.target.status.value;
-    }
-
-    // Update page state
-    var newOrder = {...order}
-    setOrder(newOrder);
-
-    console.log("The following record will post to the order-update API");
-    console.log(rec);
-    const res = await fetch("/api/order-update", {
-      body: JSON.stringify(rec),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "PATCH",
-    });
-    
-    const result = await res.json();
-
-    if (result.length > 0) {
-      alert("Saved.");
-    } else {
-      alert("There was a problem saving your order, please try again.");
-    }
-  };
   
   /////////////////////////////////////////////////////////////////////////////////
   // Update OrderDetail Event handler
@@ -294,8 +241,8 @@ export default withPageAuthRequired(function Order({ myProps }) {
   /////////////////////////////////////////////////////////////////////////////////
   return (
     <div>
-      <h2 className="fpFormTitle">{order["Client/Job"]}{" "} ({order.OrderNo})</h2>
-      <h3>{orderStatusDesc}</h3>
+      <h2 className="fpFormTitle">{order["Client/Job"]}{" "} ({order.OrderNo} - {order.Status})</h2>
+      <p>{orderStatusDesc}</p>
         
       <form>
         <input id="orderRecID" name="orderRecID" type="hidden" value={order.RecID} />
@@ -311,55 +258,9 @@ export default withPageAuthRequired(function Order({ myProps }) {
         </div>
       </form>
 
-      {/* 
-        
-        Order Header
-        
-      */}
       <h3>Header</h3>
-      <div className="fpForm">
-        <form onSubmit={updateOrder} style={{ opacity: contentLock ? ".45" : "1" }}>
-          <input id="orderRecID" name="orderRecID" type="hidden" value={order.RecID} />
-
-          <div className="fpFromField">
-            <label htmlFor="clientJob">Client/Job</label>
-            <input id="clientJob" name="clientJob" type="text" defaultValue={order["Client/Job"]} disabled={contentLock} required />
-          </div>
-
-          <div className="fpFromField">
-            <label htmlFor="teamMember">Team Member</label>
-            <input id="teamMember" name="teamMember" type="text" defaultValue={order["Team Member"]} disabled={contentLock} required />
-          </div>
-
-          <div className="fpFromField fpDate">
-            <label htmlFor="dueDate">Due Date</label>
-            <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} disabled={contentLock} required />
-          </div>
-
-          { showManagedAccount &&
-            <div className="fpFromField">
-              <label htmlFor="managedAccount">Managed Account</label>
-              <input id="managedAccount" name="managedAccount" type="text" defaultValue={order["Managed Account"]}  />
-            </div>
-          }
-          { showManagedAccount &&
-            <div className="fpFromField">
-              <label htmlFor="status">Order Status</label>
-              <select name="status" id="status" defaultValue={order.Status}>
-                {orderStatusList.map( s => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-            </div>
-          }
-          <div>
-            <button className="fpBtn" type="submit" disabled={contentLock && !showManagedAccount} >
-              Save Header
-            </button>
-          </div>
-        </form>
-      </div>
-
+      <OrderHeader order={order} contentLock={contentLock} showManagedAccount={showManagedAccount} setOrder={setOrder}/>
+      
       <h3>Items</h3>
       <OrderItems order={order} contentLock={contentLock} updateOrderDetailOnBunchesChange={updateOrderDetailOnBunchesChange} />
 
