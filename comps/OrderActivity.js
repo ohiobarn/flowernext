@@ -3,7 +3,7 @@ import Link from "next/link";
 const  OrderActivity = ({order}) => {
   return (
     <div>
-      <div className="fpPageNavTop">
+      <div className="fpPageNav fpNavAtTop">
         <Link href="/orders"><a className="fpBtn">Done</a></Link>
       </div>
     

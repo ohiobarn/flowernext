@@ -1,7 +1,10 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import Link from "next/link"
 
+
+////////////////////////////////////////////////////////////////////////////
 // This gets called on every request
+////////////////////////////////////////////////////////////////////////////
 export async function getServerSideProps( context ) {
 
   // Get user from cookie
@@ -13,6 +16,37 @@ export async function getServerSideProps( context ) {
 
   // Pass orders to the page via props
   return { props: { orders } };
+}
+
+////////////////////////////////////////////////////////////////////////////
+//          Get Orders
+////////////////////////////////////////////////////////////////////////////
+async function getOrders(account) {
+
+  // const account = account
+  const apiKey = process.env.AIRTABLE_APIKEY
+  console.log("[getOrders] Account [%s]", account)
+
+  var Airtable = require("airtable")
+  
+  Airtable.configure({endpointUrl: "https://api.airtable.com",apiKey: apiKey,});
+
+  var base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
+  const records = await base("Order").select({
+    pageSize: 100, 
+    view: "fp-grid", 
+    sort: [{field: "Client/Job", direction: "asc"}],
+    filterByFormula: `OR(Account = "${account}", {Managed Account} = "${account}")`,
+  }).all();
+
+  // Put resultes into an array
+  var orders = []; 
+  records.forEach(function (record) {
+    var order = record.fields;
+    orders.push(order);
+  });
+
+  return orders
 }
 
 export default withPageAuthRequired(function Orders({ orders }) {
@@ -51,19 +85,19 @@ export default withPageAuthRequired(function Orders({ orders }) {
     <div>
       <h1>Orders</h1>
 
-      <form className="fpPageNavTop" onSubmit={createOrder}>
+      <form className="fpPageNav fpNavAtTop" onSubmit={createOrder}>
         <span><button className="fpBtn" type="submit">New Order</button></span>
         <span><Link href="/orders/history"><a className="fpBtn">Past Orders</a></Link></span>
       </form>
  
       {orders.map(order => (
         <div key={order.RecID} className="fpOrderList">
-          <Link href={'/orders/' + order.RecID} key={order.RecID}>
+          <Link href={'/orders/' + order.RecID} key={"orderStatusLink"}>
             <a className="fpSingle"><h3 className="fpFormTitle">{order["Client/Job"]} <span>Order#: {order.OrderNo} - {order.Status}</span></h3></a>
           </Link>
           <span>
-          <Link href={'/orders/chat/' + order.RecID} key={order.RecID}><a className="fpSingle">Chat</a></Link>
-          <Link href={'/orders/activity/' + order.RecID} key={order.RecID}><a className="fpSingle">Activity</a></Link>
+          <Link href={'/orders/chat/' + order.RecID} key={"orderChatLink"}><a className="fpSingle">Chat</a></Link>
+          <Link href={'/orders/activity/' + order.RecID} key={"orderActivityLink"}><a className="fpSingle">Activity</a></Link>
           </span>
         </div>
       ))}
@@ -71,36 +105,7 @@ export default withPageAuthRequired(function Orders({ orders }) {
   );
 });
 
-////////////////////////////////////////////////////////////////////////////
-//          Get Orders
-////////////////////////////////////////////////////////////////////////////
-async function getOrders(account) {
 
-  // const account = account
-  const apiKey = process.env.AIRTABLE_APIKEY
-  console.log("[getOrders] Account [%s]", account)
-
-  var Airtable = require("airtable")
-  
-  Airtable.configure({endpointUrl: "https://api.airtable.com",apiKey: apiKey,});
-
-  var base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
-  const records = await base("Order").select({
-    pageSize: 100, 
-    view: "fp-grid", 
-    sort: [{field: "Client/Job", direction: "asc"}],
-    filterByFormula: `OR(Account = "${account}", {Managed Account} = "${account}")`,
-  }).all();
-
-  // Put resultes into an array
-  var orders = []; 
-  records.forEach(function (record) {
-    var order = record.fields;
-    orders.push(order);
-  });
-
-  return orders
-}
 
 
 

@@ -8,6 +8,9 @@ import OrderItems from "../../comps/OrderItems";
 import OrderHeader from "../../comps/OrderHeader";
 import {getOrder} from "../../utils/OrderUtils.js"
 
+/////////////////////////////////////////////////////////////////////////////////
+// getServerSideProps
+/////////////////////////////////////////////////////////////////////////////////
 export async function getServerSideProps(context) {
   // Get user from cookie
   var res = {}; // Don't use actual res object, it cause spam in logs
@@ -29,7 +32,82 @@ export async function getServerSideProps(context) {
   return { props: { myProps } };
 }
 
+/////////////////////////////////////////////////////////////////////////////////
+// Submit Order
+/////////////////////////////////////////////////////////////////////////////////
+const submitOrder = async (pOrder) => {
+  var answer = confirm("\nWARNING!\nAre you sure you want to submit this order?");
+  if (!answer) {
+    // Dont submit
+    return;
+  }
+
+  //Yes continue
+  const rec = {
+    orderRecID: pOrder.RecID,
+    status: "Submitted",
+  };
   
+  // console.log("The following record will post to the order-update API")
+  // console.log(rec)
+  
+  const res = await fetch("/api/order-update", {
+    body: JSON.stringify(rec),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "PATCH",
+  });
+
+  const result = await res.json();
+
+  if (result.length > 0) {
+    console.log("Order submit successful.");
+  } else {
+    alert("There was a problem submitting your order, please try again.");
+  }
+  
+  window.location.href = "/orders";
+};
+
+/////////////////////////////////////////////////////////////////////////////////
+// Delete Order
+/////////////////////////////////////////////////////////////////////////////////
+const deleteOrder = async (pOrder) => {
+  var answer = confirm("\nWARNING!\nAre you sure you want to delete this order?");
+  if (!answer) {
+    // Dont delete
+    return;
+  }
+  
+  // Yes continue
+  const rec = {
+    orderRecIDs: [pOrder.RecID],
+  };
+  
+  console.log("The following record will post to the order-delete API");
+  console.log(rec);
+  
+  const res = await fetch("/api/order-delete", {
+    body: JSON.stringify(rec),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "DELETE",
+  });
+  
+  const result = await res.json();
+  
+  if (result.length > 0) {
+    console.log("Order delete successful.");
+  } else {
+    alert("There was a problem deleting your order, please try again.");
+  }
+  
+  window.location.href = "/orders";
+};
+
+
 ////////////////////////////////////////////////////////////////////////////
 // Default
 ////////////////////////////////////////////////////////////////////////////
@@ -43,7 +121,6 @@ export default withPageAuthRequired(function Order({ myProps }) {
   const [contentLock, setContentLock] = useState(false);
   const [orderTotal, setOrderTotal] = useState(0);
   const [orderStatusDesc, setOrderStatusDesc] = useState("");
-  const chatFrom =  useRef(null)
 
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
@@ -161,81 +238,8 @@ export default withPageAuthRequired(function Order({ myProps }) {
   };
 
   
-  /////////////////////////////////////////////////////////////////////////////////
-  // Delete Order
-  /////////////////////////////////////////////////////////////////////////////////
-  const deleteOrder = async (event) => {
-    var answer = confirm("\nWARNING!\nAre you sure you want to delete this order?");
-    if (!answer) {
-      // Dont delete
-      return;
-    }
-    
-    // Yes continue
-    const rec = {
-      orderRecIDs: [event.target.value],
-    };
-    
-    console.log("The following record will post to the order-delete API");
-    console.log(rec);
-    
-    const res = await fetch("/api/order-delete", {
-      body: JSON.stringify(rec),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "DELETE",
-    });
-    
-    const result = await res.json();
-    
-    if (result.length > 0) {
-      console.log("Order delete successful.");
-    } else {
-      alert("There was a problem deleting your order, please try again.");
-    }
-    
-    window.location.href = "/orders";
-  };
   
-  /////////////////////////////////////////////////////////////////////////////////
-  // Submit Order
-  /////////////////////////////////////////////////////////////////////////////////
-  const submitOrder = async (event) => {
-    var answer = confirm("\nWARNING!\nAre you sure you want to submit this order?");
-    if (!answer) {
-      // Dont submit
-      return;
-    }
-    
-    //Yes continue
-    const rec = {
-      orderRecID: event.target.value,
-      status: "Submitted",
-    };
-    
-    // console.log("The following record will post to the order-update API")
-    // console.log(rec)
-    
-    const res = await fetch("/api/order-update", {
-      body: JSON.stringify(rec),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "PATCH",
-    });
 
-    const result = await res.json();
-
-    if (result.length > 0) {
-      console.log("Order submit successful.");
-    } else {
-      alert("There was a problem submitting your order, please try again.");
-    }
-    
-    window.location.href = "/orders";
-  };
-  
   /////////////////////////////////////////////////////////////////////////////////
   // return
   /////////////////////////////////////////////////////////////////////////////////
@@ -245,14 +249,13 @@ export default withPageAuthRequired(function Order({ myProps }) {
       <p>{orderStatusDesc}</p>
         
       <form>
-        <input id="orderRecID" name="orderRecID" type="hidden" value={order.RecID} />
-        <div className="fpPageNavTop">
+        <div className="fpPageNav fpNavAtTop">
           <div>&nbsp;</div>
           <Link href="/orders"><a className="fpBtn">Done</a></Link>
-          <button className="fpBtn" type="button" value={order.RecID} onClick={submitOrder} disabled={contentLock} style={{ opacity: contentLock ? ".45" : "1" }}>
+          <button className="fpBtn" type="button" value={order.RecID} onClick={ () => submitOrder(order) }  disabled={contentLock} style={{ opacity: contentLock ? ".45" : "1" }}>
             Submit Order
           </button>
-          <button className="fpBtn" type="button" value={order.RecID} onClick={deleteOrder}>
+          <button className="fpBtn" type="button" value={order.RecID} onClick={ () => deleteOrder(order)}>
             Delete Order
           </button>
         </div>
@@ -266,6 +269,20 @@ export default withPageAuthRequired(function Order({ myProps }) {
 
       <h3>Order Summary</h3>
       <OrderSummary orderTotal={orderTotal} />
+      
+      <form>
+        <div className="fpPageNav fpNavAtBottom">
+          <div>&nbsp;</div>
+          <Link href="/orders"><a className="fpBtn">Done</a></Link>
+          <button className="fpBtn" type="button" value={order.RecID} onClick={ () => submitOrder(order) }  disabled={contentLock} style={{ opacity: contentLock ? ".45" : "1" }}>
+            Submit Order
+          </button>
+          <button className="fpBtn" type="button" value={order.RecID} onClick={ () => deleteOrder(order)}>
+            Delete Order
+          </button>
+        </div>
+      </form>
+
 
     </div>
   );

@@ -220,7 +220,7 @@ Order
 }
 
 /* card */
-.fpPageNavTop {
+.fpPageNav {
   max-width: 95%;
   margin: 3px;
   padding: 5px;
@@ -229,7 +229,13 @@ Order
   align-items: center;
   flex-wrap: wrap;
   gap: 30px;
+}
+.fpNavAtTop {
   border-bottom: 1px solid #ddd;
+}
+
+.fpNavAtBottom {
+  border-top: 1px solid #ddd;
 }
 
 /* 

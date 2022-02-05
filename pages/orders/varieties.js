@@ -141,7 +141,7 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
     <div>
       <form id="varietyForm" onSubmit={addVarietiesToOrder}>
         <input type="hidden" id="orderRecID" name="orderRecID" value={myprops.order.RecID} />
-        <div className="fpPageNavTop">
+        <div className="fpPageNav fpNavAtTop">
           <div>&nbsp;</div>
           <Link href={myprops.order.RecID}><a className="fpA">Done</a></Link>
           <button className="fpBtn" type="submit">Add Selected</button>

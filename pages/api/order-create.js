@@ -33,7 +33,6 @@ async function createOrder(account,data) {
   const rec = [
       {
         "fields": { 
-          "Client/Job": "New",
           "Account": account,
           "Status": "Draft"
         }
