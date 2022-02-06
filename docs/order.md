@@ -29,7 +29,7 @@ What's on an order:
 Below are the status a florist will see in the app.
 
 ``` mermaid
-flowchart LR;
+flowchart TD;
 
 
 draft(Draft) --> 

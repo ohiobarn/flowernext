@@ -58,6 +58,10 @@ mkdocs build --clean; mkdocs gh-deploy
 open https://ohiobarn.github.io/flowerpower/ 
 ```
 
+## Fontawesome
+
+see this [post](https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react)
+
 ## Roadmap
 
 See: [ROADMAP.md](ROADMAP.md)

@@ -9,12 +9,13 @@ nav:
 theme:
   # name: readthedocs
   # name: nature
-  name: material
+  # name: material
   # name: cluster
-  # name: windmill
+  name: windmill
   # name: bootstrap386
   # name: gitbook
-  # name: github  
+  # name: github 
+  include_sidebar: true 
 
 plugins:
     - search
