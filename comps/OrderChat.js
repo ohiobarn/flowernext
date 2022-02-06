@@ -18,15 +18,13 @@ const OrderChat = ({order, setOrder}) => {
     }
     
     var notes = form.notes.value + "\n" + form.orderAccount.value + ": " + form.textMsg.value
+    form.textMsg.value = ""
     
     // Yes continue
     const rec = {
       orderRecID: event.target.value,
       notes: notes
     };
-
-    console.log("The following record will post to the order-update API")
-    console.log(rec)
     
     const res = await fetch("/api/order-update", {
       body: JSON.stringify(rec),
@@ -62,7 +60,7 @@ const OrderChat = ({order, setOrder}) => {
     <div className="fpForm">
       <p>Send MRFC special instructions, questions or comments you may have about this order</p>
       <div className="fpPageNav fpNavAtTop">
-        <Link href="/orders"><a className="fpBtn">Done</a></Link>
+        <Link href="/orders"><a className="fpBtn">Back</a></Link>
       </div>
       <form ref={chatFrom}>
       

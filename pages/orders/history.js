@@ -1,7 +1,7 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import Link from "next/link"
 import OrderList from "../../comps/OrderList";
-import {createOrder, getOrders} from "../../utils/OrderUtils.js"
+import {getOrders} from "../../utils/OrderUtils.js"
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -20,6 +20,7 @@ export async function getServerSideProps( context ) {
   return { props: {orders} };
 }
 
+
 ////////////////////////////////////////////////////////////////////////////
 //          withPageAuthRequired
 ////////////////////////////////////////////////////////////////////////////
@@ -28,13 +29,13 @@ export default withPageAuthRequired(function Orders({ orders }) {
 
   return (
     <div>
-      <h1>Orders</h1>
+      <h1>Order History</h1>
 
-      <form className="fpPageNav fpNavAtTop" onSubmit={createOrder}>
-        <button className="fpBtn" type="submit">New Order</button>
-      </form>
+      <div className="fpPageNav fpNavAtTop">
+        <Link href="/orders"><a className="fpBtn">Back</a></Link>
+      </div>
 
-      <OrderList orders={orders} showActiveOrders="yes" /> 
+      <OrderList orders={orders} showActiveOrders="no" /> 
 
     </div>
   );

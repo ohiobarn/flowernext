@@ -4,8 +4,6 @@ import Link from 'next/link'
 
 export default withPageAuthRequired(function Profile({ user }) {
 
-  console.log(user);
-
   return (
 
       <div>
@@ -13,7 +11,12 @@ export default withPageAuthRequired(function Profile({ user }) {
         <h2>{user.name}</h2>
         <p>{user.email}</p>
         <p>Role: {user["https://app.madriverfloralcollective.com/role"]}</p>
-        <Link href="/api/auth/logout?federated"><a className='fpA'>Logout</a></Link>
+        <hr></hr>
+        <div>
+          <Link href="/orders/history"><a className='fpA'>Order History</a></Link>
+          <br></br>
+          <Link href="/api/auth/logout?federated"><a className='fpA'>Logout</a></Link>
+        </div>
       </div>
 
   );

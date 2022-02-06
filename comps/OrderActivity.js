@@ -4,7 +4,7 @@ const  OrderActivity = ({order}) => {
   return (
     <div>
       <div className="fpPageNav fpNavAtTop">
-        <Link href="/orders"><a className="fpBtn">Done</a></Link>
+        <Link href="/orders"><a className="fpBtn">Back</a></Link>
       </div>
     
       <div className="fpForm">

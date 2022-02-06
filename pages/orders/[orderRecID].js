@@ -85,8 +85,8 @@ const deleteOrder = async (pOrder) => {
     orderRecIDs: [pOrder.RecID],
   };
   
-  console.log("The following record will post to the order-delete API");
-  console.log(rec);
+  // console.log("The following record will post to the order-delete API");
+  // console.log(rec);
   
   const res = await fetch("/api/order-delete", {
     body: JSON.stringify(rec),
@@ -251,7 +251,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
       <form>
         <div className="fpPageNav fpNavAtTop">
           <div>&nbsp;</div>
-          <Link href="/orders"><a className="fpBtn">Done</a></Link>
+          <Link href="/orders"><a className="fpBtn">Back</a></Link>
           <button className="fpBtn" type="button" value={order.RecID} onClick={ () => submitOrder(order) }  disabled={contentLock} style={{ opacity: contentLock ? ".45" : "1" }}>
             Submit Order
           </button>
@@ -273,7 +273,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
       <form>
         <div className="fpPageNav fpNavAtBottom">
           <div>&nbsp;</div>
-          <Link href="/orders"><a className="fpBtn">Done</a></Link>
+          <Link href="/orders"><a className="fpBtn">Back</a></Link>
           <button className="fpBtn" type="button" value={order.RecID} onClick={ () => submitOrder(order) }  disabled={contentLock} style={{ opacity: contentLock ? ".45" : "1" }}>
             Submit Order
           </button>

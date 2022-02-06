@@ -40,8 +40,8 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
     var newOrder = {...order}
     setOrder(newOrder);
 
-    console.log("The following record will post to the order-update API");
-    console.log(rec);
+    // console.log("The following record will post to the order-update API");
+    // console.log(rec);
     const res = await fetch("/api/order-update", {
       body: JSON.stringify(rec),
       headers: {

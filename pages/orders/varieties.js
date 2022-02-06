@@ -143,7 +143,7 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
         <input type="hidden" id="orderRecID" name="orderRecID" value={myprops.order.RecID} />
         <div className="fpPageNav fpNavAtTop">
           <div>&nbsp;</div>
-          <Link href={myprops.order.RecID}><a className="fpA">Done</a></Link>
+          <Link href={myprops.order.RecID}><a className="fpA">Back</a></Link>
           <button className="fpBtn" type="submit">Add Selected</button>
           <input className="searchInput" type="text" id="varietyFilter"  onKeyUp={filterCards} placeholder="Search for names.."/>
         </div>
@@ -204,7 +204,7 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
         </div>
         <div className="fpPageNavBottom">
           <button className="fpBtn" type="submit">Add Selected</button>
-          <Link href={myprops.order.RecID}><a className="fpBtn">Done</a></Link>
+          <Link href={myprops.order.RecID}><a className="fpBtn">Back</a></Link>
         </div>
       </form>
     </div>
