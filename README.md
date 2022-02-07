@@ -62,6 +62,10 @@ open https://ohiobarn.github.io/flowerpower/
 
 see this [post](https://fontawesome.com/v5.15/how-to-use/on-the-web/using-with/react)
 
+## Google Fonts
+
+see this [post](https://fonts.google.com/)
+
 ## Roadmap
 
 See: [ROADMAP.md](ROADMAP.md)

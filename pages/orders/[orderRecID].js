@@ -245,7 +245,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
   /////////////////////////////////////////////////////////////////////////////////
   return (
     <div>
-      <h2 className="fpFormTitle">{order["Client/Job"]}{" "} ({order.OrderNo} - {order.Status})</h2>
+      <h3 className="fpFormTitle">{order["Client/Job"]}{" "} ({order.OrderNo} - {order.Status})</h3>
       <p>{orderStatusDesc}</p>
         
       <form>
