@@ -1,17 +1,20 @@
 import Link from "next/link";
 import Image from "next/image";
+import { isContentLocked } from "../utils/OrderUtils";
 
-const OrderItems = ({order, contentLock, updateOrderDetailOnBunchesChange}) => {
+const OrderItems = ({order, updateOrderDetailOnBunchesChange}) => {
+
   return ( 
     <div className="fpForm">
-      <div className="fpBar" style={{display: contentLock?'none':'true'}} >
-        <Link href={"varieties?orderRecID=" + order.RecID} ><a className="fpA">Add Items</a></Link>
+      <div className="fpPageNav fpNavAtTop">
+        <Link href="/orders"><a className="fpBtn">Back</a></Link>
+        <Link href={"/orders/varieties?orderRecID=" + order.RecID} ><a className="fpBtn"  style={{display: isContentLocked(order.Status) ?'none':'true'}}>Add Items</a></Link>
       </div>
 
       <div id="items">
       {order.items.map((item) => { 
         return (
-          <form key={item.RecID} style={{ opacity: contentLock ? ".45" : "1" }}>
+          <form key={item.RecID} style={{ opacity: isContentLocked(order.Status) ? ".45" : "1" }}>
             <div className="fpCard">
               <Image src={item.Image[0].thumbnails.large.url} layout="intrinsic" width={200} height={200} alt="thmbnail"/>
               <span>
@@ -31,7 +34,7 @@ const OrderItems = ({order, contentLock, updateOrderDetailOnBunchesChange}) => {
                   <p>
                     <input id="bunches" name="bunches" type="number" defaultValue={item.Bunches} min="0" max="99" 
                       onChange={(event) => updateOrderDetailOnBunchesChange(item,event)} 
-                      disabled={contentLock}
+                      disabled={isContentLocked(order.Status) }
                     /> at ${item["Price per Bunch"]}/bn
                   </p>
                 </div>
@@ -52,9 +55,11 @@ const OrderItems = ({order, contentLock, updateOrderDetailOnBunchesChange}) => {
       })}
       </div>
 
-      <div className="fpBar" style={{display: contentLock?'none':'true'}}>
-        <Link href={"varieties?orderRecID=" + order.RecID}><a className="fpA">Add Items</a></Link>
+      <div className="fpPageNav fpNavAtBottom">
+        <Link href="/orders"><a className="fpBtn">Back</a></Link>
+        <Link href={"/orders/varieties?orderRecID=" + order.RecID} ><a className="fpBtn"  style={{display: isContentLocked(order.Status) ?'none':'true'}}>Add Items</a></Link>
       </div>
+
     </div>
    );
 }

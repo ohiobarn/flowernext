@@ -1,12 +1,9 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import Link from "next/link";
-import Image from "next/image"
+import OrderHeader from "../../comps/OrderHeader.js"
+import OrderSummary from "../../comps/OrderSummary.js"
 import React, { useState, useEffect, useRef} from "react";
-import OrderActivity from "../../comps/OrderActivity";
-import OrderSummary from "../../comps/OrderSummary";
-import OrderItems from "../../comps/OrderItems";
-import OrderHeader from "../../comps/OrderHeader";
-import {getOrder} from "../../utils/OrderUtils.js"
+import {getOrder,setStateFromStatus, submitOrder, isContentLocked, getOrderDesc} from "../../utils/OrderUtils.js"
 
 /////////////////////////////////////////////////////////////////////////////////
 // getServerSideProps
@@ -32,43 +29,6 @@ export async function getServerSideProps(context) {
   return { props: { myProps } };
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-// Submit Order
-/////////////////////////////////////////////////////////////////////////////////
-const submitOrder = async (pOrder) => {
-  var answer = confirm("\nWARNING!\nAre you sure you want to submit this order?");
-  if (!answer) {
-    // Dont submit
-    return;
-  }
-
-  //Yes continue
-  const rec = {
-    orderRecID: pOrder.RecID,
-    status: "Submitted",
-  };
-  
-  // console.log("The following record will post to the order-update API")
-  // console.log(rec)
-  
-  const res = await fetch("/api/order-update", {
-    body: JSON.stringify(rec),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "PATCH",
-  });
-
-  const result = await res.json();
-
-  if (result.length > 0) {
-    console.log("Order submit successful.");
-  } else {
-    alert("There was a problem submitting your order, please try again.");
-  }
-  
-  window.location.href = "/orders";
-};
 
 /////////////////////////////////////////////////////////////////////////////////
 // Delete Order
@@ -143,103 +103,17 @@ export default withPageAuthRequired(function Order({ myProps }) {
     }
 
     //
-    // Order Status
+    // Update state
     //
-    switch (order.Status) {
-      case "Draft":
-        setContentLock(false);
-        setOrderStatusDesc("Draft - Prepare your order and when ready click submit.");
-        break;
-      case "Submitted":
-        setContentLock(true);
-        setOrderStatusDesc("Submitted - Your order has been submitted for review. You can expect a response soon. In the mean time you will not be able to make changes to the order.");
-        break;
-      case "Modification Requested":
-        setContentLock(false)
-        setOrderStatusDesc("Modification Requested - Modifications to your order are required before it can be accepted. Please review the chat history for more detail.");
-        break;
-      case "Accepted":
-        setContentLock(true);
-        setOrderStatusDesc("Accepted - Your order has been accepted. No action is required. When the Due Date approaches the order status will change to Pending, letting you know we have started to fulfill your order. In the mean time you will not be able to make changes to the order.");
-        break;
-      case "Pending":
-        setContentLock(true);
-        setOrderStatusDesc("Pending - Order fulfillment is in progress, the order status will change when it is Ready for " + order["Delivery Option"]);
-        break;
-      case "Ready":
-        setContentLock(true);
-        setOrderStatusDesc("Ready - The order is ready for " + order["Delivery Option"]);
-        break;
-      case "Delivered":
-        setContentLock(true);
-        setOrderStatusDesc("Delivered");
-        break;
-      case "Invoiced":
-        setContentLock(true);
-        setOrderStatusDesc("Invoiced");
-        break;
-      case "Paid":
-        setContentLock(true);
-        setOrderStatusDesc("Paid");
-        break;
-      default:
-        setContentLock(true);
-        setOrderStatusDesc("Bad order status");
-    }
+    setOrderStatusDesc(getOrderDesc(order))
+    setContentLock(isContentLocked(order.Status))
+
   }, [order.Status, order.items, user]);
 
 
 
   
-  /////////////////////////////////////////////////////////////////////////////////
-  // Update OrderDetail Event handler
-  /////////////////////////////////////////////////////////////////////////////////
-  const updateOrderDetailOnBunchesChange = async (item, event) => {
-
-    const rec = {
-      orderDetailRecID: item.RecID,
-      bunches: event.target.value,
-    };
-
-    // Update extended
-    var bunches = Number(event.target.value);
-    var pricePerBunch = Number(item["Price per Bunch"]);
-    var extended = bunches * pricePerBunch;
-    
-    // event.target.form.extended.value = extended;  DEVTODO need to useState
-
-    // Update order with extended
-    var index = order.items.findIndex( o => o.RecID === item.RecID)
-    order.items[index].Extended = extended
-    setOrder(order)
-
-    // Update order total
-    var total = order.items.map(o => Number(o.Extended)).reduce((accum,curr) => accum+curr)
-    setOrderTotal(total)
-    
-    
-    // console.log("The following record will post to the order-detail-update API")
-    // console.log(rec)
-    const res = await fetch("/api/order-detail-update", {
-      body: JSON.stringify(rec),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "PATCH",
-    });
-    
-    const result = await res.json();
-    
-    if (result.length > 0) {
-      console.log("OrderDetail update successful, updateOrderDetailOnBunchesChange.");
-    } else {
-      alert("There was a problem saving your items, please try again.");
-    }
-  };
-
   
-  
-
   /////////////////////////////////////////////////////////////////////////////////
   // return
   /////////////////////////////////////////////////////////////////////////////////
@@ -252,21 +126,15 @@ export default withPageAuthRequired(function Order({ myProps }) {
         <div className="fpPageNav fpNavAtTop">
           <div>&nbsp;</div>
           <Link href="/orders"><a className="fpBtn">Back</a></Link>
-          <button className="fpBtn" type="button" value={order.RecID} onClick={ () => submitOrder(order) }  disabled={contentLock} style={{ opacity: contentLock ? ".45" : "1" }}>
-            Submit Order
-          </button>
           <button className="fpBtn" type="button" value={order.RecID} onClick={ () => deleteOrder(order)}>
             Delete Order
           </button>
         </div>
       </form>
 
-      <h3>Header</h3>
+      <h3>Order Information</h3>
       <OrderHeader order={order} contentLock={contentLock} showManagedAccount={showManagedAccount} setOrder={setOrder}/>
       
-      <h3>Items</h3>
-      <OrderItems order={order} contentLock={contentLock} updateOrderDetailOnBunchesChange={updateOrderDetailOnBunchesChange} />
-
       <h3>Order Summary</h3>
       <OrderSummary orderTotal={orderTotal} />
       
@@ -274,9 +142,6 @@ export default withPageAuthRequired(function Order({ myProps }) {
         <div className="fpPageNav fpNavAtBottom">
           <div>&nbsp;</div>
           <Link href="/orders"><a className="fpBtn">Back</a></Link>
-          <button className="fpBtn" type="button" value={order.RecID} onClick={ () => submitOrder(order) }  disabled={contentLock} style={{ opacity: contentLock ? ".45" : "1" }}>
-            Submit Order
-          </button>
           <button className="fpBtn" type="button" value={order.RecID} onClick={ () => deleteOrder(order)}>
             Delete Order
           </button>

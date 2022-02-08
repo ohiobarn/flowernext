@@ -66,7 +66,7 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
 
         <div style={{ opacity: contentLock ? ".45" : "1" }}>
           <div className="fpFromField">
-            <label htmlFor="clientJob">Client/Job</label>
+            <label htmlFor="clientJob">Enter a unique name to track your order</label>
             <input id="clientJob" name="clientJob" type="text" defaultValue={order["Client/Job"]} disabled={contentLock} required />
           </div>
 
@@ -108,7 +108,7 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
         }
         <div>
           <button className="fpBtn" type="submit" disabled={contentLock && !showManagedAccount} >
-            Save Header
+            Save Order Info
           </button>
         </div>
       </form>

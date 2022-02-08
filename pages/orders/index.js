@@ -2,6 +2,7 @@ import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import Link from "next/link"
 import OrderList from "../../comps/OrderList";
 import {createOrder, getOrders} from "../../utils/OrderUtils.js"
+import {submitOrder} from "../../utils/OrderUtils.js"
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -37,7 +38,7 @@ export default withPageAuthRequired(function Orders({ orders }) {
         <button className="fpBtn" type="submit">New Order</button>
       </form>
 
-      <OrderList orders={orders} showActiveOrders="yes" /> 
+      <OrderList orders={orders} showActiveOrders="yes" submitOrder={submitOrder} /> 
 
     </div>
   );

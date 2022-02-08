@@ -101,3 +101,148 @@ export async function createOrder() {
   
   window.location.href = "/orders/"+ result[0].id;
 }
+
+////////////////////////////////////////////////////////////////////////////
+//          Create Order
+////////////////////////////////////////////////////////////////////////////
+export function getOrderDesc(order) {
+
+    switch (order.status) {
+      case "Draft":
+        return "Draft - Prepare your order and when ready click submit.";
+      case "Submitted":
+        return "Submitted - Your order has been submitted for review. You can expect a response soon. In the mean time you will not be able to make changes to the order.";
+      case "Modification Requested":
+        setContentLock(false)
+        return "Modification Requested - Modifications to your order are required before it can be accepted. Please review the chat history for more detail.";
+      case "Accepted":
+        return "Accepted - Your order has been accepted. No action is required. When the Due Date approaches the order status will change to Pending, letting you know we have started to fulfill your order. In the mean time you will not be able to make changes to the order.";
+      case "Pending":
+        return "Pending - Order fulfillment is in progress, the order status will change when it is Ready for " + order["Delivery Option"];
+      case "Ready":
+        return "Ready - The order is ready for " + order["Delivery Option"];
+      case "Delivered":
+        return "Delivered";
+      case "Invoiced":
+        return "Invoiced";
+      case "Paid":
+        return "Paid";
+      default:
+        return "Bad order status";
+    }
+
+}
+
+////////////////////////////////////////////////////////////////////////////
+//          Create Order
+////////////////////////////////////////////////////////////////////////////
+export function isContentLocked(orderStatus) {
+
+  switch (orderStatus) {
+    case "Draft":
+      return false
+    case "Submitted":
+      return true;
+    case "Modification Requested":
+      return false
+    case "Accepted":
+      return true;
+    case "Pending":
+      return true;
+    case "Ready":
+      return true;
+    case "Delivered":
+      return true;
+    case "Invoiced":
+      return true;
+    case "Paid":
+      return true;
+    default:
+      return true;
+  }
+
+}
+////////////////////////////////////////////////////////////////////////////
+//          Update OrderDetail
+////////////////////////////////////////////////////////////////////////////
+export async function updateOrderDetailOnBunchesChange(item, event) {
+
+  const rec = {
+    orderDetailRecID: item.RecID,
+    bunches: event.target.value,
+  };
+
+  // Update extended
+  var bunches = Number(event.target.value);
+  var pricePerBunch = Number(item["Price per Bunch"]);
+  var extended = bunches * pricePerBunch;
+  
+  // event.target.form.extended.value = extended;  DEVTODO need to useState
+
+  // Update order with extended
+  var index = order.items.findIndex( o => o.RecID === item.RecID)
+  order.items[index].Extended = extended
+  setOrder(order)
+
+  // Update order total
+  var total = order.items.map(o => Number(o.Extended)).reduce((accum,curr) => accum+curr)
+  setOrderTotal(total)
+  
+  
+  // console.log("The following record will post to the order-detail-update API")
+  // console.log(rec)
+  const res = await fetch("/api/order-detail-update", {
+    body: JSON.stringify(rec),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "PATCH",
+  });
+  
+  const result = await res.json();
+  
+  if (result.length > 0) {
+    console.log("OrderDetail update successful, updateOrderDetailOnBunchesChange.");
+  } else {
+    alert("There was a problem saving your items, please try again.");
+  }
+
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+// Submit Order
+/////////////////////////////////////////////////////////////////////////////////
+export async function submitOrder(order) {
+  var answer = confirm("\nWARNING!\nAre you sure you want to submit this order?");
+  if (!answer) {
+    // Dont submit
+    return;
+  }
+
+  //Yes continue
+  const rec = {
+    orderRecID: order.RecID,
+    status: "Submitted",
+  };
+  
+  // console.log("The following record will post to the order-update API")
+  // console.log(rec)
+  
+  const res = await fetch("/api/order-update", {
+    body: JSON.stringify(rec),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "PATCH",
+  });
+
+  const result = await res.json();
+
+  if (result.length > 0) {
+    console.log("Order submit successful.");
+  } else {
+    alert("There was a problem submitting your order, please try again.");
+  }
+  
+  window.location.href = "/orders";
+};
