@@ -1,17 +1,6 @@
 import Link from "next/link"
-import {submitOrder, isContentLocked} from "../utils/OrderUtils.js"
+import {submitOrder, isContentLocked,getOrderStatusDesc,isOrderActive} from "../utils/OrderUtils.js"
 
-////////////////////////////////////////////////////////////////////////////
-//          isOrderActive
-////////////////////////////////////////////////////////////////////////////
-function isOrderActive(order) {
-  
-  var isActive = true
-  if ( order.Status === "Invoiced" || order.Status === "Paid" ){
-    isActive = false
-  }
-  return isActive
-}
 
 const OrderList = ({orders, showActiveOrders, submitOrder, contentLock}) => {
 
@@ -24,20 +13,16 @@ const OrderList = ({orders, showActiveOrders, submitOrder, contentLock}) => {
     <div>
       {orderList.map(order => (
         <div key={order.RecID} className="fpOrderList">
-          <span>
-            <Link href={'/orders/' + order.RecID} key={"orderStatusLink"}>
-              <a className="fpSingle"><h3 className="fpFormTitle">{order["Client/Job"]} <span>Order#: {order.OrderNo} - {order.Status}</span></h3></a>
-            </Link>
-            {
-              !isContentLocked(order.Status) && 
-              <a className="fpSingle" onClick={ () => submitOrder(order) }>Submit Order</a>
-            }
-          </span>
+          
+          <Link href={'/orders/' + order.RecID} key={"orderStatusLink"}>
+            <a className="fpSingle"><h3 className="fpFormTitle">{order["Client/Job"]} <span>Order#: {order.OrderNo} - {order.Status}:<br/>{getOrderStatusDesc(order)}</span></h3></a>
+          </Link>
 
           <span>
             <Link href={'/orders/items/' + order.RecID} key={"orderItemsLink"}><a className="fpSingle">Items</a></Link>
             <Link href={'/orders/chat/' + order.RecID} key={"orderChatLink"}><a className="fpSingle">Chat</a></Link>
             <Link href={'/orders/activity/' + order.RecID} key={"orderActivityLink"}><a className="fpSingle">Activity</a></Link>
+            { !isContentLocked(order.Status) && <a className="fpBtn" onClick={ () => submitOrder(order) }>Submit Order</a> }
           </span>
         </div>
       ))}

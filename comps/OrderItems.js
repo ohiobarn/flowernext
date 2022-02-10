@@ -6,15 +6,10 @@ const OrderItems = ({order, updateOrderDetailOnBunchesChange}) => {
 
   return ( 
     <div className="fpForm">
-      <div className="fpPageNav fpNavAtTop">
-        <Link href="/orders"><a className="fpBtn">Back</a></Link>
-        <Link href={"/orders/varieties?orderRecID=" + order.RecID} ><a className="fpBtn"  style={{display: isContentLocked(order.Status) ?'none':'true'}}>Add Items</a></Link>
-      </div>
-
       <div id="items">
       {order.items.map((item) => { 
         return (
-          <form key={item.RecID} style={{ opacity: isContentLocked(order.Status) ? ".45" : "1" }}>
+          <form key={item.RecID} style={{ opacity: isContentLocked(order.Status) ? ".65" : "1" }}>
             <div className="fpCard">
               <Image src={item.Image[0].thumbnails.large.url} layout="intrinsic" width={200} height={200} alt="thmbnail"/>
               <span>
@@ -54,12 +49,6 @@ const OrderItems = ({order, updateOrderDetailOnBunchesChange}) => {
         );
       })}
       </div>
-
-      <div className="fpPageNav fpNavAtBottom">
-        <Link href="/orders"><a className="fpBtn">Back</a></Link>
-        <Link href={"/orders/varieties?orderRecID=" + order.RecID} ><a className="fpBtn"  style={{display: isContentLocked(order.Status) ?'none':'true'}}>Add Items</a></Link>
-      </div>
-
     </div>
    );
 }

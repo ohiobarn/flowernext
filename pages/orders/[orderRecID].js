@@ -3,7 +3,7 @@ import Link from "next/link";
 import OrderHeader from "../../comps/OrderHeader.js"
 import OrderSummary from "../../comps/OrderSummary.js"
 import React, { useState, useEffect, useRef} from "react";
-import {getOrder,setStateFromStatus, submitOrder, isContentLocked, getOrderDesc} from "../../utils/OrderUtils.js"
+import {getOrder,setStateFromStatus, submitOrder, isContentLocked} from "../../utils/OrderUtils.js"
 
 /////////////////////////////////////////////////////////////////////////////////
 // getServerSideProps
@@ -80,7 +80,6 @@ export default withPageAuthRequired(function Order({ myProps }) {
   const [showManagedAccount, setShowManagedAccount] = useState(false);
   const [contentLock, setContentLock] = useState(false);
   const [orderTotal, setOrderTotal] = useState(0);
-  const [orderStatusDesc, setOrderStatusDesc] = useState("");
 
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
@@ -105,7 +104,6 @@ export default withPageAuthRequired(function Order({ myProps }) {
     //
     // Update state
     //
-    setOrderStatusDesc(getOrderDesc(order))
     setContentLock(isContentLocked(order.Status))
 
   }, [order.Status, order.items, user]);
@@ -119,16 +117,15 @@ export default withPageAuthRequired(function Order({ myProps }) {
   /////////////////////////////////////////////////////////////////////////////////
   return (
     <div>
-      <h3 className="fpFormTitle">{order["Client/Job"]}{" "} ({order.OrderNo} - {order.Status})</h3>
-      <p>{orderStatusDesc}</p>
+      <h3 className="fpFormTitle">{order["Client/Job"]}</h3>
+      <p>Order#: {order.OrderNo} ・ {order.Status} ・ {order["Team Member"]} ・ {order["Due Date"]} ・ {order["Delivery Option"]}</p>
+      <p>Total: ${orderTotal}</p>
         
       <form>
         <div className="fpPageNav fpNavAtTop">
           <div>&nbsp;</div>
           <Link href="/orders"><a className="fpBtn">Back</a></Link>
-          <button className="fpBtn" type="button" value={order.RecID} onClick={ () => deleteOrder(order)}>
-            Delete Order
-          </button>
+          {!contentLock && <button className="fpBtn" type="button" value={order.RecID} onClick={ () => deleteOrder(order)}>Delete Order</button>}
         </div>
       </form>
 

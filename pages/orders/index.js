@@ -1,4 +1,5 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
+import React, { useState, useEffect} from "react";
 import Link from "next/link"
 import OrderList from "../../comps/OrderList";
 import {createOrder, getOrders} from "../../utils/OrderUtils.js"
@@ -16,15 +17,20 @@ export async function getServerSideProps( context ) {
 
   // Fetch data from AirTable
   var orders = await getOrders(user.email)
+  var myProps = {};
+  myProps.orders = orders
+
 
   // Pass orders to the page via props
-  return { props: {orders} };
+  return { props: { myProps } };
 }
 
 ////////////////////////////////////////////////////////////////////////////
 //          withPageAuthRequired
 ////////////////////////////////////////////////////////////////////////////
-export default withPageAuthRequired(function Orders({ orders }) {
+export default withPageAuthRequired(function Orders({ myProps }) {
+
+  const [orders, setOrders] = useState(myProps.orders)
 
 
   return (
@@ -34,8 +40,8 @@ export default withPageAuthRequired(function Orders({ orders }) {
          See <Link href="https://ohiobarn.github.io/flowernext/#order/#order-status-summary"><a className="fpA" target="_blank">MRFC Doc</a></Link> for more detail.
       </p>
 
-      <form className="fpPageNav fpNavAtTop" onSubmit={createOrder}>
-        <button className="fpBtn" type="submit">New Order</button>
+      <form className="fpPageNav fpNavAtTop">
+        <button className="fpBtn" type="button" onClick={createOrder}>New Order</button>
       </form>
 
       <OrderList orders={orders} showActiveOrders="yes" submitOrder={submitOrder} /> 

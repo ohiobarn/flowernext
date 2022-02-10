@@ -105,28 +105,27 @@ export async function createOrder() {
 ////////////////////////////////////////////////////////////////////////////
 //          Create Order
 ////////////////////////////////////////////////////////////////////////////
-export function getOrderDesc(order) {
+export function getOrderStatusDesc(order) {
 
-    switch (order.status) {
+    switch (order.Status) {
       case "Draft":
-        return "Draft - Prepare your order and when ready click submit.";
+        return "Prepare your order and when ready click submit";
       case "Submitted":
-        return "Submitted - Your order has been submitted for review. You can expect a response soon. In the mean time you will not be able to make changes to the order.";
+        return "MRFC will review your order and respond soon";
       case "Modification Requested":
-        setContentLock(false)
-        return "Modification Requested - Modifications to your order are required before it can be accepted. Please review the chat history for more detail.";
+        return "Changes to your order are required, see chat for more detail";
       case "Accepted":
-        return "Accepted - Your order has been accepted. No action is required. When the Due Date approaches the order status will change to Pending, letting you know we have started to fulfill your order. In the mean time you will not be able to make changes to the order.";
+        return "No action is required. MFRC will fulfill your order when the Due Date approaches";
       case "Pending":
-        return "Pending - Order fulfillment is in progress, the order status will change when it is Ready for " + order["Delivery Option"];
+        return "Order fulfillment is in progress, the order status will change when it is Ready for " + order["Delivery Option"];
       case "Ready":
-        return "Ready - The order is ready for " + order["Delivery Option"];
+        return "Yoru order is ready for " + order["Delivery Option"];
       case "Delivered":
         return "Delivered";
       case "Invoiced":
-        return "Invoiced";
+        return "Payment due";
       case "Paid":
-        return "Paid";
+        return "Thanks";
       default:
         return "Bad order status";
     }
@@ -161,6 +160,17 @@ export function isContentLocked(orderStatus) {
       return true;
   }
 
+}
+////////////////////////////////////////////////////////////////////////////
+//          isOrderActive
+////////////////////////////////////////////////////////////////////////////
+export function isOrderActive(order) {
+  
+  var isActive = true
+  if ( order.Status === "Paid" ){
+    isActive = false
+  }
+  return isActive
 }
 ////////////////////////////////////////////////////////////////////////////
 //          Update OrderDetail

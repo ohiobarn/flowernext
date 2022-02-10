@@ -2,7 +2,7 @@ import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import React, { useState, useEffect, useRef} from "react";
 import Link from "next/link"
 import OrderItems from "../../../comps/OrderItems.js"
-import {getOrder,setStateFromStatus, updateOrderDetailOnBunchesChange} from "../../../utils/OrderUtils.js"
+import {getOrder,setStateFromStatus, updateOrderDetailOnBunchesChange, isContentLocked} from "../../../utils/OrderUtils.js"
 
 
 export async function getServerSideProps(context) {
@@ -41,15 +41,27 @@ export default withPageAuthRequired(function Chat({ myProps }) {
 
   // }, [order.Status, order.items]);
 
-
+  var orderTotal = order.items.map(item => item.Extended).reduce((accum,curr) => accum+curr,0)
   
   return (
     <div>
       <Link href={'/orders/' + order.RecID} key={order.RecID}>
-        <a><h3 className="fpFormTitle">{order["Client/Job"]} <span>Order#: {order.OrderNo} - {order.Status}</span></h3></a>
+        <a><h3 className="fpFormTitle">{order["Client/Job"]} </h3></a>
       </Link>
-      <OrderItems order={order} updateOrderDetailOnBunchesChange={updateOrderDetailOnBunchesChange} />
+      <p>Order#: {order.OrderNo} ・ {order.Status} ・ {order["Team Member"]} ・ {order["Due Date"]} ・ {order["Delivery Option"]}</p>
+      <p>Total: ${orderTotal}</p>
 
+      <div className="fpPageNav fpNavAtTop">
+        <Link href="/orders"><a className="fpBtn">Back</a></Link>
+        <Link href={"/orders/varieties?orderRecID=" + order.RecID} ><a className="fpBtn"  style={{display: isContentLocked(order.Status) ?'none':'true'}}>Add Items</a></Link>
+      </div>
+
+      <OrderItems order={order} updateOrderDetailOnBunchesChange={updateOrderDetailOnBunchesChange} />
+      
+      <div className="fpPageNav fpNavAtBottom">
+        <Link href="/orders"><a className="fpBtn">Back</a></Link>
+        <Link href={"/orders/varieties?orderRecID=" + order.RecID} ><a className="fpBtn"  style={{display: isContentLocked(order.Status) ?'none':'true'}}>Add Items</a></Link>
+      </div>
     </div>
   );
 
