@@ -1,5 +1,5 @@
 import Link from "next/link"
-import {submitOrder, isContentLocked,getOrderStatusDesc,isOrderActive} from "../utils/OrderUtils.js"
+import {submitOrder, isContentLocked,getOrderStatusDesc,isOrderActive,orderStatusTip} from "../utils/OrderUtils.js"
 
 
 const OrderList = ({orders, showActiveOrders, submitOrder, contentLock}) => {
@@ -13,17 +13,23 @@ const OrderList = ({orders, showActiveOrders, submitOrder, contentLock}) => {
     <div>
       {orderList.map(order => (
         <div key={order.RecID} className="fpOrderList">
+          <div>
+            <Link href={'/orders/' + order.RecID} key={"orderStatusLink"}>
+              <a className="fpSingle">
+                  {order["Client/Job"]}<br></br><br></br>
+                  <span>Order#: {order.OrderNo} - <strong>{order.Status}</strong><br/>{getOrderStatusDesc(order)}</span>
+              </a>
+            </Link>
+          </div>
+          <div>
+          { !isContentLocked(order.Status) && <a className="fpBtn" onClick={ () => submitOrder(order) }>Submit Order</a> }
+          </div>
           
-          <Link href={'/orders/' + order.RecID} key={"orderStatusLink"}>
-            <a className="fpSingle"><h3 className="fpFormTitle">{order["Client/Job"]} <span>Order#: {order.OrderNo} - {order.Status}:<br/>{getOrderStatusDesc(order)}</span></h3></a>
-          </Link>
-
-          <span>
+          <div>
             <Link href={'/orders/items/' + order.RecID} key={"orderItemsLink"}><a className="fpSingle">Items</a></Link>
             <Link href={'/orders/chat/' + order.RecID} key={"orderChatLink"}><a className="fpSingle">Chat</a></Link>
             <Link href={'/orders/activity/' + order.RecID} key={"orderActivityLink"}><a className="fpSingle">Activity</a></Link>
-            { !isContentLocked(order.Status) && <a className="fpBtn" onClick={ () => submitOrder(order) }>Submit Order</a> }
-          </span>
+          </div>
         </div>
       ))}
     </div>

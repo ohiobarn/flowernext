@@ -2,17 +2,21 @@ import Link from "next/link";
 import Image from "next/image";
 import { isContentLocked } from "../utils/OrderUtils";
 
-const OrderItems = ({order, updateOrderDetailOnBunchesChange}) => {
 
+const OrderItems = ({order, updateOrderDetailOnBunchesChange, deleteOrderItem}) => {
+
+  const contentLockStyle = {
+    opacity: isContentLocked(order.Status) ? ".65" : "1"
+  }
   return ( 
     <div className="fpForm">
       <div id="items">
       {order.items.map((item) => { 
         return (
-          <form key={item.RecID} style={{ opacity: isContentLocked(order.Status) ? ".65" : "1" }}>
-            <div className="fpCard">
+          <form key={item.RecID} style={contentLockStyle}>
+            <div className="fpCard fpCardTall">
               <Image src={item.Image[0].thumbnails.large.url} layout="intrinsic" width={200} height={200} alt="thmbnail"/>
-              <span>
+              <div>
                 <div>
                   <hr />
                   <label htmlFor="sku">SKU</label>
@@ -38,13 +42,19 @@ const OrderItems = ({order, updateOrderDetailOnBunchesChange}) => {
                   <label htmlFor="extended">Extended</label>
                   <p id="extended">${item["Extended"]}</p>
                 </div>
-              </span>
-              <span>
+              </div>
+              <div>
                 <h4>
                   {item.Crop} - {item.Variety}
                 </h4>
-              </span>
+              </div>
+              <div>
+                <button className="fpBtn" type="button" value={order.RecID} onClick={ () => deleteOrderItem(order.RecID,item.RecID)}>
+                  Delete Item
+                </button>
+              </div>
             </div>
+    
           </form>
         );
       })}

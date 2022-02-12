@@ -1,8 +1,12 @@
+
 const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
   
   const orderStatusList = ["Draft","Submitted","Modification Requested","Accepted","Pending","Ready","Delivered","Invoiced","Paid"]
   const deliveryOptions = ["Pickup","Delivery"]
-  
+  const contentLockStyle = {
+    opacity: contentLock ? ".65" : "1"
+  }
+
   /////////////////////////////////////////////////////////////////////////////////
   // Update Order Event handler
   /////////////////////////////////////////////////////////////////////////////////
@@ -63,8 +67,9 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
     <div className="fpForm">
       <form onSubmit={updateOrder} >
         <input id="orderRecID" name="orderRecID" type="hidden" value={order.RecID} />
-
-        <div style={{ opacity: contentLock ? ".65" : "1" }}>
+        
+        <div style={contentLockStyle}>
+        
           <div className="fpFromField">
             <label htmlFor="clientJob">Enter a unique name to track your order</label>
             <input id="clientJob" name="clientJob" type="text" defaultValue={order["Client/Job"]} disabled={contentLock} required />

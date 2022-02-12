@@ -228,8 +228,8 @@ Order
   flex-direction: column;
 }
 .fpFormTitle span {
-  font-size: small;
-  font-style: italic;
+  /* font-size: small; */
+  /* font-style: italic; */
   font-weight: lighter;
 }
 
@@ -259,10 +259,10 @@ Order List
 */
 .fpOrderList {
   display: flex;
-  flex-direction:row;
+  flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin: 10px;
   padding: 2px;
   background-color:white;
@@ -290,6 +290,10 @@ card
   border-color:lightgray;
   border-width: 2px;
   border-radius: 5px;  
+}
+
+.fpCardTall {
+  display: block;
 }
 
 .fpCard span {

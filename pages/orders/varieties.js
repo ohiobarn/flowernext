@@ -24,7 +24,7 @@ export async function getServerSideProps( context ) {
 
 export default withPageAuthRequired(function Varieties({ myprops }) {
 
-  const [showMe, setShowMe] = useState(true);
+  const [showMe, setShowMe] = useState(false);
   function toggleCard(){
     setShowMe(!showMe);
   }
@@ -137,13 +137,14 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
     
   }
 
+  //DEVTODO - make this a component
   return (
     <div>
       <form id="varietyForm" onSubmit={addVarietiesToOrder}>
         <input type="hidden" id="orderRecID" name="orderRecID" value={myprops.order.RecID} />
         <div className="fpPageNav fpNavAtTop">
           <div>&nbsp;</div>
-          <Link href={myprops.order.RecID}><a className="fpA">Back</a></Link>
+          <Link href={'/orders/items/' + myprops.order.RecID}><a className="fpBtn">Back</a></Link>
           <button className="fpBtn" type="submit">Add Selected</button>
           <input className="searchInput" type="text" id="varietyFilter"  onKeyUp={filterCards} placeholder="Search for names.."/>
         </div>
@@ -161,6 +162,7 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
             <div className="fpCard" key={variety.RecID} 
                 title={variety.SKU + "-" + variety.Crop + "-" + variety.Variety + "-" + variety.Color}>
               <span>
+                {/* DEVTODO - remove old school hidden fields */}
                 <input type="checkbox" name="variety" value={variety.RecID} />
                 <input type="hidden" name={variety.RecID+".SKU"} value={variety.SKU} />
                 <input type="hidden" name={variety.RecID+".Crop"} value={variety.Crop} />
@@ -196,15 +198,15 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
                   </div>                        
               </span>
               <span>
-                <h2 className="fpFormTitle">{variety.Crop} - {variety.Variety}</h2>
+                <h3 className="fpFormTitle">{variety.Crop} - {variety.Variety}</h3>
               </span>
             </div>
             
           ))}
         </div>
-        <div className="fpPageNavBottom">
+        <div className="fpPageNav fpPageNavBottom">
+          <Link href={'/orders/items/' + myprops.order.RecID}><a className="fpBtn">Back</a></Link>
           <button className="fpBtn" type="submit">Add Selected</button>
-          <Link href={myprops.order.RecID}><a className="fpBtn">Back</a></Link>
         </div>
       </form>
     </div>

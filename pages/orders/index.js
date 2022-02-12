@@ -33,6 +33,7 @@ export default withPageAuthRequired(function Orders({ myProps }) {
   const [orders, setOrders] = useState(myProps.orders)
 
 
+
   return (
     <div>
       <h3>Active Orders</h3>

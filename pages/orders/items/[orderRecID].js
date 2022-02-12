@@ -4,7 +4,9 @@ import Link from "next/link"
 import OrderItems from "../../../comps/OrderItems.js"
 import {getOrder,setStateFromStatus, updateOrderDetailOnBunchesChange, isContentLocked} from "../../../utils/OrderUtils.js"
 
-
+/////////////////////////////////////////////////////////////////////////////////
+//    getServerSideProps
+/////////////////////////////////////////////////////////////////////////////////
 export async function getServerSideProps(context) {
   // Get user from cookie
   var res = {}; // Don't use actual res object, it cause spam in logs
@@ -26,6 +28,46 @@ export async function getServerSideProps(context) {
   return { props: { myProps } };
 }
 
+/////////////////////////////////////////////////////////////////////////////////
+// Delete Order Item
+/////////////////////////////////////////////////////////////////////////////////
+const deleteOrderItem = async (pOrderRecID, pOrderItemRecID) => {
+  var answer = confirm("\nWARNING!\nAre you sure you want to delete this item?");
+  if (!answer) {
+    // Dont delete
+    return;
+  }
+  
+  // Yes continue
+  const rec = {
+    orderItemRecIDs: [pOrderItemRecID],
+  };
+  
+  // console.log("The following record will post to the order-delete API");
+  // console.log(rec);
+  
+  const res = await fetch("/api/order-detail-delete", {
+    body: JSON.stringify(rec),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "DELETE",
+  });
+  
+  const result = await res.json();
+  
+  if (result.length > 0) {
+    console.log("Item delete successful.");
+  } else {
+    alert("There was a problem deleting your item, please try again.");
+  }
+  
+  window.location.href = "/orders/items/" + pOrderRecID;
+};
+
+/////////////////////////////////////////////////////////////////////////////////
+//       withPageAuthRequired
+/////////////////////////////////////////////////////////////////////////////////
 export default withPageAuthRequired(function Chat({ myProps }) {
 
   const [order, setOrder] = useState(myProps.order);
@@ -56,12 +98,14 @@ export default withPageAuthRequired(function Chat({ myProps }) {
         <Link href={"/orders/varieties?orderRecID=" + order.RecID} ><a className="fpBtn"  style={{display: isContentLocked(order.Status) ?'none':'true'}}>Add Items</a></Link>
       </div>
 
-      <OrderItems order={order} updateOrderDetailOnBunchesChange={updateOrderDetailOnBunchesChange} />
+      <OrderItems order={order} updateOrderDetailOnBunchesChange={updateOrderDetailOnBunchesChange} deleteOrderItem={deleteOrderItem}/>
       
+      { order.items.length > 1 &&
       <div className="fpPageNav fpNavAtBottom">
         <Link href="/orders"><a className="fpBtn">Back</a></Link>
         <Link href={"/orders/varieties?orderRecID=" + order.RecID} ><a className="fpBtn"  style={{display: isContentLocked(order.Status) ?'none':'true'}}>Add Items</a></Link>
       </div>
+      }
     </div>
   );
 
