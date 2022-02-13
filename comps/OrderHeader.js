@@ -15,37 +15,38 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
   // Update Order Event handler
   /////////////////////////////////////////////////////////////////////////////////
   const updateOrder = async (event) => {
+    event.preventDefault(); // don't redirect the page
 
     const rec = {
-      orderRecID: order.RecID,
+      orderRecID: event.target.orderRecID.value,
     };
 
     //
     // Add fields
     //
-    if (event.target.form.clientJob != null) {
-      rec.clientJob = event.target.form.clientJob.value;
+    if (event.target.clientJob != null) {
+      rec.clientJob = event.target.clientJob.value;
     }
-    if (event.target.form.teamMember != null) {
-      rec.teamMember = event.target.form.teamMember.value;
+    if (event.target.teamMember != null) {
+      rec.teamMember = event.target.teamMember.value;
     }
-    if (event.target.form.dueDate != null) {
-      rec.dueDate = event.target.form.dueDate.value;
+    if (event.target.dueDate != null) {
+      rec.dueDate = event.target.dueDate.value;
       if (!isDateFarEnoughInAdvance(rec.dueDate)){
         alert("Due date must be at least 5 days from now")
         return
       }
     }
-    if (event.target.form.deliveryOption != null) {
-      rec.deliveryOption = event.target.form.deliveryOption.value;
+    if (event.target.deliveryOption != null) {
+      rec.deliveryOption = event.target.deliveryOption.value;
     }
-    if (event.target.form.managedAccount != null) { 
-      rec.managedAccount = event.target.form.managedAccount.value;
+    if (event.target.managedAccount != null) { 
+      rec.managedAccount = event.target.managedAccount.value;
     }
-    if (event.target.form.status != null) { 
-      rec.status = event.target.form.status.value;
+    if (event.target.status != null) { 
+      rec.status = event.target.status.value;
       // Update order and update state so orderStatusDesc is updated
-      order.Status = event.target.form.status.value;
+      order.Status = event.target.status.value;
     }
 
     // Update page state
@@ -79,7 +80,8 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
 
   return ( 
     <div className="fpForm">
-      <form>
+      <form onSubmit={updateOrder} >
+        <input id="orderRecID" name="orderRecID" type="hidden" value={order.RecID} />
         
         <div style={contentLockStyle}>
         
@@ -95,7 +97,7 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
 
           <div className="fpFromField fpDate">
             <label htmlFor="dueDate">Due Date</label>
-            <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} disabled={contentLock} required onChange={handleDueDateChange}/>
+            <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} disabled={contentLock} onChange={handleDueDateChange} required />
           </div>
 
           <div className="fpFromField">
@@ -129,7 +131,7 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
           </div>
         }
         <div>
-          <button className="fpBtn" type="button" disabled={contentLock && !showManagedAccount} onClick={ (event) => updateOrder(event) }>Save</button>
+          <button className="fpBtn" type="submit" disabled={contentLock && !showManagedAccount} >Save</button>
         </div>
       </form>
     </div>
