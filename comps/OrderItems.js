@@ -3,11 +3,13 @@ import Image from "next/image";
 import { isContentLocked } from "../utils/OrderUtils";
 
 
-const OrderItems = ({order, updateOrderDetailOnBunchesChange, deleteOrderItem}) => {
+
+const OrderItems = ({order, updateOrderDetailOnBunchesChange, deleteOrderItem, setOrder}) => {
 
   const contentLockStyle = {
     opacity: isContentLocked(order.Status) ? ".65" : "1"
   }
+
   return ( 
     <div className="fpForm">
       <div id="items">
@@ -32,7 +34,7 @@ const OrderItems = ({order, updateOrderDetailOnBunchesChange, deleteOrderItem}) 
                   <label htmlFor="bunches">Bunches</label>
                   <p>
                     <input id="bunches" name="bunches" type="number" defaultValue={item.Bunches} min="0" max="99" 
-                      onChange={(event) => updateOrderDetailOnBunchesChange(item,event)} 
+                      onChange={(event) => updateOrderDetailOnBunchesChange(order,item,setOrder,event)} 
                       disabled={isContentLocked(order.Status) }
                     /> at ${item["Price per Bunch"]}/bn
                   </p>

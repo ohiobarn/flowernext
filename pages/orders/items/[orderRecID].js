@@ -2,7 +2,7 @@ import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import React, { useState, useEffect, useRef} from "react";
 import Link from "next/link"
 import OrderItems from "../../../comps/OrderItems.js"
-import {getOrder,setStateFromStatus, updateOrderDetailOnBunchesChange, isContentLocked} from "../../../utils/OrderUtils.js"
+import {getOrder,setStateFromStatus, isContentLocked,getOrderSummary,updateOrderDetailOnBunchesChange} from "../../../utils/OrderUtils.js"
 
 /////////////////////////////////////////////////////////////////////////////////
 //    getServerSideProps
@@ -31,6 +31,7 @@ export async function getServerSideProps(context) {
 /////////////////////////////////////////////////////////////////////////////////
 // Delete Order Item
 /////////////////////////////////////////////////////////////////////////////////
+// DEVTODO consider moving to utils
 const deleteOrderItem = async (pOrderRecID, pOrderItemRecID) => {
   var answer = confirm("\nWARNING!\nAre you sure you want to delete this item?");
   if (!answer) {
@@ -65,40 +66,37 @@ const deleteOrderItem = async (pOrderRecID, pOrderItemRecID) => {
   window.location.href = "/orders/items/" + pOrderRecID;
 };
 
+
 /////////////////////////////////////////////////////////////////////////////////
 //       withPageAuthRequired
 /////////////////////////////////////////////////////////////////////////////////
 export default withPageAuthRequired(function Chat({ myProps }) {
 
   const [order, setOrder] = useState(myProps.order);
-  const [orderStatusDesc, setOrderStatusDesc] = useState("");
 
   // DEVTODO is this needed?
   // Similar to componentDidMount and componentDidUpdate:
   // useEffect(() => {
 
-    
-  //   setStateFromStatus(order, setContentLock, setOrderStatusDesc)
-
 
   // }, [order.Status, order.items]);
 
   var orderTotal = order.items.map(item => item.Extended).reduce((accum,curr) => accum+curr,0)
-  
+
+
   return (
     <div>
       <Link href={'/orders/' + order.RecID} key={order.RecID}>
         <a><h3 className="fpFormTitle">{order["Client/Job"]} </h3></a>
       </Link>
-      <p>Order#: {order.OrderNo} ・ {order.Status} ・ {order["Team Member"]} ・ {order["Due Date"]} ・ {order["Delivery Option"]}</p>
-      <p>Total: ${orderTotal}</p>
+      <p>{getOrderSummary(order).all}</p>
 
       <div className="fpPageNav fpNavAtTop">
         <Link href="/orders"><a className="fpBtn">Back</a></Link>
         <Link href={"/orders/varieties?orderRecID=" + order.RecID} ><a className="fpBtn"  style={{display: isContentLocked(order.Status) ?'none':'true'}}>Add Items</a></Link>
       </div>
 
-      <OrderItems order={order} updateOrderDetailOnBunchesChange={updateOrderDetailOnBunchesChange} deleteOrderItem={deleteOrderItem}/>
+      <OrderItems order={order} updateOrderDetailOnBunchesChange={updateOrderDetailOnBunchesChange} deleteOrderItem={deleteOrderItem} setOrder={setOrder}/>
       
       { order.items.length > 1 &&
       <div className="fpPageNav fpNavAtBottom">

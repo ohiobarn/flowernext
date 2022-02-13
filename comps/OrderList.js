@@ -1,5 +1,5 @@
 import Link from "next/link"
-import {submitOrder, isContentLocked,getOrderStatusDesc,isOrderActive,orderStatusTip} from "../utils/OrderUtils.js"
+import {submitOrder, isContentLocked,getOrderStatusDesc,isOrderActive,findPickupWindow,getOrderSummary} from "../utils/OrderUtils.js"
 
 
 const OrderList = ({orders, showActiveOrders, submitOrder, contentLock}) => {
@@ -16,10 +16,15 @@ const OrderList = ({orders, showActiveOrders, submitOrder, contentLock}) => {
           <div>
             <Link href={'/orders/' + order.RecID} key={"orderStatusLink"}>
               <a className="fpSingle">
-                  {order["Client/Job"]}<br></br><br></br>
-                  <span>Order#: {order.OrderNo} - <strong>{order.Status}</strong><br/>{getOrderStatusDesc(order)}</span>
+                <h3>{order["Client/Job"]}</h3>
+                <br/>{getOrderSummary(order).what}
+                <br/>{getOrderSummary(order).who}
+                <br/>{getOrderSummary(order).when}
               </a>
             </Link>
+            <div className="fpSingleNoHover" >
+              <p>{getOrderStatusDesc(order)}</p>
+            </div>
           </div>
 
           <div>

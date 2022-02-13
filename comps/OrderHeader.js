@@ -30,13 +30,6 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
     if (event.target.teamMember != null) {
       rec.teamMember = event.target.teamMember.value;
     }
-    if (event.target.dueDate != null) {
-      rec.dueDate = event.target.dueDate.value;
-      if (!isDateFarEnoughInAdvance(rec.dueDate)){
-        alert("Due date must be at least 5 days from now")
-        return
-      }
-    }
     if (event.target.deliveryOption != null) {
       rec.deliveryOption = event.target.deliveryOption.value;
     }
@@ -47,6 +40,16 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
       rec.status = event.target.status.value;
       // Update order and update state so orderStatusDesc is updated
       order.Status = event.target.status.value;
+    }
+    if (event.target.dueDate != null) {
+      rec.dueDate = event.target.dueDate.value;
+      if (!isDateFarEnoughInAdvance(rec.dueDate)){
+        alert("Due date must be at least 5 days from now")
+        return
+      }
+      rec.pickupStart =  pickupWindow.start;
+      rec.pickupEnd =  pickupWindow.end;
+
     }
 
     // Update page state
@@ -94,12 +97,7 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
             <label htmlFor="teamMember">Team Member</label>
             <input id="teamMember" name="teamMember" type="text" defaultValue={order["Team Member"]} disabled={contentLock} required />
           </div>
-
-          <div className="fpFromField fpDate">
-            <label htmlFor="dueDate">Due Date</label>
-            <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} disabled={contentLock} onChange={handleDueDateChange} required />
-          </div>
-
+          
           <div className="fpFromField">
             <label htmlFor="deliveryOption">Delivery Option</label>
             <select name="deliveryOption" id="deliveryOption" defaultValue={order["Delivery Option"]} disabled={contentLock}>
@@ -108,10 +106,16 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
               ))}
             </select>
           </div>
-          <div className="fpFromField">
-            <label htmlFor="pickupWindow">{order["Delivery Option"]} window</label>
-            <p>{pickupWindow.start} through {pickupWindow.end}</p>
+
+          <div className="fpFromField fpDate">
+            <label htmlFor="dueDate">Due Date</label>
+            <span>
+            <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} disabled={contentLock} onChange={handleDueDateChange} required />
+            {order["Delivery Option"]}: {pickupWindow.start} - {pickupWindow.end}
+            </span>
           </div>
+
+
         </div>
 
         { showManagedAccount &&

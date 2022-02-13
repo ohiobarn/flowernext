@@ -128,16 +128,23 @@ Order
 .fpSingle {
   padding: 2px 16px;
   background: #fff;
-  /* display: block; */
   display: flex;
   flex-direction: column;
   margin: 10px 5px;
-  border-left: 8px solid #fff;
 }
 
 .fpSingle:hover {
-  border-left: 8px solid #4979ff;
+  border-left: 3px solid #4979ff;
 }
+
+.fpSingleNoHover {
+  padding: 2px 16px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  margin: 10px 5px;
+} 
+
 
 .fpForm {
   border-style: solid;
@@ -338,7 +345,7 @@ card
   margin: 5px;
 }
 .fpCard:hover {
-  border-left: 5px solid #4979ff;
+  border-left: 3px solid #4979ff;
 }
 /* 
 

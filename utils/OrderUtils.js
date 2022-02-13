@@ -9,33 +9,108 @@
 ////////////////////////////////////////////////////////////////////////////
 //         getPickupWindow
 ////////////////////////////////////////////////////////////////////////////
-export function findPickupWindow(date){
+export function getOrderSummary(order){
+  
+
+  var account = order.Account;
+  if (order["Managed Account"]) {
+    account = order["Managed Account"];
+  }
+
+  var orderTotal = 0;
+  if (order.items) {
+    orderTotal = order.items.map(item => item.Extended).reduce((accum,curr) => accum+curr,0);
+  }
+
+  const summary = {}
+  summary.what = `Order#: ${order.OrderNo} ・ ${order.Status}`;
+
+  if (order["Team Member"]) {
+    summary.who = `${order["Team Member"]}<${account}>`;
+  } else {
+    summary.who = "";
+  }
+  
+  if (order["Due Date"]) {
+    summary.when = `${order["Due Date"]} ・ ${order["Delivery Option"]} (${order["Pickup Start"]} ・ ${order["Pickup End"]})`;
+  } else {
+    summary.when = "";
+  }
+
+  if ( orderTotal ) {
+    summary.total = `Total \$${orderTotal}`;
+  } else {
+    summary.total = "";
+  }
+  
+  summary.all = `${summary.what} ・ ${summary.who} ・ ${summary.when} ・ ${summary.total}`;
+
+  return summary
+
+}
+////////////////////////////////////////////////////////////////////////////
+//         getPickupWindow
+////////////////////////////////////////////////////////////////////////////
+export function findPickupWindow(dateString){
+  
   // Examples:
-  // dueDate is before Wednesday
+  // When dueDate is before Wednesday:
   //  dueDate: Tue Feb 15 2022
   //  puStart: Wed Feb 09 2022
   //  puEnd:   Thu Feb 10 2022
   //
-  // dueDate is Wednesday;
+  // When dueDate is Wednesday:
   //  dueDate: Wed Feb 16 2022
   //  puStart: Wed Feb 16 2022
   //  puEnd:   Thu Feb 17 2022 
 
-  const dueDate = new Date(date);
-  const puStart = new Date(); //Pickup Start
-  const puEnd = new Date();   //Pickup End
+  const puWindow = {};
+
+  // If no dateString then return empty window
+  if (!dateString || dateString === ""){
+    puWindow.start = "";
+    puWindow.end = "";
+    return puWindow;
+  }
+
+  // dateString must be a string in this format YYYY-MM-DD
+  // EST time is assumed
+  var dueDate
+  if (typeof dateString === "string") {
+    dueDate = new Date(dateString + "T12:01:00-05:00"); // Use mid day
+  } else {
+    console.log("Bad date " + dateString)
+    throw 'dateString must be a string in this format YYYY-MM-DD!';
+  }
+  
+
+  // WARN - puStart is created with dueDate and puEnd is created with puStart! 
+  //        if you dont do this then only works when the date that you are adding
+  //        days to happens to have the current year and month.
+  //      see: https://stackoverflow.com/questions/563406/how-to-add-days-to-date
+  
 
   // Find the last Wednesday 
   // If dueDate is a Wednesday then that is the start date
+  const puStart = new Date(dueDate); 
   puStart.setDate(dueDate.getDate() - ((dueDate.getDay() + 4) % 7));
+  // console.log("[finPickupWindow] [puStart] dueDate.getDate(): " + dueDate.getDate())
+  console.log("[finPickupWindow] [puStart] ((dueDate.getDay() + 4) % 7): " + ((dueDate.getDay() + 4) % 7))
 
   // Pickup window of Wed thru Thru is just one day apart
+  const puEnd = new Date(puStart);   //Pickup End
   puEnd.setDate(puStart.getDate() + 1);
 
-  // Return a window start and end date as strings in this timezone
-  const puWindow = {};
+  // Return a window start and end date as strings in EST timezone
   puWindow.start = puStart.toLocaleDateString('en-US', {timeZone: 'America/New_York'});
   puWindow.end = puEnd.toLocaleDateString('en-US', {timeZone: 'America/New_York'});
+
+  // console.log("[finPickupWindow] dateString: " + dateString)
+  // console.log("[finPickupWindow] dueDate: " + dueDate)
+  // console.log("[finPickupWindow] puStart: " + puStart)
+  // console.log("[finPickupWindow] puEnd: " + puEnd)
+  // console.log(puWindow)
+
 
   return puWindow
 
@@ -236,52 +311,53 @@ export function isOrderActive(order) {
   }
   return isActive
 }
-////////////////////////////////////////////////////////////////////////////
-//          Update OrderDetail
-////////////////////////////////////////////////////////////////////////////
-export async function updateOrderDetailOnBunchesChange(item, event) {
+  ////////////////////////////////////////////////////////////////////////////
+  //          Update OrderDetail
+  ////////////////////////////////////////////////////////////////////////////
+  export async function updateOrderDetailOnBunchesChange(order,item, setOrder,event) {
 
-  const rec = {
-    orderDetailRecID: item.RecID,
-    bunches: event.target.value,
-  };
+    const rec = {
+      orderDetailRecID: item.RecID,
+      bunches: event.target.value,
+    };
 
-  // Update extended
-  var bunches = Number(event.target.value);
-  var pricePerBunch = Number(item["Price per Bunch"]);
-  var extended = bunches * pricePerBunch;
-  
-  // event.target.form.extended.value = extended;  DEVTODO need to useState
+    // Update extended
+    var bunches = Number(event.target.value);
+    var pricePerBunch = Number(item["Price per Bunch"]);
+    var extended = bunches * pricePerBunch;
+    
+    // event.target.form.extended.value = extended;  DEVTODO need to useState
 
-  // Update order with extended
-  var index = order.items.findIndex( o => o.RecID === item.RecID)
-  order.items[index].Extended = extended
-  setOrder(order)
+    // Update order with extended
+    var index = order.items.findIndex( o => o.RecID === item.RecID)
+    order.items[index].Extended = extended
 
-  // Update order total
-  var total = order.items.map(o => Number(o.Extended)).reduce((accum,curr) => accum+curr)
-  setOrderTotal(total)
-  
-  
-  // console.log("The following record will post to the order-detail-update API")
-  // console.log(rec)
-  const res = await fetch("/api/order-detail-update", {
-    body: JSON.stringify(rec),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "PATCH",
-  });
-  
-  const result = await res.json();
-  
-  if (result.length > 0) {
-    console.log("OrderDetail update successful, updateOrderDetailOnBunchesChange.");
-  } else {
-    alert("There was a problem saving your items, please try again.");
+    // Update order total
+    var total = order.items.map(o => Number(o.Extended)).reduce((accum,curr) => accum+curr)
+    
+    // Update page state
+    var newOrder = {...order}
+    setOrder(newOrder);
+    
+    // console.log("The following record will post to the order-detail-update API")
+    // console.log(rec)
+    const res = await fetch("/api/order-detail-update", {
+      body: JSON.stringify(rec),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "PATCH",
+    });
+    
+    const result = await res.json();
+    
+    if (result.length > 0) {
+      console.log("OrderDetail update successful, updateOrderDetailOnBunchesChange.");
+    } else {
+      alert("There was a problem saving your items, please try again.");
+    }
+
   }
-
-}
 
 /////////////////////////////////////////////////////////////////////////////////
 // Submit Order

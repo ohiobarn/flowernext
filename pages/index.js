@@ -4,7 +4,6 @@ import Image from "next/image";
 export default function Home() {
 
   var pjson = require('../package.json');
-  console.log("Flower Power v%s", pjson.version);
 
   return (
     <div className="fpSplash">
