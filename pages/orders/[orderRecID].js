@@ -109,8 +109,6 @@ export default withPageAuthRequired(function Order({ myProps }) {
   }, [order.Status, order.items, user]);
 
 
-
-  
   
   /////////////////////////////////////////////////////////////////////////////////
   // return

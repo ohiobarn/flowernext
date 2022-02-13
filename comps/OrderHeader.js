@@ -1,3 +1,5 @@
+import {findPickupWindow, isDateFarEnoughInAdvance} from "../utils/OrderUtils.js"
+import React, { useState} from "react";
 
 const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
   
@@ -6,38 +8,44 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
   const contentLockStyle = {
     opacity: contentLock ? ".65" : "1"
   }
+  const [pickupWindow, setPickupWindow] = useState(findPickupWindow(order["Due Date"]));
+
 
   /////////////////////////////////////////////////////////////////////////////////
   // Update Order Event handler
   /////////////////////////////////////////////////////////////////////////////////
   const updateOrder = async (event) => {
-    event.preventDefault(); // don't redirect the page
 
     const rec = {
-      orderRecID: event.target.orderRecID.value,
+      orderRecID: order.RecID,
     };
+
     //
     // Add fields
     //
-    if (event.target.clientJob != null) {
-      rec.clientJob = event.target.clientJob.value;
+    if (event.target.form.clientJob != null) {
+      rec.clientJob = event.target.form.clientJob.value;
     }
-    if (event.target.teamMember != null) {
-      rec.teamMember = event.target.teamMember.value;
+    if (event.target.form.teamMember != null) {
+      rec.teamMember = event.target.form.teamMember.value;
     }
-    if (event.target.dueDate != null) {
-      rec.dueDate = event.target.dueDate.value;
+    if (event.target.form.dueDate != null) {
+      rec.dueDate = event.target.form.dueDate.value;
+      if (!isDateFarEnoughInAdvance(rec.dueDate)){
+        alert("Due date must be at least 5 days from now")
+        return
+      }
     }
-    if (event.target.deliveryOption != null) {
-      rec.deliveryOption = event.target.deliveryOption.value;
+    if (event.target.form.deliveryOption != null) {
+      rec.deliveryOption = event.target.form.deliveryOption.value;
     }
-    if (event.target.managedAccount != null) { 
-      rec.managedAccount = event.target.managedAccount.value;
+    if (event.target.form.managedAccount != null) { 
+      rec.managedAccount = event.target.form.managedAccount.value;
     }
-    if (event.target.status != null) { 
-      rec.status = event.target.status.value;
+    if (event.target.form.status != null) { 
+      rec.status = event.target.form.status.value;
       // Update order and update state so orderStatusDesc is updated
-      order.Status = event.target.status.value;
+      order.Status = event.target.form.status.value;
     }
 
     // Update page state
@@ -61,12 +69,17 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
     } else {
       alert("There was a problem saving your order, please try again.");
     }
+
+    window.location.href = "/orders";
   };
+
+  function handleDueDateChange(event) {
+    setPickupWindow(findPickupWindow(event.target.value));
+  }
 
   return ( 
     <div className="fpForm">
-      <form onSubmit={updateOrder} >
-        <input id="orderRecID" name="orderRecID" type="hidden" value={order.RecID} />
+      <form>
         
         <div style={contentLockStyle}>
         
@@ -82,7 +95,7 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
 
           <div className="fpFromField fpDate">
             <label htmlFor="dueDate">Due Date</label>
-            <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} disabled={contentLock} required />
+            <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} disabled={contentLock} required onChange={handleDueDateChange}/>
           </div>
 
           <div className="fpFromField">
@@ -92,6 +105,10 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
                 <option key={d} value={d}>{d}</option>
               ))}
             </select>
+          </div>
+          <div className="fpFromField">
+            <label htmlFor="pickupWindow">{order["Delivery Option"]} window</label>
+            <p>{pickupWindow.start} through {pickupWindow.end}</p>
           </div>
         </div>
 
@@ -112,9 +129,7 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
           </div>
         }
         <div>
-          <button className="fpBtn" type="submit" disabled={contentLock && !showManagedAccount} >
-            Save Order Info
-          </button>
+          <button className="fpBtn" type="button" disabled={contentLock && !showManagedAccount} onClick={ (event) => updateOrder(event) }>Save</button>
         </div>
       </form>
     </div>

@@ -7,6 +7,63 @@
 // }
 
 ////////////////////////////////////////////////////////////////////////////
+//         getPickupWindow
+////////////////////////////////////////////////////////////////////////////
+export function findPickupWindow(date){
+  // Examples:
+  // dueDate is before Wednesday
+  //  dueDate: Tue Feb 15 2022
+  //  puStart: Wed Feb 09 2022
+  //  puEnd:   Thu Feb 10 2022
+  //
+  // dueDate is Wednesday;
+  //  dueDate: Wed Feb 16 2022
+  //  puStart: Wed Feb 16 2022
+  //  puEnd:   Thu Feb 17 2022 
+
+  const dueDate = new Date(date);
+  const puStart = new Date(); //Pickup Start
+  const puEnd = new Date();   //Pickup End
+
+  // Find the last Wednesday 
+  // If dueDate is a Wednesday then that is the start date
+  puStart.setDate(dueDate.getDate() - ((dueDate.getDay() + 4) % 7));
+
+  // Pickup window of Wed thru Thru is just one day apart
+  puEnd.setDate(puStart.getDate() + 1);
+
+  // Return a window start and end date as strings in this timezone
+  const puWindow = {};
+  puWindow.start = puStart.toLocaleDateString('en-US', {timeZone: 'America/New_York'});
+  puWindow.end = puEnd.toLocaleDateString('en-US', {timeZone: 'America/New_York'});
+
+  return puWindow
+
+}
+
+////////////////////////////////////////////////////////////////////////////
+//         isDateFarEnoughInAdvance
+////////////////////////////////////////////////////////////////////////////
+export function isDateFarEnoughInAdvance(date){
+
+  const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+  const dueDate = new Date(date);
+  const today = new Date();
+  const earliest = new Date();
+
+  earliest.setDate(today.getDate() + 4);
+
+  const diffDays = Math.round((dueDate - earliest) / oneDay);
+
+
+  if (diffDays < 0) {
+    return false
+  } else {
+    return true
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////
 //          Get Orders
 ////////////////////////////////////////////////////////////////////////////
 export async function getOrders(account) {

@@ -21,14 +21,12 @@ const OrderList = ({orders, showActiveOrders, submitOrder, contentLock}) => {
               </a>
             </Link>
           </div>
-          <div>
-          { !isContentLocked(order.Status) && <a className="fpBtn" onClick={ () => submitOrder(order) }>Submit Order</a> }
-          </div>
-          
+
           <div>
             <Link href={'/orders/items/' + order.RecID} key={"orderItemsLink"}><a className="fpSingle">Items</a></Link>
             <Link href={'/orders/chat/' + order.RecID} key={"orderChatLink"}><a className="fpSingle">Chat</a></Link>
             <Link href={'/orders/activity/' + order.RecID} key={"orderActivityLink"}><a className="fpSingle">Activity</a></Link>
+            { !isContentLocked(order.Status) && <a className="fpBtn" onClick={ () => submitOrder(order) }>Submit Draft</a> }
           </div>
         </div>
       ))}
