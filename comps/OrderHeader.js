@@ -152,9 +152,11 @@ const OrderHeader = ({order, contentLock, isAdmin, setOrder}) => {
             <input id="growerSplit" name="growerSplit" type="text" defaultValue={order["Grower Split"]}  />
           </div>
         }
+        { (!contentLock || isAdmin) &&
         <div>
-          <button className="fpBtn" type="submit" disabled={contentLock && !isAdmin} >Save</button>
+          <button className="fpBtn" type="submit" >Save</button>
         </div>
+        }
       </form>
     </div>
    );
