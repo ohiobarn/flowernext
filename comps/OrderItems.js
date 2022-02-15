@@ -50,11 +50,13 @@ const OrderItems = ({order, updateOrderDetailOnBunchesChange, deleteOrderItem, s
                   {item.Crop} - {item.Variety}
                 </h4>
               </div>
+              { !isContentLocked(order.Status) && 
               <div>
                 <button className="fpBtn" type="button" value={order.RecID} onClick={ () => deleteOrderItem(order.RecID,item.RecID)}>
                   Delete Item
                 </button>
               </div>
+              }
             </div>
     
           </form>

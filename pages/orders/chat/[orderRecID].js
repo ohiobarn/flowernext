@@ -27,15 +27,28 @@ export async function getServerSideProps(context) {
 }
 
 export default withPageAuthRequired(function Chat({ myProps }) {
+  let user = myProps.user;
+  let isAdmin = false;
 
   const [order, setOrder] = useState(myProps.order);
+  
+
+    //
+    // Role
+    //
+    if (user["https://app.madriverfloralcollective.com/role"] === "Admin" ){
+      isAdmin = true;
+    } 
+    else {
+      isAdmin = false;
+    }
 
   return (
     <div>
       <Link href={'/orders/' + order.RecID} key={order.RecID}>
         <a><h3 className="fpFormTitle">{order["Client/Job"]} <span>Order#: {order.OrderNo} - {order.Status}</span></h3></a>
       </Link>
-      <OrderChat order={order} setOrder={setOrder} />
+      <OrderChat order={order} setOrder={setOrder} isAdmin={isAdmin}/>
     </div>
   );
 

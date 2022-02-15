@@ -1,7 +1,7 @@
 import React, {useRef} from "react";
 import Link from "next/link";
 
-const OrderChat = ({order, setOrder}) => {
+const OrderChat = ({order, setOrder, isAdmin}) => {
   
   const chatFrom =  useRef(null)
 
@@ -16,8 +16,15 @@ const OrderChat = ({order, setOrder}) => {
       //Nothing to do just return
       return;      
     }
+
+    let account = ""
+    if(isAdmin){
+      account = order.Account
+    } else {
+      account = order["Managed Account"]
+    }
     
-    var notes = form.notes.value + "\n" + form.orderAccount.value + ": " + form.textMsg.value
+    var notes = form.notes.value + "\n" + account + ": " + form.textMsg.value
     form.textMsg.value = ""
     
     // Yes continue
@@ -38,22 +45,18 @@ const OrderChat = ({order, setOrder}) => {
     
     if (result.length > 0) {
       console.log("Send notes successful.");
-      alert("Your notes have been sent to MRFC");
+      console.log("Your text has been sent to MRFC");
     } else {
-      alert("There was a problem sending your notes, please try again.");
+      console.log("There was a problem sending your text, please try again.");
     }
     
     // Update state
     order.Notes =  notes
-    setOrder(order)
 
-    // DEVTODO - This work but i dont under stand why yet 
-    setOrder(order => ({
-      ...order,
-      ["Notes"]: notes
-    }));
+    // Update page state
+    var newOrder = {...order}
+    setOrder(newOrder);
     
-
   };
 
   return ( 

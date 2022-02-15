@@ -1,7 +1,7 @@
 import {findPickupWindow, isDateFarEnoughInAdvance} from "../utils/OrderUtils.js"
 import React, { useState} from "react";
 
-const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
+const OrderHeader = ({order, contentLock, isAdmin, setOrder}) => {
   
   const orderStatusList = ["Draft","Submitted","Modification Requested","Accepted","Pending","Ready","Delivered","Invoiced","Paid"]
   const deliveryOptions = ["Pickup","Delivery"]
@@ -35,6 +35,12 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
     }
     if (event.target.managedAccount != null) { 
       rec.managedAccount = event.target.managedAccount.value;
+    }
+    if (event.target.primaryGrower != null) { 
+      rec.primaryGrower = event.target.primaryGrower.value;
+    }
+    if (event.target.growerSplit != null) { 
+      rec.growerSplit = event.target.growerSplit.value;
     }
     if (event.target.status != null) { 
       rec.status = event.target.status.value;
@@ -118,15 +124,15 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
 
         </div>
 
-        { showManagedAccount &&
+        { isAdmin &&
           <div className="fpFromField">
-            <label htmlFor="managedAccount">Managed Account</label>
+            <label htmlFor="managedAccount">Managed Account (admin)</label>
             <input id="managedAccount" name="managedAccount" type="text" defaultValue={order["Managed Account"]}  />
           </div>
         }
-        { showManagedAccount &&
+        { isAdmin &&
           <div className="fpFromField">
-            <label htmlFor="status">Order Status</label>
+            <label htmlFor="status">Order Status (admin)</label>
             <select name="status" id="status" defaultValue={order.Status}>
               {orderStatusList.map( s => (
                 <option key={s} value={s}>{s}</option>
@@ -134,8 +140,20 @@ const OrderHeader = ({order, contentLock, showManagedAccount, setOrder}) => {
             </select>
           </div>
         }
+        { isAdmin &&
+          <div className="fpFromField">
+            <label htmlFor="primaryGrower">Primary Grower (admin)</label>
+            <input id="primaryGrower" name="primaryGrower" type="text" defaultValue={order["Primary Grower"]}  />
+          </div>
+        }
+        { isAdmin &&
+          <div className="fpFromField">
+            <label htmlFor="growerSplit">Grower Split (admin)</label>
+            <input id="growerSplit" name="growerSplit" type="text" defaultValue={order["Grower Split"]}  />
+          </div>
+        }
         <div>
-          <button className="fpBtn" type="submit" disabled={contentLock && !showManagedAccount} >Save</button>
+          <button className="fpBtn" type="submit" disabled={contentLock && !isAdmin} >Save</button>
         </div>
       </form>
     </div>

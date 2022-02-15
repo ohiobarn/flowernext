@@ -77,7 +77,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
 
 
   const [order, setOrder] = useState(myProps.order)
-  const [showManagedAccount, setShowManagedAccount] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [contentLock, setContentLock] = useState(false);
   const [orderTotal, setOrderTotal] = useState(0);
   
@@ -95,10 +95,10 @@ export default withPageAuthRequired(function Order({ myProps }) {
     // Role
     //
     if (user["https://app.madriverfloralcollective.com/role"] === "Admin" ){
-      setShowManagedAccount(true)
+      setIsAdmin(true)
     } 
     else {
-      setShowManagedAccount(false)
+      setIsAdmin(false)
     }
 
     //
@@ -127,7 +127,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
       </form>
 
       <h3>Order Information</h3>
-      <OrderHeader order={order} contentLock={contentLock} showManagedAccount={showManagedAccount} setOrder={setOrder}/>
+      <OrderHeader order={order} contentLock={contentLock} isAdmin={isAdmin} setOrder={setOrder}/>
       
       <h3>Order Summary</h3>
       <OrderSummary orderTotal={orderTotal} />
@@ -136,9 +136,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
         <div className="fpPageNav fpNavAtBottom">
           <div>&nbsp;</div>
           <Link href="/orders"><a className="fpBtn">Back</a></Link>
-          <button className="fpBtn" type="button" value={order.RecID} onClick={ () => deleteOrder(order)}>
-            Delete Order
-          </button>
+          {!contentLock && <button className="fpBtn" type="button" value={order.RecID} onClick={ () => deleteOrder(order)}>Delete Order</button>}
         </div>
       </form>
 

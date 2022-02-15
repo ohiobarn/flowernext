@@ -9,10 +9,10 @@ export default function handler(req, res) {
   const result = createOrder(user.email,req.body)
 
   result.then(value => {
-    console.log("OrderDetail update successful") // Success!
+    console.log("Create order successful") // Success!
     res.status(200).json(value) 
   }, reason => {
-    console.log("OrderDetail update NOT successful") // Error!
+    console.log("Create order NOT successful") // Error!
     console.error(reason); // Error!
     res.status(500).json(reason)
   });
@@ -38,6 +38,9 @@ async function createOrder(account,data) {
         }
       }
     ]
+  
+  console.log("[createOrder] Create with:")
+  console.log(rec)
 
   var Airtable = require("airtable")
   Airtable.configure({endpointUrl: "https://api.airtable.com",apiKey: apiKey,});
