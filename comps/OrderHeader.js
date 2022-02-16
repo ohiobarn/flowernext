@@ -14,6 +14,7 @@ const OrderHeader = ({order, contentLock, isAdmin, setOrder}) => {
   /////////////////////////////////////////////////////////////////////////////////
   // Update Order Event handler
   /////////////////////////////////////////////////////////////////////////////////
+  // DEVTODO - stop using globals and put this OrderUtils.js
   const updateOrder = async (event) => {
     event.preventDefault(); // don't redirect the page
 

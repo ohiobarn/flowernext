@@ -1,63 +1,10 @@
 import React, {useRef} from "react";
 import Link from "next/link";
+import {sendNotes} from "../utils/OrderUtils.js"
 
 const OrderChat = ({order, setOrder, isAdmin}) => {
   
   const chatFrom =  useRef(null)
-
-  /////////////////////////////////////////////////////////////////////////////////
-  // Send Notes
-  /////////////////////////////////////////////////////////////////////////////////
-  const sendNotes = async () => {
-
-    const form = chatFrom.current
-
-    if (form.textMsg.value.length === 0) {
-      //Nothing to do just return
-      return;      
-    }
-
-    let account = ""
-    if(isAdmin){
-      account = order.Account
-    } else {
-      account = order["Managed Account"]
-    }
-    
-    var notes = form.notes.value + "\n" + account + ": " + form.textMsg.value
-    form.textMsg.value = ""
-    
-    // Yes continue
-    const rec = {
-      orderRecID: order.RecID,
-      notes: notes
-    };
-    
-    const res = await fetch("/api/order-update", {
-      body: JSON.stringify(rec),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "PATCH",
-    });
-    
-    const result = await res.json();
-    
-    if (result.length > 0) {
-      console.log("Send notes successful.");
-      console.log("Your text has been sent to MRFC");
-    } else {
-      console.log("There was a problem sending your text, please try again.");
-    }
-    
-    // Update state
-    order.Notes =  notes
-
-    // Update page state
-    var newOrder = {...order}
-    setOrder(newOrder);
-    
-  };
 
   return ( 
     <div className="fpForm">
@@ -76,7 +23,9 @@ const OrderChat = ({order, setOrder, isAdmin}) => {
 
         <div className="fpTextMsgCard">
           <input id="textMsg" name="textMsg" type="text" /> 
-          <button className="fpBtn" type="button" value={order.RecID} onClick={() => sendNotes()}>Send</button>
+          <button className="fpBtn" type="button" value={order.RecID} 
+                  onClick={() => sendNotes(order,chatFrom,setOrder)}>Send
+          </button>
         </div>
       
       </form>
