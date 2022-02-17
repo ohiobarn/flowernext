@@ -12,9 +12,8 @@ const Catalog = () => {
       <div>
         <iframe src="https://airtable.com/embed/shrSovazR20A9djwC?backgroundColor=yellow&viewControls=on" 
                 frameBorder="0" 
-                onmousewheel="" 
                 width="100%" 
-                height="800">
+                height="750">
         </iframe>
       </div>
     </div>

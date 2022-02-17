@@ -1,13 +1,19 @@
 /*
   Global
 */
-@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap);
 
+/* Extra-light 200 -  font-family: 'Montserrat', sans-serif; */
+/* @import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap);  */
+
+/* Roboto Serif - font-family: 'Roboto Serif', sans-serif; */
+@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap); 
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Serif&display=swap');
 
 * {
   /* font-size: 100%; */
   /* font-family: Arial; */
-  font-family: 'Montserrat', sans-serif;
+  /* font-family: 'Montserrat', sans-serif; */
+  font-family: 'Roboto Serif', sans-serif;
  }
 
 body {
@@ -223,7 +229,7 @@ Order
 }
 
 .fpDate input {
-  max-width: 135px;
+  max-width: 150px;
 }
 
 .fpFormTitle {

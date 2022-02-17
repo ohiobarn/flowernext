@@ -6,7 +6,10 @@ const AvailabilityList = () => {
         the bottom right section of the grid to view a larger grid.{" "}
       </p>
       <div>
-        <iframe src="https://airtable.com/embed/shr2OXWY4yLoqCYKf?backgroundColor=cyan&viewControls=on" frameBorder="0" onmousewheel="" width="100%" height="800"></iframe>
+        <iframe src="https://airtable.com/embed/shr2OXWY4yLoqCYKf?backgroundColor=cyan&viewControls=on" 
+                frameBorder="0" 
+                width="100%" 
+                height="750"></iframe>
       </div>
     </div>
   );
