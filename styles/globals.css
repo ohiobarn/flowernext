@@ -8,22 +8,24 @@
 /* Roboto Serif - font-family: 'Roboto Serif', sans-serif; */
 /* @import url('https://fonts.googleapis.com/css2?family=Roboto+Serif&display=swap'); */
 
-/* Roboto Serif - font-family: 'Roboto', sans-serif; */
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&family=Poppins:wght@300&family=Roboto&family=Roboto+Serif&display=swap');
+
 
 * {
   /* font-size: 100%; */
   /* font-family: Arial; */
   /* font-family: 'Montserrat', sans-serif; */
   /* font-family: 'Roboto Serif', sans-serif; */
-  font-family: 'Roboto', sans-serif;
+  /* font-family: 'Roboto', sans-serif; */
+  font-family: 'Poppins', sans-serif;
  }
 
 body {
-  background: #fafafa;
+  background: #F3E5F5;
   color: #333;
   /* font-family: "Nunito"; */
-  font-family: Arial, Helvetica, sans-serif
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 a {
@@ -40,7 +42,7 @@ h2 {
 
 .fpA {
   text-decoration-style: solid;
-  text-decoration-color:#e9cbcb;
+  text-decoration-color:#CE93D8;
   text-decoration:solid;
   text-decoration:underline;
   
@@ -56,26 +58,37 @@ h2 {
   width: 100px;
   padding: 8px 0;
   margin: 10px auto;
-  background: #e9cbcb;
+  background: #CE93D8;
   border-radius: 4px;
   color: white;
   text-align: center;
 }
 
-.fpBtn {
+/* .fpBtn {
   display: block;
   width: 100px;
   padding: 8px 0;
   margin: 10px auto;
-  background: #e9cbcb;
+  background: #CE93D8;
   border-radius: 4px;
   color: white;
   text-align: center;
   border: none;
   color:black;
   font-size: 14px;
-}
+} */
 
+.fpBtn {
+  text-decoration: none;
+  color:#fff;
+  background-color: #CE93D8;
+  padding: 8px 20px;
+  border-radius: 30px; /* rounded corners */
+  border: none;
+  margin: 3px;
+  font-size: small;
+  
+}
 
 
 
@@ -103,9 +116,7 @@ nav .fpLogo {
   align-items: center;
 }
 
-nav h1 {
-  font-family:
-}
+
 .fpSplash {
   margin: 80px auto 10px;
   padding: 10px 0;
@@ -143,7 +154,7 @@ Order
 }
 
 .fpSingle:hover {
-  border-left: 3px solid #4979ff;
+  border-left: 3px solid #F3E5F5;
 }
 
 .fpSingleNoHover {
@@ -158,7 +169,7 @@ Order
 .fpForm {
   border-style: solid;
   border-color:lightgray;
-  background-color: rgba(245, 233, 243, 0.5);
+  background-color:#fff;
   border-width: 2px;
   border-radius: 5px;
   max-width: 90%; 
@@ -271,12 +282,12 @@ Order List
 */
 .fpOrderList {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-start;
   margin: 10px;
-  padding: 2px;
+  padding: 10px;
   background-color:white;
   border-style: solid;
   border-color:lightgray;
@@ -348,7 +359,7 @@ card
   margin: 5px;
 }
 .fpCard:hover {
-  border-left: 3px solid #4979ff;
+  border-left: 3px solid #F3E5F5;
 }
 /* 
 

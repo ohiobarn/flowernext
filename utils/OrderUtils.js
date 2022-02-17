@@ -248,7 +248,7 @@ export function getOrderStatusDesc(order) {
 
     switch (order.Status) {
       case "Draft":
-        return "Prepare your order and when ready click submit";
+        return "Edit items and when ready click submit";
       case "Submitted":
         return "MRFC will review your order and respond soon";
       case "Modification Requested":

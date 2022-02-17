@@ -41,17 +41,17 @@ async function updateOrder(account,data) {
   // 
   // Add fields
   //
-  if (data.status != null)         { rec[0].fields.Status = data.status }
-  if (data.clientJob != null)      { rec[0].fields["Client/Job"] = data.clientJob }
-  if (data.teamMember != null)     { rec[0].fields["Team Member"] = data.teamMember }
-  if (data.deliveryOption != null) { rec[0].fields["Delivery Option"] = data.deliveryOption }
-  if (data.notes != null)          { rec[0].fields.Notes = data.notes }
-  if (data.managedAccount != null) { rec[0].fields["Managed Account"] = data.managedAccount}
-  if (data.primaryGrower != null)  { rec[0].fields["Primary Grower"] = data.primaryGrower}
-  if (data.growerSplit != null)    { rec[0].fields["Grower Split"] = data.growerSplit}
-  if (data.dueDate != null)        { rec[0].fields["Due Date"] = data.dueDate }
-  if (data.pickupStart != null)    { rec[0].fields["Pickup Start"] = data.pickupStart }
-  if (data.pickupEnd != null)      { rec[0].fields["Pickup End"] = data.pickupEnd }
+  if (data.status != null && data.status.length > 0)                 { rec[0].fields.Status = data.status }
+  if (data.clientJob != null && data.clientJob.length > 0)           { rec[0].fields["Client/Job"] = data.clientJob }
+  if (data.teamMember != null && data.teamMember.length > 0)         { rec[0].fields["Team Member"] = data.teamMember }
+  if (data.deliveryOption != null && data.deliveryOption.length > 0) { rec[0].fields["Delivery Option"] = data.deliveryOption }
+  if (data.notes != null && data.notes.length > 0)                   { rec[0].fields.Notes = data.notes }
+  if (data.managedAccount != null && data.managedAccount.length > 0) { rec[0].fields["Managed Account"] = data.managedAccount}
+  if (data.primaryGrower != null && data.primaryGrower.length > 0)   { rec[0].fields["Primary Grower"] = data.primaryGrower}
+  if (data.growerSplit != null && data.growerSplit.length > 0)       { rec[0].fields["Grower Split"] = data.growerSplit}
+  if (data.dueDate != null && data.dueDate.length > 0)               { rec[0].fields["Due Date"] = data.dueDate }
+  if (data.pickupStart != null && data.pickupStart.length > 0)       { rec[0].fields["Pickup Start"] = data.pickupStart }
+  if (data.pickupEnd != null && data.pickupEnd.length > 0)           { rec[0].fields["Pickup End"] = data.pickupEnd }
 
   console.log("The following record will be used to update the order.")
   console.log(rec)

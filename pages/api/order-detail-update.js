@@ -40,7 +40,7 @@ async function updateOrderDetail(account,data) {
     }
   ]
 
-  // console.log("The following record will be used to update the order.")
+  // console.log("The following record will be used to update the order detail.")
   // console.log(rec)
 
   var Airtable = require("airtable")

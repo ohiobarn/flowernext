@@ -41,9 +41,9 @@ export default withPageAuthRequired(function Orders({ myProps }) {
          See <Link href="https://ohiobarn.github.io/flowernext/#order/#order-status-summary"><a className="fpA" target="_blank">MRFC Doc</a></Link> for more detail.
       </p>
 
-      <form className="fpPageNav fpNavAtTop">
+      <div className="fpPageNav fpNavAtTop">
         <button className="fpBtn" type="button" onClick={createOrder}>New Order</button>
-      </form>
+      </div>
 
       <OrderList orders={orders} showActiveOrders="yes" submitOrder={submitOrder} /> 
 
