@@ -25,8 +25,7 @@ const OrderList = ({orders, showActiveOrders, submitOrder, contentLock}) => {
             </Link>
             <hr></hr>
           </div>
-          <div>
-            
+          <div className="fpActions">
             <Link href={'/orders/items/' + order.RecID} key={"orderItemsLink"}><a className="fpBtn">Edit Items</a></Link>
             <Link href={'/orders/chat/' + order.RecID} key={"orderChatLink"}><a className="fpBtn">Chat with MRFC</a></Link>
             <Link href={'/orders/activity/' + order.RecID} key={"orderActivityLink"}><a className="fpBtn">View Activity Log</a></Link>
