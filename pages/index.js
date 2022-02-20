@@ -9,7 +9,7 @@ export default function Home() {
     <div className="fpSplash">
       <Image src="/splash-clear-bg.png" layout="intrinsic" alt="splash" width={406} height={173} />
       <Link href='/landing'><a className="fpBtn">Login</a></Link>
-      <p className="fpVersion"><small>Flower Power v{pjson.version}</small></p>
+      <p className="fpVersion"><small>version {pjson.version}</small></p>
     </div>
   );
 }
