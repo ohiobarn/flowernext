@@ -23,7 +23,7 @@ export function getOrderSummary(order){
   }
 
   const summary = {}
-  summary.what = `Order#: ${order.OrderNo} ・ ${order.Status}`;
+  summary.what = `Order#: ${order.OrderNo}`;
 
   if (order["Team Member"]) {
     summary.who = `${order["Team Member"]}<${account}>`;
@@ -32,18 +32,20 @@ export function getOrderSummary(order){
   }
   
   if (order["Due Date"]) {
-    summary.when = `${order["Due Date"]} ・ ${order["Delivery Option"]} (${order["Pickup Start"]} ・ ${order["Pickup End"]})`;
+    summary.due = `Due: ${order["Due Date"]}`;
+    summary.window = `${order["Delivery Option"]} (${order["Pickup Start"]} ・ ${order["Pickup End"]})`;
   } else {
-    summary.when = "";
+    summary.due = "";
+    summary.window = "";
   }
+
 
   if ( orderTotal ) {
     summary.total = `Total \$${orderTotal}`;
   } else {
     summary.total = "";
   }
-  
-  summary.all = `${summary.what} ・ ${summary.who} ・ ${summary.when} ・ ${summary.total}`;
+ 
 
   return summary
 
@@ -246,28 +248,51 @@ export async function createOrder() {
 ////////////////////////////////////////////////////////////////////////////
 export function getOrderStatusDesc(order) {
 
+    let statusObj = {};
+
     switch (order.Status) {
       case "Draft":
-        return "Edit items and when ready click submit";
+        statusObj.status = "📝 Draft";
+        statusObj.desc = "Edit items and when ready click submit";
+        break;
       case "Submitted":
-        return "MRFC will review your order and respond soon";
+        statusObj.status = "🎉 Submitted";
+        statusObj.desc = "MRFC will review your order and respond soon";
+        break;
       case "Modification Requested":
-        return "Changes to your order are required, see chat for more detail";
+        statusObj.status = "⚠️ Modification Requested";
+        statusObj.desc = "Changes to your order are required, see chat for more detail";
+        break;
       case "Accepted":
-        return "No action is required. MFRC will fulfill your order when the Due Date approaches";
+        statusObj.status = "👍🏻 Accepted";
+        statusObj.desc = "No action is required. MFRC will fulfill your order when the Due Date approaches";
+        break;
       case "Pending":
-        return "Order fulfillment is in progress, the order status will change when it is Ready for " + order["Delivery Option"];
+        statusObj.status = "⌛️ Pending";
+        statusObj.desc = "Order fulfillment is in progress, the order status will change when it is Ready for " + order["Delivery Option"];
+        break;
       case "Ready":
-        return "Yoru order is ready for " + order["Delivery Option"];
+        statusObj.status = "💐 Ready";
+        statusObj.desc = "Yoru order is ready for " + order["Delivery Option"];
+        break;
       case "Delivered":
-        return "Delivered";
+        statusObj.status = "🚐 Delivered";
+        statusObj.desc = "Delivered";
+        break;
       case "Invoiced":
-        return "Payment due";
+        statusObj.status = "📬 Invoiced";
+        statusObj.desc = "Payment due";
+        break;
       case "Paid":
-        return "Thanks";
+        statusObj.status = "✅ Paid";
+        statusObj.desc = "Thanks";
+        break;
       default:
-        return "Bad order status";
+        statusObj.status = "✗ Bad";
+        statusObj.desc = "Bad order status";
     }
+
+    return statusObj
 
 }
 

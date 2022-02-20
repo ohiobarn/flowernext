@@ -76,7 +76,8 @@ const OrderHeader = ({order, contentLock, isAdmin, setOrder}) => {
     const result = await res.json();
 
     if (result.length > 0) {
-      alert("Saved.");
+      // alert("Saved.");
+      console.log("saved")
     } else {
       alert("There was a problem saving your order, please try again.");
     }

@@ -89,7 +89,7 @@ export default withPageAuthRequired(function Chat({ myProps }) {
       <Link href={'/orders/' + order.RecID} key={order.RecID}>
         <a><h3 className="fpFormTitle">{order["Client/Job"]} </h3></a>
       </Link>
-      <p>{getOrderSummary(order).all}</p>
+      <p>{getOrderSummary(order).fullWithTotal}</p>
 
       <div className="fpPageNav fpNavAtTop">
         <Link href="/orders"><a className="fpBtn">Back</a></Link>

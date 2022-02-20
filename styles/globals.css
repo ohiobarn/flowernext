@@ -8,7 +8,6 @@
 /* Roboto Serif - font-family: 'Roboto Serif', sans-serif; */
 /* @import url('https://fonts.googleapis.com/css2?family=Roboto+Serif&display=swap'); */
 
-
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&family=Poppins:wght@300&family=Roboto&family=Roboto+Serif&display=swap');
 
 
@@ -17,8 +16,8 @@
   /* font-family: Arial; */
   /* font-family: 'Montserrat', sans-serif; */
   /* font-family: 'Roboto Serif', sans-serif; */
-  /* font-family: 'Roboto', sans-serif; */
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  
  }
 
 body {
@@ -31,13 +30,6 @@ body {
 a {
   color: #333;
   text-decoration: none;
-}
-
-h1 {
-  margin:auto;
-}
-h2 {
-  margin:auto;
 }
 
 .fpA {
@@ -293,6 +285,22 @@ Order List
   border-color:lightgray;
   border-width: 2px;
   border-radius: 5px;  
+}
+
+.fpOrderList h2 {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-left: 1px;
+  margin-right: 2px;
+
+}
+
+.fpOrderList hr {
+  border: 1px solid #F3E5F5;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  margin-left: 0px;
+  margin-right: 0px;
 }
 
 /* 

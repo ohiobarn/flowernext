@@ -16,17 +16,17 @@ const OrderList = ({orders, showActiveOrders, submitOrder, contentLock}) => {
           <div>
             <Link href={'/orders/' + order.RecID} key={"orderStatusLink"}>
               <a className="fpSingle">
-                <h3>{order["Client/Job"]}</h3>
-                {getOrderSummary(order).what}
-                <br/>{getOrderSummary(order).when} {getOrderSummary(order).who}
+                <small>{order["Due Date"]}</small>
+                <h2>{order["Client/Job"]}</h2>
+                <p>{ getOrderStatusDesc(order).status}</p>
+                {getOrderSummary(order).what} ・ {getOrderSummary(order).window}
+                <i>{getOrderStatusDesc(order).desc}</i>
               </a>
             </Link>
-            <div className="fpSingleNoHover" >
-              <p><i>{getOrderStatusDesc(order)}</i></p>
-            </div>
+            <hr></hr>
           </div>
-
           <div>
+            
             <Link href={'/orders/items/' + order.RecID} key={"orderItemsLink"}><a className="fpBtn">Edit Items</a></Link>
             <Link href={'/orders/chat/' + order.RecID} key={"orderChatLink"}><a className="fpBtn">Chat with MRFC</a></Link>
             <Link href={'/orders/activity/' + order.RecID} key={"orderActivityLink"}><a className="fpBtn">View Activity Log</a></Link>
