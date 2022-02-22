@@ -18,9 +18,11 @@ const OrderList = ({orders, showActiveOrders, submitOrder, contentLock}) => {
               <a className="fpSingle">
                 <small>{order["Due Date"]}</small>
                 <h2>{order["Client/Job"]}</h2>
-                <p>{ getOrderStatusDesc(order).status}</p>
-                {getOrderSummary(order).what} ・ {getOrderSummary(order).window}
-                <i>{getOrderStatusDesc(order).desc}</i>
+                <p>{getOrderStatusDesc(order).status}</p>
+                <p>
+                  {getOrderSummary(order).what} ・ {getOrderSummary(order).window} ・ {getOrderSummary(order).items} ・ {getOrderSummary(order).total} <br/>
+                  {getOrderStatusDesc(order).desc}
+                </p>
               </a>
             </Link>
             <hr></hr>

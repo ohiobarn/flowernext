@@ -93,7 +93,8 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
     const result = await res.json()
 
     if ( result.length > 0) {
-      alert("Varieties added to order.")
+      // alert("Varieties added to order.")
+      console.log("Item added to order")
     } else {
       alert("There was a problem saving your order, please try again...")
     }

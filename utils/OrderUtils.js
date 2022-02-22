@@ -17,11 +17,6 @@ export function getOrderSummary(order){
     account = order["Managed Account"];
   }
 
-  var orderTotal = 0;
-  if (order.items) {
-    orderTotal = order.items.map(item => item.Extended).reduce((accum,curr) => accum+curr,0);
-  }
-
   const summary = {}
   summary.what = `Order#: ${order.OrderNo}`;
 
@@ -40,12 +35,17 @@ export function getOrderSummary(order){
   }
 
 
-  if ( orderTotal ) {
+  let orderTotal = 0;
+  let itemCount = 0;
+  if (order.items) {
+    orderTotal = order.items.map(item => item.Extended).reduce((accum,curr) => accum+curr,0);
+    itemCount = order.items.length;
     summary.total = `Total \$${orderTotal}`;
+    summary.items = `${itemCount} items`
   } else {
     summary.total = "";
+    summary.items = "";
   }
- 
 
   return summary
 
@@ -149,11 +149,11 @@ export async function getOrders(account) {
   const apiKey = process.env.AIRTABLE_APIKEY
   console.log("[getOrders] Account [%s]", account)
 
-  var Airtable = require("airtable")
+  let Airtable = require("airtable")
   
   Airtable.configure({endpointUrl: "https://api.airtable.com",apiKey: apiKey,});
 
-  var base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
+  let base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
   const records = await base("Order").select({
     pageSize: 100, 
     view: "fp-grid", 
@@ -161,15 +161,17 @@ export async function getOrders(account) {
     filterByFormula: `OR(Account = "${account}", {Managed Account} = "${account}")`,
   }).all();
 
-  // Put resultes into an array
-  var orders = []; 
-  records.forEach(function (record) {
-    var order = record.fields;
+  // Get order detail
+  let orders = []; 
+  for (let i = 0; i < records.length; i++){
+    let order = records[i].fields;
+    order = await getOrderDetailByRecId(order);
     orders.push(order);
-  });
+  }
 
   return orders
 }
+
 
 ////////////////////////////////////////////////////////////////////////////
 //          Get Order
@@ -181,10 +183,10 @@ export async function getOrder(account, orderRecID) {
   //
   // Get order header
   //
-  var Airtable = require("airtable");
+  let Airtable = require("airtable");
   Airtable.configure({ endpointUrl: "https://api.airtable.com", apiKey: apiKey });
 
-  var base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
+  let base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
   const records = await base("Order")
     .select({
       view: "fp-grid",
@@ -193,26 +195,34 @@ export async function getOrder(account, orderRecID) {
     .all();
 
   // There should only be one order
-  var order = records[0].fields;
+  let order = records[0].fields;
 
-  //
-  // Get Order detail
-  //
+  // Get order detail
+  order = await getOrderDetailByRecId(order);
+
+  return order;
+}
+
+////////////////////////////////////////////////////////////////////////////
+//          Get Order Detail by RecID
+////////////////////////////////////////////////////////////////////////////
+async function getOrderDetailByRecId(order) {
+
+  let Airtable = require("airtable");
+  let base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
   const detailRecords = await base("OrderDetail")
-    .select({
-      view: "fp-grid",
-      filterByFormula: `OrderRecID = "${orderRecID}"`,
-    })
-    .all();
+  .select({
+    view: "fp-grid",
+    filterByFormula: `OrderRecID = "${order.RecID}"`,
+  }).all();
 
   order.items = [];
   detailRecords.forEach((item) => {
     order.items.push(item.fields);
   });
 
-  return order;
+  return order
 }
-
 
 ////////////////////////////////////////////////////////////////////////////
 //          Create Order

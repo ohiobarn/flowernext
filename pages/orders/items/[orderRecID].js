@@ -89,10 +89,15 @@ export default withPageAuthRequired(function Chat({ myProps }) {
       <Link href={'/orders/' + order.RecID} key={order.RecID}>
         <a><h3 className="fpFormTitle">{order["Client/Job"]} </h3></a>
       </Link>
-      <p>{getOrderSummary(order).fullWithTotal}</p>
+      <p>
+        {getOrderSummary(order).what} ・ {getOrderSummary(order).items} ・ {getOrderSummary(order).total}
+      </p>
+      <p>
+        Add items to your order, then adjust the <b>Bunches</b> on each.
+      </p>
 
       <div className="fpPageNav fpNavAtTop">
-        <Link href="/orders"><a className="fpBtn">Back</a></Link>
+        <Link href="/orders"><a className="fpBtn">Done</a></Link>
         <Link href={"/orders/varieties?orderRecID=" + order.RecID} ><a className="fpBtn"  style={{display: isContentLocked(order.Status) ?'none':'true'}}>Add Items</a></Link>
       </div>
 
@@ -100,7 +105,7 @@ export default withPageAuthRequired(function Chat({ myProps }) {
       
       { order.items.length > 1 &&
       <div className="fpPageNav fpNavAtBottom">
-        <Link href="/orders"><a className="fpBtn">Back</a></Link>
+        <Link href="/orders"><a className="fpBtn">Done</a></Link>
         <Link href={"/orders/varieties?orderRecID=" + order.RecID} ><a className="fpBtn"  style={{display: isContentLocked(order.Status) ?'none':'true'}}>Add Items</a></Link>
       </div>
       }

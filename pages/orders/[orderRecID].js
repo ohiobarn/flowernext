@@ -133,7 +133,6 @@ export default withPageAuthRequired(function Order({ myProps }) {
       
       <form>
         <div className="fpPageNav fpNavAtBottom">
-          <div>&nbsp;</div>
           <Link href="/orders"><a className="fpBtn">Back</a></Link>
           {!contentLock && <button className="fpBtn" type="button" value={order.RecID} onClick={ () => deleteOrder(order)}>Delete Order</button>}
         </div>
