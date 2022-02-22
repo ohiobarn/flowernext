@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div className="fpSplash">
       <Image src="/splash-clear-bg.png" layout="intrinsic" alt="splash" width={406} height={173} />
-      <Link href='/landing'><a className="fpBtn">Login</a></Link>
+      <Link href='/landing'><a className="fpBtn" name="login">Login</a></Link>
       <p className="fpVersion"><small>version {pjson.version}</small></p>
     </div>
   );
