@@ -6,10 +6,10 @@ const Navbar = () => {
     <div>
       <nav>
         <div className="fpLogo">
-        <Link href="/landing">
-          <a><Image src="/logo-clear-bg.png" alt="" width={50} height={50} /></a>
-        </Link>&nbsp;&nbsp;
-        <h1>Mad River Floral Collective</h1>
+          <Link href="/landing">
+            <a><Image src="/logo-clear-bg-50x50.png" alt="" width={50} height={50} /></a>
+          </Link>&nbsp;&nbsp;
+          <h1>Mad River Floral Collective</h1>
         </div>
       </nav>
       <nav>

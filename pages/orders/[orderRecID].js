@@ -3,7 +3,7 @@ import Link from "next/link";
 import OrderHeader from "../../comps/OrderHeader.js"
 import OrderSummary from "../../comps/OrderSummary.js"
 import React, { useState, useEffect, useRef} from "react";
-import {getOrder,setStateFromStatus, submitOrder, isContentLocked,getOrderSummary,getOrderStatusDesc} from "../../utils/OrderUtils.js"
+import {getOrder,setStateFromStatus, isContentLocked,getOrderSummary,getOrderStatusDesc} from "../../utils/OrderUtils.js"
 
 /////////////////////////////////////////////////////////////////////////////////
 // getServerSideProps
@@ -115,9 +115,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
   /////////////////////////////////////////////////////////////////////////////////
   return (
     <div>
-      <h3 className="fpFormTitle">{order["Client/Job"]}</h3>
-      <p>{getOrderStatusDesc(order).status} ・ {getOrderSummary(order).what} </p>
-        
+
       <form>
         <div className="fpPageNav fpNavAtTop">
           <Link href="/orders"><a className="fpBtn">Back</a></Link>

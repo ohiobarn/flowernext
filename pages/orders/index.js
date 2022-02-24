@@ -3,7 +3,6 @@ import React, { useState, useEffect} from "react";
 import Link from "next/link"
 import OrderList from "../../comps/OrderList";
 import {createOrder, getOrders} from "../../utils/OrderUtils.js"
-import {submitOrder} from "../../utils/OrderUtils.js"
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -19,6 +18,7 @@ export async function getServerSideProps( context ) {
   var orders = await getOrders(user.email)
   var myProps = {};
   myProps.orders = orders
+  myProps.user = user;
 
 
   // Pass orders to the page via props
@@ -29,8 +29,23 @@ export async function getServerSideProps( context ) {
 //          withPageAuthRequired
 ////////////////////////////////////////////////////////////////////////////
 export default withPageAuthRequired(function Orders({ myProps }) {
+  var user = myProps.user;
 
   const [orders, setOrders] = useState(myProps.orders)
+  const [isAdmin, setIsAdmin] = useState(false);
+
+
+  useEffect(() => {
+    //
+    // Role
+    //
+    if (user["https://app.madriverfloralcollective.com/role"] === "Admin" ){
+      setIsAdmin(true)
+    } 
+    else {
+      setIsAdmin(false)
+    }
+  });
 
   return (
     <div>
@@ -43,7 +58,7 @@ export default withPageAuthRequired(function Orders({ myProps }) {
         <button className="fpBtn" type="button" onClick={createOrder}>New Order</button>
       </div>
 
-      <OrderList orders={orders} showActiveOrders="yes" submitOrder={submitOrder} /> 
+      <OrderList orders={orders} showActiveOrders="yes" isAdmin={isAdmin} /> 
 
     </div>
   );

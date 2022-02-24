@@ -2,7 +2,7 @@ import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import React, { useState} from "react";
 import Link from "next/link"
 import OrderActivity from "../../../comps/OrderActivity.js"
-import {getOrder} from "../../../utils/OrderUtils.js"
+import {getOrder,getOrderStatusDesc,getOrderSummary} from "../../../utils/OrderUtils.js"
 
 
 export async function getServerSideProps(context) {
@@ -32,9 +32,12 @@ export default withPageAuthRequired(function Chat({ myProps }) {
 
   return (
     <div>
-      <Link href={'/orders/' + order.RecID} key={order.RecID}>
-        <a><h3 className="fpFormTitle">{order["Client/Job"]} <span>Order#: {order.OrderNo} - {order.Status}</span></h3></a>
-      </Link>
+      <div className="fpHeader">
+        <p><small>Due: {order["Due Date"]}</small></p>
+        <h2>{order["Client/Job"]}</h2>
+        <br />
+        <p>{getOrderStatusDesc(order).status} ・ {getOrderSummary(order).what} ・ {getOrderSummary(order).window} ・ {getOrderSummary(order).items} ・ {getOrderSummary(order).total}</p>
+      </div>
       <OrderActivity order={order} setOrder={setOrder} />
     </div>
   );

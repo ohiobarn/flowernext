@@ -2,7 +2,7 @@ import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import React, { useState, useEffect, useRef} from "react";
 import Link from "next/link"
 import OrderItems from "../../../comps/OrderItems.js"
-import {getOrder,setStateFromStatus, isContentLocked,getOrderSummary,updateOrderDetailOnBunchesChange} from "../../../utils/OrderUtils.js"
+import {getOrder,setStateFromStatus, isContentLocked,getOrderSummary,updateOrderDetailOnBunchesChange,getOrderStatusDesc} from "../../../utils/OrderUtils.js"
 
 /////////////////////////////////////////////////////////////////////////////////
 //    getServerSideProps
@@ -86,15 +86,14 @@ export default withPageAuthRequired(function Chat({ myProps }) {
 
   return (
     <div>
-      <Link href={'/orders/' + order.RecID} key={order.RecID}>
-        <a><h3 className="fpFormTitle">{order["Client/Job"]} </h3></a>
-      </Link>
-      <p>
-        {getOrderSummary(order).what} ・ {getOrderSummary(order).items} ・ {getOrderSummary(order).total}
-      </p>
-      <p>
-        Add items to your order, then adjust the <b>Bunches</b> on each.
-      </p>
+      <div className="fpHeader">
+        <p><small>Due: {order["Due Date"]}</small></p>
+        <h2>{order["Client/Job"]}</h2>
+        <br />
+        <p>{getOrderStatusDesc(order).status} ・ {getOrderSummary(order).what} ・ {getOrderSummary(order).window} ・ {getOrderSummary(order).items} ・ {getOrderSummary(order).total}</p>
+        <p>Add items to your order, then adjust the <b>Bunches</b> on each.</p>
+      </div>
+      
 
       <div className="fpPageNav fpNavAtTop">
         <Link href="/orders"><a className="fpBtn">Done</a></Link>

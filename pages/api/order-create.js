@@ -34,7 +34,8 @@ async function createOrder(account,data) {
       {
         "fields": { 
           "Account": account,
-          "Status": "Draft"
+          "Status": "Draft",
+          "Delivery Option": "Pickup"
         }
       }
     ]

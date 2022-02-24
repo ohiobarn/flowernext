@@ -2,35 +2,31 @@
   Global
 */
 
-/* Extra-light 200 -  font-family: 'Montserrat', sans-serif; */
-/* @import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap);  */
-
-/* Roboto Serif - font-family: 'Roboto Serif', sans-serif; */
-/* @import url('https://fonts.googleapis.com/css2?family=Roboto+Serif&display=swap'); */
-
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200&family=Poppins:wght@300&family=Roboto&family=Roboto+Serif&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Poppins:wght@300&family=Roboto&family=Roboto+Serif&display=swap');
 
 * {
   /* font-size: 100%; */
   /* font-family: Arial; */
-  /* font-family: 'Montserrat', sans-serif; */
+  font-family: 'Montserrat', sans-serif;
   /* font-family: 'Roboto Serif', sans-serif; */
-  font-family: 'Roboto', sans-serif;
-  
+  /* font-family: 'Roboto', sans-serif; */
+  /* font-family: 'Poppins', sans-serif; */
+
+
  }
 
 body {
   background: #F3E5F5;
   color: #333;
   /* font-family: "Nunito"; */
-  font-family: Arial, Helvetica, sans-serif;
+  /* font-family: Arial, Helvetica, sans-serif; */
 }
 
 a {
   color: #333;
   text-decoration: none;
 }
+
 
 .fpA {
   text-decoration-style: solid;
@@ -101,6 +97,12 @@ nav {
 }
 nav a {
   margin-left: 12px;
+}
+nav h1 {
+  margin-top: 1px;
+  margin-bottom: 1px;
+  margin-left: 1px;
+  margin-right: 1px;
 }
 nav .fpLogo {
   margin-right: auto;
@@ -250,11 +252,11 @@ Order
 
 /* card */
 .fpPageNav {
-  max-width: 95%;
+  /* max-width: 95%; */
   margin: 3px;
   padding: 5px;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
   gap: 30px;
@@ -445,4 +447,30 @@ bar
   padding: 12px 20px 12px 40px; /* Add some padding */
   border: 1px solid #ddd; /* Add a grey border */
   /* margin-bottom: 12px; Add some space below the input */
+}
+
+/* 
+header secton
+*/
+
+.fpHeader {
+  margin-left: 10px;
+}
+
+.fpHeader p {
+  margin-top: 1px;
+  margin-bottom: 1px;
+  margin-left: 1px;
+  margin-right: 2px;
+  margin-block-start: 1px;
+  margin-block-end: 1px;
+  margin-inline-start: 1px;
+  margin-inline-end: 1px;
+}
+
+.fpHeader h2 {
+  margin-top: 1px;
+  margin-bottom: 1px;
+  margin-left: 1px;
+  margin-right: 1px;
 }

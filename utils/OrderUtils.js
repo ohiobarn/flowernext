@@ -53,7 +53,7 @@ export function getOrderSummary(order){
 ////////////////////////////////////////////////////////////////////////////
 //         getPickupWindow
 ////////////////////////////////////////////////////////////////////////////
-export function findPickupWindow(dateString){
+export function getPickupWindowDesc(dateString, deliveryOption){
   
   // Examples:
   // When dueDate is before Wednesday:
@@ -66,13 +66,17 @@ export function findPickupWindow(dateString){
   //  puStart: Wed Feb 16 2022
   //  puEnd:   Thu Feb 17 2022 
 
+  let puDesc = "";
   const puWindow = {};
 
   // If no dateString then return empty window
   if (!dateString || dateString === ""){
-    puWindow.start = "";
-    puWindow.end = "";
-    return puWindow;
+    return puDesc;
+  }
+
+  // Default deliveryOption to pickup if it does not exist
+  if ( !deliveryOption || deliveryOption === "") {
+    deliveryOption = "Pickup"
   }
 
   // dateString must be a string in this format YYYY-MM-DD
@@ -89,15 +93,14 @@ export function findPickupWindow(dateString){
   // WARN - puStart is created with dueDate and puEnd is created with puStart! 
   //        if you dont do this then only works when the date that you are adding
   //        days to happens to have the current year and month.
-  //      see: https://stackoverflow.com/questions/563406/how-to-add-days-to-date
+  //        see: https://stackoverflow.com/questions/563406/how-to-add-days-to-date
   
 
   // Find the last Wednesday 
   // If dueDate is a Wednesday then that is the start date
   const puStart = new Date(dueDate); 
   puStart.setDate(dueDate.getDate() - ((dueDate.getDay() + 4) % 7));
-  // console.log("[finPickupWindow] [puStart] dueDate.getDate(): " + dueDate.getDate())
-  console.log("[finPickupWindow] [puStart] ((dueDate.getDay() + 4) % 7): " + ((dueDate.getDay() + 4) % 7))
+  // console.log("[finPickupWindow] [puStart] ((dueDate.getDay() + 4) % 7): " + ((dueDate.getDay() + 4) % 7))
 
   // Pickup window of Wed thru Thru is just one day apart
   const puEnd = new Date(puStart);   //Pickup End
@@ -106,6 +109,24 @@ export function findPickupWindow(dateString){
   // Return a window start and end date as strings in EST timezone
   puWindow.start = puStart.toLocaleDateString('en-US', {timeZone: 'America/New_York'});
   puWindow.end = puEnd.toLocaleDateString('en-US', {timeZone: 'America/New_York'});
+  puWindow.due = dueDate.toLocaleDateString('en-US', {timeZone: 'America/New_York'});
+
+  let isInWindow = false
+  if ( dueDate >= puStart && dueDate <= puEnd){
+    isInWindow = true;
+  } 
+
+  //
+  // Format pickup window desc
+  //
+  puDesc = `Pickup: (${puWindow.start} - ${puWindow.end})`;
+  if (deliveryOption === "Delivery") {
+    if (isInWindow) {
+      puDesc = `Delivery on: ${puWindow.due}`;
+    } else {
+      puDesc = `Delivery: (${puWindow.start} - ${puWindow.end})`;
+    }
+  }
 
   // console.log("[finPickupWindow] dateString: " + dateString)
   // console.log("[finPickupWindow] dueDate: " + dueDate)
@@ -113,8 +134,7 @@ export function findPickupWindow(dateString){
   // console.log("[finPickupWindow] puEnd: " + puEnd)
   // console.log(puWindow)
 
-
-  return puWindow
+  return puDesc
 
 }
 
@@ -157,7 +177,7 @@ export async function getOrders(account) {
   const records = await base("Order").select({
     pageSize: 100, 
     view: "fp-grid", 
-    sort: [{field: "Client/Job", direction: "asc"}],
+    sort: [{field: "Due Date", direction: "asc"}],
     filterByFormula: `OR(Account = "${account}", {Managed Account} = "${account}")`,
   }).all();
 
@@ -283,7 +303,7 @@ export function getOrderStatusDesc(order) {
         break;
       case "Ready":
         statusObj.status = "💐 Ready";
-        statusObj.desc = "Yoru order is ready for " + order["Delivery Option"];
+        statusObj.desc = "Your order is ready for " + order["Delivery Option"];
         break;
       case "Delivered":
         statusObj.status = "🚐 Delivered";
@@ -435,7 +455,7 @@ export async function submitOrder(order) {
 /////////////////////////////////////////////////////////////////////////////////
 // Send Notes
 /////////////////////////////////////////////////////////////////////////////////
-export async function sendNotes(order,chatFrom,setOrder) {
+export async function sendNotes(order,chatFrom,setOrder,isAdmin) {
 
   const form = chatFrom.current
 
