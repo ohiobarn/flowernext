@@ -47,13 +47,14 @@ export function getOrderSummary(order){
     summary.items = "";
   }
 
+
   return summary
 
 }
 ////////////////////////////////////////////////////////////////////////////
 //         getPickupWindow
 ////////////////////////////////////////////////////////////////////////////
-export function getPickupWindowDesc(dateString, deliveryOption){
+export function getPickupWindow(dateString, deliveryOption){
   
   // Examples:
   // When dueDate is before Wednesday:
@@ -68,10 +69,11 @@ export function getPickupWindowDesc(dateString, deliveryOption){
 
   let puDesc = "";
   const puWindow = {};
+  puWindow.desc = puDesc;
 
   // If no dateString then return empty window
   if (!dateString || dateString === ""){
-    return puDesc;
+    return puWindow;
   }
 
   // Default deliveryOption to pickup if it does not exist
@@ -127,6 +129,7 @@ export function getPickupWindowDesc(dateString, deliveryOption){
       puDesc = `Delivery: (${puWindow.start} - ${puWindow.end})`;
     }
   }
+  puWindow.desc = puDesc;
 
   // console.log("[finPickupWindow] dateString: " + dateString)
   // console.log("[finPickupWindow] dueDate: " + dueDate)
@@ -134,7 +137,7 @@ export function getPickupWindowDesc(dateString, deliveryOption){
   // console.log("[finPickupWindow] puEnd: " + puEnd)
   // console.log(puWindow)
 
-  return puDesc
+  return puWindow
 
 }
 

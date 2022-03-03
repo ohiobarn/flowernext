@@ -1,4 +1,4 @@
-import {getPickupWindowDesc, isDateFarEnoughInAdvance} from "../utils/OrderUtils.js"
+import {getPickupWindow, isDateFarEnoughInAdvance} from "../utils/OrderUtils.js"
 import React, { useState} from "react";
 
 const OrderHeader = ({order, contentLock, isAdmin, setOrder}) => {
@@ -8,7 +8,7 @@ const OrderHeader = ({order, contentLock, isAdmin, setOrder}) => {
   const contentLockStyle = {
     opacity: contentLock ? ".65" : "1"
   }
-  const [pickupWindow, setPickupWindow] = useState(getPickupWindowDesc(order["Due Date"],order["Delivery Option"]));
+  const [pickupWindow, setPickupWindow] = useState(getPickupWindow(order["Due Date"],order["Delivery Option"]));
 
 
   /////////////////////////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ const OrderHeader = ({order, contentLock, isAdmin, setOrder}) => {
 
   function handleDueDateChange(event) {
 
-    setPickupWindow(getPickupWindowDesc(event.target.value, event.target.form.deliveryOption.value));
+    setPickupWindow(getPickupWindow(event.target.value, event.target.form.deliveryOption.value));
   }
 
   return ( 
@@ -120,7 +120,7 @@ const OrderHeader = ({order, contentLock, isAdmin, setOrder}) => {
             <label htmlFor="dueDate">Due Date</label>
             <span>
             <input id="dueDate" name="dueDate" type="date" defaultValue={order["Due Date"]} disabled={contentLock} onChange={handleDueDateChange} required />
-            {pickupWindow}
+            {pickupWindow.desc}
             </span>
           </div>
 

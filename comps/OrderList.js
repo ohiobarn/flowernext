@@ -1,5 +1,5 @@
 import Link from "next/link"
-import {submitOrder, isContentLocked,getOrderStatusDesc,isOrderActive,getPickupWindowDesc,getOrderSummary} from "../utils/OrderUtils.js"
+import {submitOrder, isContentLocked,getOrderStatusDesc,isOrderActive,getPickupWindow,getOrderSummary} from "../utils/OrderUtils.js"
 
 
 const OrderList = ({orders, showActiveOrders, isAdmin}) => {
