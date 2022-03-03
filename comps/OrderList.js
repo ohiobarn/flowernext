@@ -29,7 +29,8 @@ const OrderList = ({orders, showActiveOrders, isAdmin}) => {
             <hr></hr>
           </div>
           <div className="fpActions">
-            { !isContentLocked(order.Status) && <Link href={'/orders/items/' + order.RecID} key={"orderItemsLink"}><a className="fpBtn">Edit Items</a></Link>}
+            { !isContentLocked(order.Status) && <Link href={'/orders/items/' + order.RecID} key={"orderItemsLink"}><a className="fpBtn">Edit Order Items</a></Link>}
+            {  isContentLocked(order.Status) && <Link href={'/orders/items/' + order.RecID} key={"orderItemsLink"}><a className="fpBtn">View Order Items</a></Link>}
             <Link href={'/orders/chat/' + order.RecID} key={"orderChatLink"}><a className="fpBtn">Chat with MRFC</a></Link>
             <Link href={'/orders/activity/' + order.RecID} key={"orderActivityLink"}><a className="fpBtn">View Activity Log</a></Link>
             { !isContentLocked(order.Status) && <a className="fpBtn" onClick={ () => submitOrder(order) }>Submit Draft</a> }
