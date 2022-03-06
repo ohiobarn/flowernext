@@ -48,7 +48,7 @@ export default function Orders({ myProps }) {
     else {
       setIsAdmin(false)
     }
-  });
+  }, [user]);
 
   return (
     <div>
