@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Home() {
 
-  var pjson = require('../package.json');
+  let pjson = require('../package.json');
 
   return (
     <div className="fpSplash">

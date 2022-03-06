@@ -12,7 +12,6 @@
   /* font-family: 'Roboto', sans-serif; */
   /* font-family: 'Poppins', sans-serif; */
 
-
  }
 
 body {
@@ -52,19 +51,6 @@ a {
   text-align: center;
 }
 
-/* .fpBtn {
-  display: block;
-  width: 100px;
-  padding: 8px 0;
-  margin: 10px auto;
-  background: #CE93D8;
-  border-radius: 4px;
-  color: white;
-  text-align: center;
-  border: none;
-  color:black;
-  font-size: 14px;
-} */
 
 .fpBtn {
   text-decoration: none;
@@ -74,7 +60,7 @@ a {
   border-radius: 30px; /* rounded corners */
   border: none;
   margin: 3px;
-  font-size: small;
+  font-size: medium;
   
 }
 
@@ -307,7 +293,8 @@ Order List
 
 .fpActions {
   display: flex;
-  flex-direction: row;
+  flex-direction:row;
+  flex-wrap: wrap;
 }
 /* 
 

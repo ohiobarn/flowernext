@@ -5,28 +5,31 @@ import OrderActivity from "../../../comps/OrderActivity.js"
 import {getOrder,getOrderStatusDesc,getOrderSummary} from "../../../utils/OrderUtils.js"
 
 
-export async function getServerSideProps(context) {
-  // Get user from cookie
-  var res = {}; // Don't use actual res object, it cause spam in logs
-  const { user } = getSession(context.req, res);
+export const getServerSideProps = withPageAuthRequired({
+  resizeTo: "/",
+  async getServerSideProps( context ) {
+    // Get user from cookie
+    var res = {}; // Don't use actual res object, it cause spam in logs
+    const { user } = getSession(context.req, res);
 
-  // Get RecID
-  const orderRecID = context.query.orderRecID;
+    // Get RecID
+    const orderRecID = context.query.orderRecID;
 
-  // Fetch data from AirTable
-  const order = await getOrder(user.email, orderRecID);
+    // Fetch data from AirTable
+    const order = await getOrder(user.email, orderRecID);
 
-  var myProps = {}
-  myProps.order = order;
-  myProps.user = user;
+    var myProps = {}
+    myProps.order = order;
+    myProps.user = user;
 
-  // console.log(myProps)
+    // console.log(myProps)
 
-  // Pass order to the page via props
-  return { props: { myProps } };
-}
+    // Pass order to the page via props
+    return { props: { myProps } };
+  }
+});
 
-export default withPageAuthRequired(function Chat({ myProps }) {
+export default function Chat({ myProps }) {
 
   const [order, setOrder] = useState(myProps.order);
 
@@ -42,4 +45,4 @@ export default withPageAuthRequired(function Chat({ myProps }) {
     </div>
   );
 
-});
+};

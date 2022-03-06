@@ -4,25 +4,28 @@ import { useState } from "react"
 import Image from "next/image"
 
 // This gets called on every request
-export async function getServerSideProps( context ) {
+export const getServerSideProps = withPageAuthRequired({
+  resizeTo: "/",
+  async getServerSideProps( context ) {
 
-  // Get RecID
-  const orderRecID = context.query.orderRecID
-  
-  // Fetch data from AirTable
-  const varieties = await getVarieties()
+    // Get RecID
+    const orderRecID = context.query.orderRecID
+    
+    // Fetch data from AirTable
+    const varieties = await getVarieties()
 
-  const myprops  = {
-    order: { RecID: orderRecID },
-    varieties: varieties
+    const myprops  = {
+      order: { RecID: orderRecID },
+      varieties: varieties
+    }
+
+    // Pass props to the page via props
+    return { props: { myprops } };
   }
-
-  // Pass props to the page via props
-  return { props: { myprops } };
-}
+});
 
 
-export default withPageAuthRequired(function Varieties({ myprops }) {
+export default function Varieties({ myprops }) {
 
   const [showMe, setShowMe] = useState(false);
   function toggleCard(){
@@ -212,7 +215,7 @@ export default withPageAuthRequired(function Varieties({ myprops }) {
       </form>
     </div>
   );
-});
+};
 
 ////////////////////////////////////////////////////////////////////////////
 //          Get varieties

@@ -7,26 +7,27 @@ import {getOrders} from "../../utils/OrderUtils.js"
 ////////////////////////////////////////////////////////////////////////////
 // This gets called on every request
 ////////////////////////////////////////////////////////////////////////////
-export async function getServerSideProps( context ) {
+export const getServerSideProps = withPageAuthRequired({
+  resizeTo: "/",
+  async getServerSideProps( context ) {
 
-  // Get user from cookie
-  var res = {}; // Don't use actual res object, it cause spam in logs
-  const { user } = getSession(context.req,res)
+    // Get user from cookie
+    var res = {}; // Don't use actual res object, it cause spam in logs
+    const { user } = getSession(context.req,res)
 
-  // Fetch data from AirTable
-  var orders = await getOrders(user.email)
+    // Fetch data from AirTable
+    var orders = await getOrders(user.email)
 
-  // Pass orders to the page via props
-  return { props: {orders} };
-}
+    // Pass orders to the page via props
+    return { props: {orders} };
+  }
+});
 
 
 ////////////////////////////////////////////////////////////////////////////
 //          withPageAuthRequired
 ////////////////////////////////////////////////////////////////////////////
-export default withPageAuthRequired(function Orders({ orders }) {
-
-
+export default function Orders({ orders }) {
   return (
     <div>
       <h1>Order History</h1>
@@ -39,4 +40,4 @@ export default withPageAuthRequired(function Orders({ orders }) {
 
     </div>
   );
-});
+};

@@ -8,28 +8,31 @@ import {createOrder, getOrders} from "../../utils/OrderUtils.js"
 ////////////////////////////////////////////////////////////////////////////
 // This gets called on every request
 ////////////////////////////////////////////////////////////////////////////
-export async function getServerSideProps( context ) {
+export const getServerSideProps = withPageAuthRequired({
+  resizeTo: "/",
+  async getServerSideProps( context ) {
 
-  // Get user from cookie
-  var res = {}; // Don't use actual res object, it cause spam in logs
-  const { user } = getSession(context.req,res)
+    // Get user from cookie
+    var res = {}; // Don't use actual res object, it cause spam in logs
+    const { user } = getSession(context.req,res)
 
-  // Fetch data from AirTable
-  var orders = await getOrders(user.email)
-  var myProps = {};
-  myProps.orders = orders
-  myProps.user = user;
+    // Fetch data from AirTable
+    var orders = await getOrders(user.email)
+    var myProps = {};
+    myProps.orders = orders
+    myProps.user = user;
 
 
-  // Pass orders to the page via props
-  return { props: { myProps } };
-}
+    // Pass orders to the page via props
+    return { props: { myProps } };
+  }
+});
 
 ////////////////////////////////////////////////////////////////////////////
-//          withPageAuthRequired
+//   Default
 ////////////////////////////////////////////////////////////////////////////
-export default withPageAuthRequired(function Orders({ myProps }) {
-  var user = myProps.user;
+export default function Orders({ myProps }) {
+  let user = myProps.user;
 
   const [orders, setOrders] = useState(myProps.orders)
   const [isAdmin, setIsAdmin] = useState(false);
@@ -62,4 +65,4 @@ export default withPageAuthRequired(function Orders({ myProps }) {
 
     </div>
   );
-});
+};

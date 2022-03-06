@@ -8,26 +8,29 @@ import {getOrder,setStateFromStatus, isContentLocked,getOrderSummary,getOrderSta
 /////////////////////////////////////////////////////////////////////////////////
 // getServerSideProps
 /////////////////////////////////////////////////////////////////////////////////
-export async function getServerSideProps(context) {
-  // Get user from cookie
-  var res = {}; // Don't use actual res object, it cause spam in logs
-  const { user } = getSession(context.req, res);
+export const getServerSideProps = withPageAuthRequired({
+  resizeTo: "/",
+  async getServerSideProps( context ) {
+    // Get user from cookie
+    var res = {}; // Don't use actual res object, it cause spam in logs
+    const { user } = getSession(context.req, res);
 
-  // Get RecID
-  const orderRecID = context.query.orderRecID;
+    // Get RecID
+    const orderRecID = context.query.orderRecID;
 
-  // Fetch data from AirTable
-  const order = await getOrder(user.email, orderRecID);
+    // Fetch data from AirTable
+    const order = await getOrder(user.email, orderRecID);
 
-  var myProps = {}
-  myProps.order = order;
-  myProps.user = user;
+    var myProps = {}
+    myProps.order = order;
+    myProps.user = user;
 
-  // console.log(myProps)
+    // console.log(myProps)
 
-  // Pass order to the page via props
-  return { props: { myProps } };
-}
+    // Pass order to the page via props
+    return { props: { myProps } };
+  }
+});
 
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +74,7 @@ const deleteOrder = async (pOrder) => {
 ////////////////////////////////////////////////////////////////////////////
 // Default
 ////////////////////////////////////////////////////////////////////////////
-export default withPageAuthRequired(function Order({ myProps }) {
+export default function Order({ myProps }) {
   // var order = myProps.order;
   var user = myProps.user;
 
@@ -139,6 +142,6 @@ export default withPageAuthRequired(function Order({ myProps }) {
 
     </div>
   );
-});
+};
 
 
