@@ -77,12 +77,7 @@ export default withPageAuthRequired(function Chat({ myProps }) {
   // DEVTODO is this needed?
   // Similar to componentDidMount and componentDidUpdate:
   // useEffect(() => {
-
-
   // }, [order.Status, order.items]);
-
-  var orderTotal = order.items.map(item => item.Extended).reduce((accum,curr) => accum+curr,0)
-
 
   return (
     <div>

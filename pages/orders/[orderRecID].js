@@ -87,7 +87,7 @@ export default withPageAuthRequired(function Order({ myProps }) {
     //
     // Order Total
     //
-    var orderTotal = order.items.map(item => item.Extended).reduce((accum,curr) => accum+curr,0)
+    let orderTotal = order.items.map(item => item.Extended).reduce((accum,curr) => accum+curr,0)
     setOrderTotal(orderTotal)
 
 

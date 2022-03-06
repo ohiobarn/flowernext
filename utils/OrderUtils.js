@@ -12,7 +12,7 @@
 export function getOrderSummary(order){
   
 
-  var account = order.Account;
+  let account = order.Account;
   if (order["Managed Account"]) {
     account = order["Managed Account"];
   }
@@ -34,15 +34,18 @@ export function getOrderSummary(order){
     summary.window = "";
   }
 
-
-  let orderTotal = 0;
-  let itemCount = 0;
+  
   if (order.items) {
-    orderTotal = order.items.map(item => item.Extended).reduce((accum,curr) => accum+curr,0);
-    itemCount = order.items.length;
-    summary.total = `Total \$${orderTotal}`;
+
+    let dollarUS = Intl.NumberFormat("en-US", {style: "currency", currency: "USD"});
+    let orderTotal = order.items.map(item => item.Extended).reduce((accum,curr) => accum+curr,0);
+    summary.total = `Total ${dollarUS.format(orderTotal)}`;
+
+    let itemCount = order.items.length;
     summary.items = `${itemCount} items`
+
   } else {
+
     summary.total = "";
     summary.items = "";
   }
@@ -380,21 +383,18 @@ export function isOrderActive(order) {
     };
 
     // Update extended
-    var bunches = Number(event.target.value);
-    var pricePerBunch = Number(item["Price per Bunch"]);
-    var extended = bunches * pricePerBunch;
+    let bunches = Number(event.target.value);
+    let pricePerBunch = Number(item["Price per Bunch"]);
+    let extended = bunches * pricePerBunch;
     
     // event.target.form.extended.value = extended;  DEVTODO need to useState
 
     // Update order with extended
-    var index = order.items.findIndex( o => o.RecID === item.RecID)
+    let index = order.items.findIndex( o => o.RecID === item.RecID)
     order.items[index].Extended = extended
 
-    // Update order total
-    var total = order.items.map(o => Number(o.Extended)).reduce((accum,curr) => accum+curr)
-    
     // Update page state
-    var newOrder = {...order}
+    let newOrder = {...order}
     setOrder(newOrder);
     
     // console.log("The following record will post to the order-detail-update API")
