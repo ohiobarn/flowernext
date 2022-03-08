@@ -17,7 +17,7 @@ const OrderItems = ({order, updateOrderDetailOnBunchesChange, deleteOrderItem, s
         return (
           <form key={item.RecID} style={contentLockStyle}>
             <div className="fpCard fpCardTall">
-              <Image src={item.Image[0].thumbnails.large.url} layout="intrinsic" width={200} height={200} alt="thmbnail"/>
+              { Array.isArray(item.Image) && item.length && <Image src={item.Image[0].thumbnails.large.url} layout="intrinsic" width={200} height={200} alt="thmbnail"/> }
               <div>
                 <div>
                   <hr />
