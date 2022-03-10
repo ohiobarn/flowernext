@@ -12,7 +12,7 @@ export const getServerSideProps = withPageAuthRequired({
   resizeTo: "/",
   async getServerSideProps( context ) {
     // Get user from cookie
-    var res = {}; // Don't use actual res object, it cause spam in logs
+    let res = {}; // Don't use actual res object, it cause spam in logs
     const { user } = getSession(context.req, res);
 
     // Get RecID
@@ -21,7 +21,7 @@ export const getServerSideProps = withPageAuthRequired({
     // Fetch data from AirTable
     const order = await getOrder(user.email, orderRecID);
 
-    var myProps = {}
+    let myProps = {}
     myProps.order = order;
     myProps.user = user;
 
@@ -76,7 +76,7 @@ const deleteOrder = async (pOrder) => {
 ////////////////////////////////////////////////////////////////////////////
 export default function Order({ myProps }) {
   // var order = myProps.order;
-  var user = myProps.user;
+  let user = myProps.user;
 
 
   const [order, setOrder] = useState(myProps.order)

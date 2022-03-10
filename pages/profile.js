@@ -9,16 +9,16 @@ export default withPageAuthRequired(function Profile({ user }) {
 
       <div>
         <Image src={user.picture} alt={user.name} width={200} height={200}/>
-        <h2>{user.name}</h2>
-        <p>{user.email}</p>
-        <p>Role: {user["https://app.madriverfloralcollective.com/role"]}</p>
-      
+        <div className="fpBasicPage">
+          <h2>{user.name}</h2>
+          <p>{user.email}</p>
+          <p>Role: {user["https://app.madriverfloralcollective.com/role"]}</p>
         
-        <hr></hr>
-        <div>
-          <Link href="/orders/history"><a className='fpA'>Order History</a></Link>
-          <br></br>
-          <Link href="/api/auth/logout?federated"><a className='fpA'>Logout</a></Link>
+          
+          <hr></hr>
+          <div>
+            <Link href="/api/auth/logout?federated"><a className='fpA'>Logout</a></Link>
+          </div>
         </div>
       </div>
 
