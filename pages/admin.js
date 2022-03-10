@@ -53,6 +53,7 @@ export default function Admin({ myProps }) {
         <p><Link href="/orders/history"><a className='fpA'>Order History</a></Link></p>
         { isAdmin &&
         <p><Link href="https://airtable.com/shrtDX6ufhKlBEOEK"><a className='fpA'>New variety form</a></Link></p>
+        <p><Link href="https://airtable.com/shrsQV51NX4AvA1XV"><a className='fpA'>Order Report</a></Link></p>
         }
       </div>
     </div>
