@@ -17,8 +17,7 @@ const Navbar = () => {
       <Link href="/catalog">Catalog</Link>
       <Link href="/availabilityList">Availability</Link>
       <Link href="/orders">Orders</Link>
-      <Link href="/admin">Admin</Link>
-      <Link href="/profile">Profile</Link>
+      <Link href="/account">Account</Link>
       <Link href="https://ohiobarn.github.io/flowernext/#order/"><a target="_blank">Help</a></Link>
     </nav>
     </div>

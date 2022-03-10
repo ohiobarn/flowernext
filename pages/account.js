@@ -1,6 +1,7 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import React, { useState, useEffect} from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 /////////////////////////////////////////////////////////////////////////////////
 // getServerSideProps
@@ -46,15 +47,26 @@ export default function Admin({ myProps }) {
   // return
   /////////////////////////////////////////////////////////////////////////////////
   return (
-    <div>
-      <h3>Administration</h3>
 
+    <div>
+      <Image src={user.picture} alt={user.name} width={200} height={200}/>
       <div className="fpBasicPage">
-        <p><Link href="/orders/history"><a className='fpA'>Order History</a></Link></p>
-        { isAdmin &&
-        <p><Link href="https://airtable.com/shrtDX6ufhKlBEOEK"><a className='fpA'>New variety form</a></Link></p>
-        <p><Link href="https://airtable.com/shrsQV51NX4AvA1XV"><a className='fpA'>Order Report</a></Link></p>
-        }
+        <h2>{user.name}</h2>
+        <p>{user.email}</p>
+        <p>Role: {user["https://app.madriverfloralcollective.com/role"]}</p>
+
+        <hr></hr>
+        <div>
+          <p><Link href="/orders/history"><a className='fpA'>Order History</a></Link></p>
+          { isAdmin && 
+            <>
+            <p><Link href="https://airtable.com/shrtDX6ufhKlBEOEK"><a className='fpA'>New Variety Form</a></Link></p>
+            <p><Link href="https://airtable.com/shrsQV51NX4AvA1XV"><a className='fpA'>Order Report</a></Link></p>
+            </>
+          }
+          <hr></hr>
+          <p><Link href="/api/auth/logout?federated"><a className='fpA'>Logout</a></Link></p>
+        </div>
       </div>
     </div>
   );

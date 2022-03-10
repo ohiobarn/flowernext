@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect } from 'react';
 
-export default withPageAuthRequired(function Profile({ user }) {
+export default withPageAuthRequired(function Landing({ user }) {
 
   useEffect( () => {
     setTimeout(function() {
