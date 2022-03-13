@@ -2,6 +2,7 @@ import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import Link from "next/link"
 import { useState } from "react"
 import Image from "next/image"
+import {getVarieties} from "../../utils/OrderUtils.js"
 
 // This gets called on every request
 export const getServerSideProps = withPageAuthRequired({
@@ -27,6 +28,14 @@ export const getServerSideProps = withPageAuthRequired({
 
 export default function Varieties({ myprops }) {
 
+  //
+  // Create a variety map from the arry given in props
+  ///
+  let varieties = new Map();
+  myprops.varieties.forEach(function (variety) {
+    varieties.set(variety.RecID,variety)
+  });
+
   const [showMe, setShowMe] = useState(false);
   function toggleCard(){
     setShowMe(!showMe);
@@ -44,28 +53,25 @@ export default function Varieties({ myprops }) {
     var rec = {
       varieties: []
     }
-    for (var i=0; i < event.target.variety.length; i++) {
+    for (let i=0; i < event.target.variety.length; i++) {
       if (event.target.variety[i].checked) {
+        //
+        // get variety record from Map by RecID
+        //
+        let varietyRecord = varieties.get(event.target.variety[i].value)
 
-        var skuKey = event.target.variety[i].value + ".SKU"
-        var cropKey = event.target.variety[i].value + ".Crop"
-        var varietyKey = event.target.variety[i].value + ".Variety"
-        var colorKey = event.target.variety[i].value + ".Color"
-        var ppbKey = event.target.variety[i].value + ".Price per Bunch"
-        var spbKey = event.target.variety[i].value + ".Stems per Bunch"
-        var orderRecIDKey = event.target.variety[i].value + ".OrderRecID"
-
-        var variety = {
-          ForecastRecID: event.target.variety[i].value,
-          SKU: event.target[skuKey].value,
-          Crop: event.target[cropKey].value,
-          Variety: event.target[varietyKey].value,
-          Color: event.target[colorKey].value,
-          "Price per Bunch": event.target[ppbKey].value,
-          "Stems per Bunch": event.target[spbKey].value,
-          OrderRecID: event.target[orderRecIDKey].value,
+        let variety = {
+          //ForecastRecID: event.target.variety[i].value,
+          SKU: varietyRecord.SKU,
+          Crop: varietyRecord.Crop,
+          Variety: varietyRecord.Variety,
+          Color: varietyRecord.Color,
+          "Price per Bunch": varietyRecord["Price per Bunch"],
+          "Stems per Bunch": varietyRecord["Stems per Bunch"],
+          Image: varietyRecord.Image,
+          OrderRecID: event.target.orderRecID.value,
         }
-        
+
         rec.varieties.push(variety)
 
       }
@@ -166,15 +172,7 @@ export default function Varieties({ myprops }) {
             <div className="fpCard" key={variety.RecID} 
                 title={variety.SKU + "-" + variety.Crop + "-" + variety.Variety + "-" + variety.Color}>
               <span>
-                {/* DEVTODO - remove old school hidden fields */}
                 <input type="checkbox" name="variety" value={variety.RecID} />
-                <input type="hidden" name={variety.RecID+".SKU"} value={variety.SKU} />
-                <input type="hidden" name={variety.RecID+".Crop"} value={variety.Crop} />
-                <input type="hidden" name={variety.RecID+".Variety"} value={variety.Variety} />
-                <input type="hidden" name={variety.RecID+".Color"} value={variety.Color} />
-                <input type="hidden" name={variety.RecID+".Price per Bunch"} value={variety["Price per Bunch"]} />
-                <input type="hidden" name={variety.RecID+".Stems per Bunch"} value={variety["Stems per Bunch"]} />
-                <input type="hidden" name={variety.RecID+".OrderRecID"} value={myprops.order.RecID} />
               </span>
               <span style={{display: showMe?"block":"none"}}>
                 <Image src={variety.Image[0].thumbnails.large.url} layout="intrinsic" width={200} height={200} alt="thmbnail"/>
@@ -217,29 +215,3 @@ export default function Varieties({ myprops }) {
   );
 };
 
-////////////////////////////////////////////////////////////////////////////
-//          Get varieties
-////////////////////////////////////////////////////////////////////////////
-async function getVarieties() {
-
-  const apiKey = process.env.AIRTABLE_APIKEY
-  var Airtable = require("airtable")
-  
-  Airtable.configure({endpointUrl: "https://api.airtable.com",apiKey: apiKey,});
-
-  var base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
-  const records = await base("Forecast (MRFC)").select({
-    pageSize: 100, 
-    view: "fp-grid", 
-    sort: [{field: "Crop"},{field: "Variety"}],
-  }).all();
-
-  // Put resultes into an array
-  var varieties = []; 
-  records.forEach(function (record) {
-    var variety = record.fields;
-    varieties.push(variety);
-  });
-
-  return varieties
-}

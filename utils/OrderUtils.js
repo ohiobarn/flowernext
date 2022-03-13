@@ -508,3 +508,31 @@ export async function sendNotes(order,chatFrom,setOrder,isAdmin) {
   setOrder(newOrder);
   
 };
+
+////////////////////////////////////////////////////////////////////////////
+//          Get varieties
+////////////////////////////////////////////////////////////////////////////
+export async function getVarieties() {
+
+  const apiKey = process.env.AIRTABLE_APIKEY
+  let Airtable = require("airtable")
+  
+  Airtable.configure({endpointUrl: "https://api.airtable.com",apiKey: apiKey,});
+
+  let base = Airtable.base("apptDZu7d1mrDMIFp"); //MRFC
+  const records = await base("Forecast (MRFC)").select({
+    pageSize: 100, 
+    view: "fp-grid", 
+    sort: [{field: "Crop"},{field: "Variety"}],
+  }).all();
+
+  // Put resultes into an array
+  let varieties = []; 
+  records.forEach(function (record) {
+    let variety = record.fields;
+    varieties.push(variety);
+  });
+
+
+  return varieties
+}

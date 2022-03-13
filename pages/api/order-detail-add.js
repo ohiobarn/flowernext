@@ -28,12 +28,18 @@ async function addOrderDetail(account,data) {
   
   const apiKey = process.env.AIRTABLE_APIKEY
   console.log("OrderDetail create, account [%s] varieties:", account )
-  console.log(data.varieties)
-  console.log(data.varieties.length)
+
+
 
   // Build record from form data
   var rec = []
   for (var i=0; i < data.varieties.length; i++) {
+
+  //
+  // Just need the URL, AirTable computes all the other fields
+  ///
+  let image = {}
+  image.url = data.varieties[i].Image[0].url
 
     console.log("build...")
     console.log(data.varieties[i].SKU)
@@ -48,7 +54,7 @@ async function addOrderDetail(account,data) {
         "Price per Bunch": Number(data.varieties[i]["Price per Bunch"]),
         "Stems per Bunch": Number(data.varieties[i]["Stems per Bunch"]),
         "OrderRecID": [data.varieties[i].OrderRecID],
-        "Forecast (MRFC)": [data.varieties[i].ForecastRecID]
+        "Image": [image],
       }  
     }
     console.log("push...")

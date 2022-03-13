@@ -9,8 +9,6 @@ const OrderItems = ({order, updateOrderDetailOnBunchesChange, deleteOrderItem, s
   const contentLockStyle = {
     opacity: isContentLocked(order.Status) ? ".65" : "1"
   }
-
-
   
   return ( 
     <div className="fpForm">
@@ -20,7 +18,7 @@ const OrderItems = ({order, updateOrderDetailOnBunchesChange, deleteOrderItem, s
           <form key={item.RecID} style={contentLockStyle}>
             <div className="fpCard fpCardTall">
               { 
-                Array.isArray(item.Image) && item.Image.length && 
+                Array.isArray(item.Image) && item.Image.length && item.Image[0].thumbnails && item.Image[0].thumbnails.large && item.Image[0].thumbnails.large.url &&
                 <Image src={item.Image[0].thumbnails.large.url} layout="intrinsic" width={200} height={200} alt="thmbnail"/> 
               }
               <div>
