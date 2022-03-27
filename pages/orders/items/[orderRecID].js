@@ -84,12 +84,13 @@ export default function Chat({ myProps }) {
 
   return (
     <div>
+      <h2>Manage Items</h2>
+      <p>Add items to your order, then adjust the <b>Bunches</b> on each.</p>
       <div className="fpHeader">
         <p><small>Due: {order["Due Date"]}</small></p>
         <h2>{order["Client/Job"]}</h2>
         <br />
         <p>{getOrderStatusDesc(order).status} ・ {getOrderSummary(order).what} ・ {getOrderSummary(order).window} ・ {getOrderSummary(order).items} ・ {getOrderSummary(order).total}</p>
-        <p>Add items to your order, then adjust the <b>Bunches</b> on each.</p>
       </div>
       
 

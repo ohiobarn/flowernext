@@ -55,13 +55,20 @@ a {
 .fpBtn {
   text-decoration: none;
   color:#fff;
-  background-color: #CE93D8;
+  /* background-color: #CE93D8; */
+  background-color: #7986cb;
   padding: 2px 15px;
   border-radius: 30px; /* rounded corners */
   border: none;
-  margin: 3px;
+  margin: 5px;
   font-size: medium;
-  
+  cursor: pointer;
+}
+
+.fpBtnCard {
+  color:#1a237e;
+  background-color:white;
+  text-decoration:underline;
 }
 
 

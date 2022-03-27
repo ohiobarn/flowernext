@@ -10,9 +10,18 @@ const OrderItems = ({order, updateOrderDetailOnBunchesChange, deleteOrderItem, s
     opacity: isContentLocked(order.Status) ? ".65" : "1"
   }
   
+  console.log("xxxxxxxxx")
+  console.log(order.items.length)
+
   return ( 
     <div className="fpForm">
       <div id="items">
+      { order.items.length == 0 &&
+        <div>
+          <center><h2>No items found on this order</h2></center>
+          <center>Click the <i>Add Items</i> button above</center>
+        </div>
+      }
       {order.items.map((item) => { 
         return (
           <form key={item.RecID} style={contentLockStyle}>

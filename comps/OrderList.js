@@ -29,11 +29,11 @@ const OrderList = ({orders, showActiveOrders, isAdmin}) => {
             <hr></hr>
           </div>
           <div className="fpActions">
-            { !isContentLocked(order.Status) && <Link href={'/orders/items/' + order.RecID} key={"orderItemsLink"}><a className="fpBtn">Edit Order Items</a></Link>}
-            {  isContentLocked(order.Status) && <Link href={'/orders/items/' + order.RecID} key={"orderItemsLink"}><a className="fpBtn">View Order Items</a></Link>}
-            <Link href={'/orders/chat/' + order.RecID} key={"orderChatLink"}><a className="fpBtn">Chat with MRFC</a></Link>
-            <Link href={'/orders/activity/' + order.RecID} key={"orderActivityLink"}><a className="fpBtn">View Activity Log</a></Link>
-            { !isContentLocked(order.Status) && <a className="fpBtn" onClick={ () => submitOrder(order) }>Submit Draft</a> }
+            { !isContentLocked(order.Status) && <Link href={'/orders/items/' + order.RecID} key={"orderItemsLink"}><a className="fpBtn fpBtnCard">Manage Items</a></Link>}
+            {  isContentLocked(order.Status) && <Link href={'/orders/items/' + order.RecID} key={"orderItemsLink"}><a className="fpBtn fpBtnCard">View Items</a></Link>}
+            <Link href={'/orders/chat/' + order.RecID} key={"orderChatLink"}><a className="fpBtn fpBtnCard">Chat with MRFC</a></Link>
+            <Link href={'/orders/activity/' + order.RecID} key={"orderActivityLink"}><a className="fpBtn fpBtnCard">View Activity Log</a></Link>
+            { !isContentLocked(order.Status) && <a className="fpBtn fpBtnCard" onClick={ () => submitOrder(order) }>Submit Draft</a> }
           </div>
         </div>
       ))}
