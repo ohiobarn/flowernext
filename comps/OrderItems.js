@@ -10,8 +10,6 @@ const OrderItems = ({order, updateOrderDetailOnBunchesChange, deleteOrderItem, s
     opacity: isContentLocked(order.Status) ? ".65" : "1"
   }
   
-  console.log("xxxxxxxxx")
-  console.log(order.items.length)
 
   return ( 
     <div className="fpForm">

@@ -160,12 +160,16 @@ export default function Varieties({ myprops }) {
         </div>
         <div className="fpFormList">
           <div className="expandCollapse">
-            <span style={{display: showMe?"none":"block"}}>
-              <Image  onClick={toggleCard} src="/expand-alt-solid.svg"   layout="fixed" alt="expand" width={20} height={20} />
-            </span>
-            <span style={{display: showMe?"block":"none"}}>
-              <Image  onClick={toggleCard} src="/compress-alt-solid.svg" layout="fixed" alt="compress" width={20} height={20}/>
-            </span>
+            { !showMe &&
+              <span className="fpBtn">
+                  <Image  onClick={toggleCard} src="/expand-alt-solid.svg"   layout="fixed" alt="expand" width={20} height={20} />
+              </span>
+            }
+            { showMe &&
+              <span className="fpBtn">
+                <Image  onClick={toggleCard} src="/compress-alt-solid.svg" layout="fixed" alt="compress" width={20} height={20}/>
+              </span>
+            }
           </div>
           {myprops.varieties.map(variety => (
             
