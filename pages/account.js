@@ -49,6 +49,7 @@ export default function Admin({ myProps }) {
   return (
 
     <div>
+      <h2>Account</h2>
       <Image src={user.picture} alt={user.name} width={200} height={200}/>
       <div className="fpBasicPage">
         <h2>{user.name}</h2>

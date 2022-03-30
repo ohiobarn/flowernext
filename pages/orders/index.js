@@ -52,7 +52,7 @@ export default function Orders({ myProps }) {
 
   return (
     <div>
-      <h3>Active Orders</h3>
+      <h2>Orders</h2>
       <p>Manage your active orders as they progress through several phases as indicated  by the <i>Order Status</i>. 
          See <Link href="https://ohiobarn.github.io/flowernext/#order/#order-status-summary"><a className="fpA" target="_blank">MRFC Doc</a></Link> for more detail.
       </p>

@@ -10,7 +10,8 @@ const OrderItems = ({order, updateOrderDetailOnBunchesChange, deleteOrderItem, s
     opacity: isContentLocked(order.Status) ? ".65" : "1"
   }
   
-
+  let dollarUS = Intl.NumberFormat("en-US", {style: "currency", currency: "USD"});
+  
   return ( 
     <div className="fpForm">
       <div id="items">
@@ -46,13 +47,13 @@ const OrderItems = ({order, updateOrderDetailOnBunchesChange, deleteOrderItem, s
                     <input id="bunches" name="bunches" type="number" defaultValue={item.Bunches} min="0" max="99" 
                       onChange={(event) => updateOrderDetailOnBunchesChange(order,item,setOrder,event)} 
                       disabled={isContentLocked(order.Status) }
-                    /> at ${item["Price per Bunch"]}/bn
+                    /> at {dollarUS.format(item["Price per Bunch"])}/bn
                   </p>
                 </div>
                 <div>
                   <hr />
                   <label htmlFor="extended">Extended</label>
-                  <p id="extended">${item["Extended"]}</p>
+                  <p id="extended">{dollarUS.format(item["Extended"])}</p>
                 </div>
               </div>
               <div>

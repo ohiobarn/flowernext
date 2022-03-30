@@ -3,6 +3,7 @@ import Link from "next/link";
 const Catalog = () => {
   return (
     <div>
+      <h2>Catalog</h2>
       <p>
         Use the grid below to browse the our catalog. <b>Tip,</b> click the <b>...</b> icon to print or download a copy. 
         Also, click the <b>View larger version</b> link located in
