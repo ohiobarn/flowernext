@@ -1,4 +1,8 @@
-const AvailabilityList = () => {
+
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+
+export default withPageAuthRequired(function AvailabilityList({ user }) {
+
   return (
     <div>
       <h2>Availability</h2>
@@ -14,6 +18,5 @@ const AvailabilityList = () => {
       </div>
     </div>
   );
-};
+});
 
-export default AvailabilityList;
