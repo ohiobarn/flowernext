@@ -11,10 +11,12 @@ export default withPageAuthRequired(function AvailabilityList({ user }) {
         the bottom right section of the grid to view a larger grid.{" "}
       </p>
       <div>
+        {/* Uses airtable view: MFRC 2022/Forecast (MFRC)/Collective/MFRC Grid Public */}
         <iframe src="https://airtable.com/embed/shr2OXWY4yLoqCYKf?backgroundColor=cyan&viewControls=on" 
                 frameBorder="0" 
                 width="100%" 
-                height="750"></iframe>
+                height="533">
+        </iframe>
       </div>
     </div>
   );

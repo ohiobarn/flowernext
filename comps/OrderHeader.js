@@ -49,24 +49,16 @@ const OrderHeader = ({order, contentLock, isAdmin, setOrder}) => {
       order.Status = event.target.status.value;
     }
 
-    //
-    // If the page is locked and trying to set the status back to Draft
-    // then just do it with out checking the date to avoid deadlock
-    if (event.target.contentLock.value && event.target.status.value === "Draft")
-    {
-      console.log("Skip data validation when switching back to Draft")
-    } else {
 
-      if (event.target.dueDate != null) {
-        rec.dueDate = event.target.dueDate.value;
-        if (!isDateFarEnoughInAdvance(rec.dueDate)){
-          alert("Due date must be at least 5 days from now")
-          return
-        }
-        rec.pickupStart =  pickupWindow.start;
-        rec.pickupEnd =  pickupWindow.end;
-  
+    if (event.target.dueDate != null) {
+      rec.dueDate = event.target.dueDate.value;
+      if (!isDateFarEnoughInAdvance(rec.dueDate)){
+        alert("Due date must be at least 5 days from now")
+        return
       }
+      rec.pickupStart =  pickupWindow.start;
+      rec.pickupEnd =  pickupWindow.end;
+
     }
 
 

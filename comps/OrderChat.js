@@ -22,7 +22,7 @@ const OrderChat = ({order, setOrder, isAdmin}) => {
         </div>
 
         <div className="fpTextMsgCard">
-          <input id="textMsg" name="textMsg" type="text" /> 
+          <input id="textMsg" name="textMsg" type="text" placeholder="Message" /> 
           <button className="fpBtn" type="button" value={order.RecID} 
                   onClick={() => sendNotes(order,chatFrom,setOrder,isAdmin)}>Send
           </button>
